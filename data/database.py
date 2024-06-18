@@ -1,9 +1,9 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # Import generated models
-from models import *
+from .models import *
 
 # Database connection parameters
 user_name = 'postgres'
@@ -30,4 +30,3 @@ def get_db():
         yield db
     finally:
         db.close()
-
