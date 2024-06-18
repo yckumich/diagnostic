@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from database import engine, Base, get_db
-from models import *  # Import all models generated in models.py
+from data.database import engine, Base, get_db
+from data.models import *  # Import all models generated in models.py
 
 # Create the database tables (if they don't already exist)
 Base.metadata.create_all(bind=engine)

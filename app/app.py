@@ -1,7 +1,7 @@
 import streamlit as st
 from sqlalchemy.orm import Session
-from database import get_db
-from models import *  # Replace with your actual model
+from data.database import get_db
+from data.models import *  # Replace with your actual model
 
 # Streamlit app
 st.title('Database Viewer')
