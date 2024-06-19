@@ -5,7 +5,6 @@ High-level filter: {Lower-level filter title: Lower-level filter column name}.
 """
 
 high_level_filter_map = {
-    
     'Diagnostic': {
         'Laboratory': 'laboratory',
         'Test Format': 'test_format',
@@ -26,5 +25,4 @@ high_level_filter_map = {
         'WHO EML v20': 'who_eml_v20',
         'EML Category': 'eml_cat_1'
     }
-    
 }
