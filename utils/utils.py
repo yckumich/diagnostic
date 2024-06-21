@@ -6,10 +6,15 @@ from data.database import engine
 from data.models import t_tableau3_t2_tjfs_join_edl_dashadmin as table
 
 from utils.filter import high_level_filter_map
-from typing import Dict, List
+from typing import Dict, List, Any
 
 import streamlit as st
 import pandas as pd
+import math
+
+from st_aggrid import AgGrid, GridUpdateMode, AgGridTheme
+from st_aggrid.grid_options_builder import GridOptionsBuilder
+
 
 
 def convert_query_to_df(query:Query, 
@@ -111,3 +116,55 @@ def convert_selection_to_df(selection: Dict[str,Dict[str,List[str]]]) -> pd.Data
     query_w_filter = convert_filter_to_query(filters=filters)
     
     return convert_query_to_df(query_w_filter)
+
+@st.cache_resource(ttl=3600)
+def build_grid_option(df:pd.DataFrame, 
+                      pagination_size:int=50, 
+                      selection_mode='multiple'):
+    """
+    Builds and configures grid options for displaying a DataFrame using st_aggrid.
+    """
+    gd = GridOptionsBuilder.from_dataframe(df)
+
+    gd.configure_pagination(
+        enabled=False,
+        paginationPageSize=pagination_size, 
+        paginationAutoPageSize=False,
+    )
+    gd.configure_default_column(
+        editable=True, 
+        groupable=True
+    )
+    gd.configure_selection(
+        selection_mode=selection_mode, 
+        use_checkbox=True
+    )
+    return gd.build()
+
+@st.cache_data(ttl=3600)
+def get_unique_values(input_list: List[Any]) -> List[Any]:
+    """
+    This function takes a list containing various types including float('nan') and returns a new list
+    with unique values and compresses all 'nan' values into a single occurrence.
+    """
+    def is_nan(value):
+        return isinstance(value, float) and math.isnan(value)
+
+    nans = list(filter(is_nan, input_list))
+    non_nans = list(filter(lambda x: not is_nan(x), input_list))
+    unique_non_nans = list(set(non_nans))
+    if nans:
+        unique_non_nans.append(float('nan'))
+    return unique_non_nans
+
+@st.cache_data(ttl=3600)
+def create_test_detail(df:pd.DataFrame):
+    """
+    df contains dataframe of a single test
+    """
+    col_to_unique_map = dict()
+    for col in df.columns:
+        col_to_unique_map[col] = get_unique_values(list(df[col]))
+    
+    return col_to_unique_map
+        
