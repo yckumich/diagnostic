@@ -1,8 +1,7 @@
 from sqlalchemy.orm.query import Query
-from sqlalchemy.sql.schema import Table
-from sqlalchemy.orm import Session
+# from sqlalchemy.orm import Session
 
-from data.database import engine
+from data.database import get_db
 from data.models import t_tableau3_t2_tjfs_join_edl_dashadmin as table
 
 from utils.filter import high_level_filter_map
@@ -12,9 +11,12 @@ import streamlit as st
 import pandas as pd
 import math
 
-from st_aggrid import AgGrid, GridUpdateMode, AgGridTheme
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 
+
+def local_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 
 def convert_query_to_df(query:Query, 
@@ -62,7 +64,7 @@ def get_filter()-> Dict:
     """
     global table
 
-    db = Session(bind=engine)
+    db = next(get_db())
     query = db.query(table)
     df = convert_query_to_df(query, None)
     filter = create_filter_map(df, high_level_filter_map)
@@ -96,7 +98,7 @@ def convert_filter_to_query(filters:Dict[str,List[str]]) -> Query:
     """
     global table
 
-    db = Session(bind=engine)
+    db = next(get_db())
     query = db.query(table)
     
     for column, values in filters.items():
@@ -140,23 +142,28 @@ def build_grid_option(df:pd.DataFrame,
     )
     return gd.build()
 
-@st.cache_data(ttl=3600)
+
+@st.cache_resource(ttl=3600)
 def get_unique_values(input_list: List[Any]) -> List[Any]:
     """
     This function takes a list containing various types including float('nan') and returns a new list
     with unique values and compresses all 'nan' values into a single occurrence.
     """
-    def is_nan(value):
-        return isinstance(value, float) and math.isnan(value)
 
-    nans = list(filter(is_nan, input_list))
-    non_nans = list(filter(lambda x: not is_nan(x), input_list))
-    unique_non_nans = list(set(non_nans))
-    if nans:
-        unique_non_nans.append(float('nan'))
-    return unique_non_nans
+    return list(set(map(str, input_list)))
+    
+    # def is_nan(value):
+    #     return isinstance(value, float) and math.isnan(value)
 
-@st.cache_data(ttl=3600)
+    # nans = list(filter(is_nan, input_list))
+    # non_nans = list(filter(lambda x: not is_nan(x), input_list))
+    # unique_non_nans = list(set(non_nans))
+    # if nans:
+    #     unique_non_nans.append(float('nan'))
+    # return unique_non_nans
+
+
+@st.cache_resource(ttl=3600)
 def create_test_detail(df:pd.DataFrame) -> Dict:
     """
     df contains dataframe of a single test
@@ -166,7 +173,48 @@ def create_test_detail(df:pd.DataFrame) -> Dict:
         col_to_unique_map[col] = get_unique_values(list(df[col]))
     
     return col_to_unique_map
-        
-def local_css(file_name):
-    with open(file_name) as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+
+def create_sorted_dataframe(data: dict[str,List]) -> pd.DataFrame:
+    """
+    Converts a dictionary of lists into a sorted DataFrame,
+    where each list is padded to the same length and sorted in descending order.
+    """
+    def sort_row(row):
+        return sorted(row, key=lambda x: (x != "", str(x)), reverse=True)
+    
+    labels = list(data.keys())
+    lists = list(data.values())
+    
+    # Determine the maximum length of the lists
+    max_length = max(len(lst) for lst in lists)
+    
+    # Pad the shorter lists with empty strings
+    for label in data.keys():
+        num_pad = max_length - len(data[label])
+        data[label] = data[label] + [""] * num_pad
+    
+    sorted_data = {label:sort_row(data[label]) for label in data.keys()}
+    
+    return pd.DataFrame(sorted_data)
+    
+    
+def generate_test_detail_dataframe(test_df:pd.DataFrame):
+    """
+    Processes a DataFrame of test details to generate sorted DataFrames for each
+    column (excluding 'testname'), mapping tests to unique details for each specified column.
+    The function groups the input data by 'testname', constructs a dictionary of test details, 
+    and then yields a tuple containing the column name and the corresponding sorted DataFrame.
+    """
+    
+    test_to_col_to_detail = dict()
+    for test, df in test_df.groupby(by='testname'):
+        test_to_col_to_detail[test] = create_test_detail(df)
+
+    test_list = test_to_col_to_detail.keys()
+    col_names = list(next(iter(test_to_col_to_detail.values())).keys())
+    col_names.remove('testname')
+    
+    for col in col_names:
+        test_to_detail_list = {test: list(set(map(str,test_to_col_to_detail[test][col]))) for test in test_list}
+        yield col, create_sorted_dataframe(test_to_detail_list)

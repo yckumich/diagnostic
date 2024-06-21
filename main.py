@@ -1,12 +1,9 @@
 import streamlit as st
-from sqlalchemy.orm import Session
 from data.database import engine, Base
-from data.models import t_tableau3_t2_tjfs_join_edl_dashadmin
 from utils.utils import *
 import pandas as pd
 from typing import Dict
 from st_aggrid import AgGrid, GridUpdateMode, AgGridTheme
-from st_aggrid.grid_options_builder import GridOptionsBuilder
 
 
 # Create the database tables (if they don't already exist)
@@ -37,6 +34,7 @@ def add_sidebar(filter_map):
             # selected_option_map = create_expander(main_filter, filter_map[main_filter])
             agg_filter_selection[main_filter] = create_filter_expander(main_filter, filter_map[main_filter])
 
+        st.divider()  
         with st.expander("Current Filter Selection"):
             st.json(agg_filter_selection)    
 
@@ -106,6 +104,8 @@ def main():
                       .reset_index(drop=True)
                       .sort_values(by='testname'))
 
+    st.divider()  
+
     test_list_col, test_detail_col = st.columns([0.25, 0.75], gap="small")
     
     ## passing the first 100 rows to build the grid option
@@ -119,13 +119,18 @@ def main():
             gridOptions=grid_option,
             update_mode=GridUpdateMode.SELECTION_CHANGED,
             height=1000,
-            theme=AgGridTheme.MATERIAL,        )
+            theme=AgGridTheme.MATERIAL
+        )
+
         sel_row = grid_table['selected_rows']
 
         if isinstance(sel_row, pd.DataFrame):
             with test_detail_col:
+                st.header('Test Detail')
+                st.markdown("""<div style="height:23px;"></div>""", unsafe_allow_html=True)
+                st.divider()
                 test_name_list = list(sel_row['testname'])
-
+                
                 if len(test_name_list) == 1 :
                     test_df = selected_test_df[selected_test_df['testname'] == test_name_list[0]]
                     test_detail = create_test_detail(test_df)
@@ -133,12 +138,13 @@ def main():
                         create_detail_expander(detail_title, details)
                 else:
                     test_df = selected_test_df[selected_test_df['testname'].isin(test_name_list)]
+                    for col_name, test_detail_df in iter(generate_test_detail_dataframe(test_df)):
+                        with st.expander(label=col_name):
+                            st.dataframe(
+                                test_detail_df,
+                                use_container_width=True
+                            )
                     
-                    all_test_detail_structure = dict()
-                    for test_name, df in test_df.groupby(by='testname'):
-                        all_test_detail_structure[test_name] = create_test_detail(df)
-
-                    create_comparison_expandable(all_test_detail_structure)
 
 
 if __name__ == "__main__":
