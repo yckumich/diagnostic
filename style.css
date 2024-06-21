@@ -1,0 +1,4 @@
+[data-testid="stExpander"] details:hover summary{
+    background-color: rgba(119, 244, 121, 0.1);
+    color:darkgreen;
+}

@@ -111,7 +111,6 @@ def convert_selection_to_df(selection: Dict[str,Dict[str,List[str]]]) -> pd.Data
     Convert a nested dictionary of user selections into a pandas DataFrame by applying the 
     corresponding filters and executing the query.
     """
-    print("RUNNING: convert_selection_to_df")
     filters = convert_selection_to_filter(selection=selection)
     query_w_filter = convert_filter_to_query(filters=filters)
     
@@ -137,7 +136,7 @@ def build_grid_option(df:pd.DataFrame,
     )
     gd.configure_selection(
         selection_mode=selection_mode, 
-        use_checkbox=True
+        use_checkbox=False
     )
     return gd.build()
 
@@ -158,7 +157,7 @@ def get_unique_values(input_list: List[Any]) -> List[Any]:
     return unique_non_nans
 
 @st.cache_data(ttl=3600)
-def create_test_detail(df:pd.DataFrame):
+def create_test_detail(df:pd.DataFrame) -> Dict:
     """
     df contains dataframe of a single test
     """
@@ -168,3 +167,6 @@ def create_test_detail(df:pd.DataFrame):
     
     return col_to_unique_map
         
+def local_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)

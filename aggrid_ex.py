@@ -1,22 +1,48 @@
-from st_aggrid import AgGrid, GridUpdateMode, AgGridTheme
 import streamlit as st
 import pandas as pd
-from st_aggrid.grid_options_builder import GridOptionsBuilder
 
-df = pd.read_csv('https://raw.githubusercontent.com/fivethirtyeight/data/master/airline-safety/airline-safety.csv')
-st.dataframe(df)
+# Function to compare multiple lists and create a DataFrame
+def compare_lists(data: dict) -> pd.DataFrame:
+    labels = list(data.keys())
+    lists = list(data.values())
 
-gd = GridOptionsBuilder.from_dataframe(df)
-gd.configure_pagination(enabled=True,paginationPageSize=15, paginationAutoPageSize=False)
-gd.configure_default_column(editable=True, groupable=True)
+    # Determine the maximum length of the lists
+    max_length = max(len(lst) for lst in lists)
+    
+    # Pad the shorter lists with empty strings
+    extended_lists = [lst + [""] * (max_length - len(lst)) for lst in lists]
+    
+    # Transpose the lists to get rows
+    rows = list(zip(*extended_lists))
+    
+    # Function to sort items in each row in descending order
+    def sort_row(row):
+        return sorted(row, reverse=True)
+    
+    # Sort each row
+    sorted_rows = [sort_row(row) for row in rows]
+    
+    # Create a DataFrame for comparison
+    comparison_df = pd.DataFrame(sorted_rows, columns=labels)
+    return comparison_df
 
-sel_mode = st.radio("Selection Type", options=['single', 'multiple'])
+# Example input data
+input_data = {
+    "Coagulation": [
+        "Pathophysiology", "DiffDiagnosis", "Complication", "CoMorbidity",
+        "Toxicity", "Dosing/Safety", "Diagnosis", "Monitoring"
+    ], 
+    "Fibrinogen":[
+        "DiffDiagnosis", "Complication", "Toxicity", "Dosing/Safety", "Diagnosis", "Monitoring"
+    ], 
+    "Another Test": [
+         "Diagnosis", "Monitoring", "Toxicity", "Dosing/Safety", "Pathophysiology"
+    ]
+}
 
-gd.configure_selection(selection_mode=sel_mode, use_checkbox=False)
-gridOptions = gd.build()
+# Create the comparison DataFrame
+comparison_df = compare_lists(input_data)
 
-grid_table = AgGrid(df, gridOptions=gridOptions, update_mode=GridUpdateMode.SELECTION_CHANGED, height=500, theme=AgGridTheme.MATERIAL)
-sel_row = grid_table['selected_rows']
-st.write(sel_row)
-print(sel_row)
-print(type(sel_row))
+# Display the comparison table in Streamlit with a fixed height for scrolling
+st.title("Comparison of Test Reasons")
+st.dataframe(comparison_df, height=400)  # Adjust the height as needed

@@ -9,7 +9,6 @@ from st_aggrid import AgGrid, GridUpdateMode, AgGridTheme
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 
 
-
 # Create the database tables (if they don't already exist)
 Base.metadata.create_all(bind=engine)
 agg_filter_selection = dict()
@@ -31,14 +30,16 @@ def create_detail_expander(detail_title:str, details:List):
                 markdown_string += "- " + str(detail) + "\n"
             st.markdown(markdown_string)
 
-
 def add_sidebar(filter_map):
     with st.sidebar:
         st.header('Filters')
         for main_filter in filter_map:
             # selected_option_map = create_expander(main_filter, filter_map[main_filter])
             agg_filter_selection[main_filter] = create_filter_expander(main_filter, filter_map[main_filter])
-    
+
+        with st.expander("Current Filter Selection"):
+            st.json(agg_filter_selection)    
+
     return agg_filter_selection
 
 
@@ -47,12 +48,56 @@ def display_test_details(test_details):
         st.write(f"**{key}**: {value}")
 
 
+def compare_lists(data: dict) -> pd.DataFrame:
+    labels = list(data.keys())
+    lists = list(data.values())
+
+    # Determine the maximum length of the lists
+    max_length = max(len(lst) for lst in lists)
+    
+    # Pad the shorter lists with empty strings
+    extended_lists = [lst + [""] * (max_length - len(lst)) for lst in lists]
+    
+    # Transpose the lists to get rows
+    rows = list(zip(*extended_lists))
+    
+    # Function to sort items in each row in descending order, handling None values
+    def sort_row(row):
+        return sorted(row, key=lambda x: (x is None, str(x)), reverse=True)
+    
+    # Sort each row and replace None with an empty string
+    sorted_rows = [sort_row([item if item is not None else "" for item in row]) for row in rows]
+    
+    # Create a DataFrame for comparison
+    comparison_df = pd.DataFrame(sorted_rows, columns=labels)
+    return comparison_df
+
+# Function to create comparison expanders with dataframes
+def create_comparison_expandable(data: dict):
+    # Extract all test details
+    test_details = list(next(iter(data.values())).keys())
+    
+    # Iterate over each test detail
+    for detail in test_details:
+        # Create a dictionary to store lists for each test
+        detail_dict = {test: data[test][detail] for test in data}
+        
+        # Use compare_lists to create the comparison DataFrame
+        comparison_df = compare_lists(detail_dict)
+        
+        # Create an expander for each test detail
+        with st.expander(label=detail):
+            st.dataframe(comparison_df)
+
 def main():
+
     st.set_page_config(
         page_title="EDL Dashboard",
         layout="wide",
         initial_sidebar_state="expanded"
     )
+    local_css("style.css")
+
     filter_map = get_filter()
     selection = add_sidebar(filter_map=filter_map)
     selected_test_df = convert_selection_to_df(selection)
@@ -61,7 +106,7 @@ def main():
                       .reset_index(drop=True)
                       .sort_values(by='testname'))
 
-    test_list_col, test_detail_col = st.columns([0.2, 0.8], gap="small")
+    test_list_col, test_detail_col = st.columns([0.25, 0.75], gap="small")
     
     ## passing the first 100 rows to build the grid option
     grid_option = build_grid_option(unique_test_df)
@@ -74,8 +119,7 @@ def main():
             gridOptions=grid_option,
             update_mode=GridUpdateMode.SELECTION_CHANGED,
             height=1000,
-            theme=AgGridTheme.MATERIAL
-        )
+            theme=AgGridTheme.MATERIAL,        )
         sel_row = grid_table['selected_rows']
 
         if isinstance(sel_row, pd.DataFrame):
@@ -88,45 +132,13 @@ def main():
                     for detail_title, details in test_detail.items():
                         create_detail_expander(detail_title, details)
                 else:
-                    pass
-            #         print(test_name_list)
+                    test_df = selected_test_df[selected_test_df['testname'].isin(test_name_list)]
+                    
+                    all_test_detail_structure = dict()
+                    for test_name, df in test_df.groupby(by='testname'):
+                        all_test_detail_structure[test_name] = create_test_detail(df)
 
-            # lst = ['a', 'b', 'c']
-            # s = ''
-            # for i in lst:
-            #     s += "- " + i + "\n"
-            # st.markdown(s)
-
-                        
-
-        # if sel_row:
-        #     st.dataframe(sel_row)
-
- 
-     #.drop_duplicates(subset=['testname']).reset_index(drop=True).sort_values(by='testname')
-    # st.dataframe(test_df)
-
-    # # If no test is selected, initialize session state
-    # if 'selected_test' not in st.session_state:
-    #     st.session_state['selected_test'] = None
-    
-    # # Layout with two columns
-    # test_name_col, test_detail_col = st.columns([0.3, 0.7], gap="small")
-    
-    # # Display test names in col1
-    # with test_name_col:
-    #     st.header("Test Names")
-    #     AgGrid(test_df[['testname']])
-
-
-    # print(st.session_state['selected_test'])
-    # Display test details in col2 if a test is selected
-    # with col2:
-    #     if st.session_state['selected_test']:
-    #         st.header(f"Details for {st.session_state['selected_test']['testname']}")
-    #         display_test_details(st.session_state['selected_test'])
-    #     else:
-    #         st.write("Select a test to see details.")
+                    create_comparison_expandable(all_test_detail_structure)
 
 
 if __name__ == "__main__":
