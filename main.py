@@ -68,6 +68,7 @@ def main():
     test_list_col, test_detail_col = st.columns([0.25, 0.75], gap="small")
     
     ## passing the first 100 rows to build the grid option
+    ## here 
     grid_option = build_grid_option(unique_test_df)
         
     with test_list_col:
