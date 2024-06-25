@@ -15,8 +15,12 @@ db_name = 'EDL'
 SQLALCHEMY_DATABASE_URL = f"postgresql://{user_name}:{password}@{host_name}/{db_name}"
 
 # Create the SQLAlchemy engine
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
-
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL,
+    pool_size=10,       # Increase pool size
+    max_overflow=20,    # Allow additional connections beyond the pool size
+    pool_timeout=30,    # Wait time before giving up on getting a connection
+)
 # Create a sessionmaker factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

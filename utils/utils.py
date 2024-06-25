@@ -64,11 +64,10 @@ def get_filter()-> Dict:
     """
     global table
 
-    db = next(get_db())
-    query = db.query(table)
-    df = convert_query_to_df(query, None)
-    filter = create_filter_map(df, high_level_filter_map)
-    del df
+    with next(get_db()) as db:
+        query = db.query(table)
+        df = convert_query_to_df(query, None)
+        filter = create_filter_map(df, high_level_filter_map)
     db.close()
     return filter
 
@@ -98,13 +97,12 @@ def convert_filter_to_query(filters:Dict[str,List[str]]) -> Query:
     """
     global table
 
-    db = next(get_db())
-    query = db.query(table)
-    
-    for column, values in filters.items():
-        if values:
-            query = query.filter(table.c[column].in_(values))
-    
+    with next(get_db()) as db:
+        query = db.query(table)
+        for column, values in filters.items():
+            if values:
+                query = query.filter(table.c[column].in_(values))
+    db.close()
     return query
 
 @st.cache_data(ttl=3600)
@@ -218,3 +216,45 @@ def generate_test_detail_dataframe(test_df:pd.DataFrame):
     for col in col_names:
         test_to_detail_list = {test: list(set(map(str,test_to_col_to_detail[test][col]))) for test in test_list}
         yield col, create_sorted_dataframe(test_to_detail_list)
+
+
+def compare_lists(data: dict) -> pd.DataFrame:
+    labels = list(data.keys())
+    lists = list(data.values())
+
+    # Determine the maximum length of the lists
+    max_length = max(len(lst) for lst in lists)
+    
+    # Pad the shorter lists with empty strings
+    extended_lists = [lst + [""] * (max_length - len(lst)) for lst in lists]
+    
+    # Transpose the lists to get rows
+    rows = list(zip(*extended_lists))
+    
+    # Function to sort items in each row in descending order, handling None values
+    def sort_row(row):
+        return sorted(row, key=lambda x: (x is None, str(x)), reverse=True)
+    
+    # Sort each row and replace None with an empty string
+    sorted_rows = [sort_row([item if item is not None else "" for item in row]) for row in rows]
+    
+    # Create a DataFrame for comparison
+    comparison_df = pd.DataFrame(sorted_rows, columns=labels)
+    return comparison_df
+
+# Function to create comparison expanders with dataframes
+def create_comparison_expandable(data: dict):
+    # Extract all test details
+    test_details = list(next(iter(data.values())).keys())
+    
+    # Iterate over each test detail
+    for detail in test_details:
+        # Create a dictionary to store lists for each test
+        detail_dict = {test: data[test][detail] for test in data}
+        
+        # Use compare_lists to create the comparison DataFrame
+        comparison_df = compare_lists(detail_dict)
+        
+        # Create an expander for each test detail
+        with st.expander(label=detail):
+            st.dataframe(comparison_df)
