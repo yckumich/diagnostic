@@ -63,12 +63,13 @@ def get_filter()-> Dict:
     Retrieves a comprehensive filter dictionary from the database query results.
     """
     global table
-
-    with next(get_db()) as db:
+    db = next(get_db())
+    try:
         query = db.query(table)
         df = convert_query_to_df(query, None)
         filter = create_filter_map(df, high_level_filter_map)
-    db.close()
+    finally:
+        db.close()
     return filter
 
 
@@ -97,12 +98,14 @@ def convert_filter_to_query(filters:Dict[str,List[str]]) -> Query:
     """
     global table
 
-    with next(get_db()) as db:
+    db = next(get_db())
+    try:
         query = db.query(table)
         for column, values in filters.items():
             if values:
                 query = query.filter(table.c[column].in_(values))
-    db.close()
+    finally:
+        db.close()
     return query
 
 @st.cache_data(ttl=3600)
