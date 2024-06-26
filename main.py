@@ -4,6 +4,7 @@ from utils.utils import *
 import pandas as pd
 from typing import Dict
 from st_aggrid import AgGrid, GridUpdateMode, AgGridTheme
+from utils import sub_filter, utils_sub_filter
 
 
 # Create the database tables (if they don't already exist)
@@ -62,10 +63,10 @@ def main():
                       .drop_duplicates(subset=['testname'])
                       .reset_index(drop=True)
                       .sort_values(by='testname'))
-
+    print(selected_test_df)
     st.divider()  
 
-    test_list_col, test_detail_col = st.columns([0.25, 0.75], gap="small")
+    test_list_col, sub_filter_panel = st.columns([0.14, 0.86], gap="small")
     
     ## passing the first 100 rows to build the grid option
     ## here 
@@ -81,30 +82,44 @@ def main():
             height=1000,
             theme=AgGridTheme.MATERIAL
         )
+        # sel_row = grid_table['selected_rows'] # this return list of selected row in test name panel
 
-        sel_row = grid_table['selected_rows']
+    #-------------------------------FIX START------------------------
+    with sub_filter_panel:
+        num_subfilters = len(sub_filter.keys())
+        sub_filter_cols = st.columns(num_subfilters)
 
-        if isinstance(sel_row, pd.DataFrame):
-            with test_detail_col:
-                st.header('Test Detail')
-                st.markdown("""<div style="height:23px;"></div>""", unsafe_allow_html=True)
-                st.divider()
-                test_name_list = list(sel_row['testname'])
+
+
+
+
+
+
+        
+    #-------------------------------FIX END------------------------
+
+    #-------------------------------REMOVE START------------------------
+        # if isinstance(sel_row, pd.DataFrame):
+        #     with test_detail_col:
+        #         st.header('Test Detail')
+        #         st.markdown("""<div style="height:23px;"></div>""", unsafe_allow_html=True)
+        #         st.divider()
+        #         test_name_list = list(sel_row['testname'])
                 
-                if len(test_name_list) == 1 :
-                    test_df = selected_test_df[selected_test_df['testname'] == test_name_list[0]]
-                    test_detail = create_test_detail(test_df)
-                    for detail_title, details in test_detail.items():
-                        create_detail_expander(detail_title, details)
-                else:
-                    test_df = selected_test_df[selected_test_df['testname'].isin(test_name_list)]
-                    for col_name, test_detail_df in iter(generate_test_detail_dataframe(test_df)):
-                        with st.expander(label=col_name):
-                            st.dataframe(
-                                test_detail_df,
-                                use_container_width=True
-                            )
-                    
+        #         if len(test_name_list) == 1 :
+        #             test_df = selected_test_df[selected_test_df['testname'] == test_name_list[0]]
+        #             test_detail = create_test_detail(test_df)
+        #             for detail_title, details in test_detail.items():
+        #                 create_detail_expander(detail_title, details)
+        #         else:
+        #             test_df = selected_test_df[selected_test_df['testname'].isin(test_name_list)]
+        #             for col_name, test_detail_df in iter(generate_test_detail_dataframe(test_df)):
+        #                 with st.expander(label=col_name):
+        #                     st.dataframe(
+        #                         test_detail_df,
+        #                         use_container_width=True
+        #                     )
+    #-------------------------------REMOVE END------------------------
 
 
 if __name__ == "__main__":
