@@ -261,3 +261,4 @@ def create_comparison_expandable(data: dict):
         # Create an expander for each test detail
         with st.expander(label=detail):
             st.dataframe(comparison_df)
+

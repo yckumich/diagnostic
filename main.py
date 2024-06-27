@@ -4,14 +4,14 @@ from utils.utils import *
 import pandas as pd
 from typing import Dict
 from st_aggrid import AgGrid, GridUpdateMode, AgGridTheme
-from utils import sub_filter, utils_sub_filter
-
+from utils.center_filter import cetner_filter_dict
+from utils.utils_center_filter import *
 
 # Create the database tables (if they don't already exist)
 Base.metadata.create_all(bind=engine)
 agg_filter_selection = dict()
 
-
+#------------------------------HELPER------------------------------
 def create_filter_expander(expander_title:str, subfilter_map:dict) -> Dict:
     selected_option_map = {k:[] for k in subfilter_map.keys()}
     with st.expander(expander_title):
@@ -30,12 +30,15 @@ def create_detail_expander(detail_title:str, details:List):
 
 def add_sidebar(filter_map):
     with st.sidebar:
-        st.header('Filters')
+        st.markdown("""<div style="height:0px;"></div>""", unsafe_allow_html=True)
+        st.divider()  
+        st.header('Main-Filters')
+        
         for main_filter in filter_map:
-            # selected_option_map = create_expander(main_filter, filter_map[main_filter])
             agg_filter_selection[main_filter] = create_filter_expander(main_filter, filter_map[main_filter])
 
         st.divider()  
+        st.header('Current Filter Selection')
         with st.expander("Current Filter Selection"):
             st.json(agg_filter_selection)    
 
@@ -46,7 +49,7 @@ def display_test_details(test_details):
     for key, value in test_details.items():
         st.write(f"**{key}**: {value}")
 
-
+#------------------------------MAIN------------------------------
 def main():
 
     st.set_page_config(
@@ -54,27 +57,54 @@ def main():
         layout="wide",
         initial_sidebar_state="expanded"
     )
-    local_css("style.css")
+    st.markdown(
+        """
+        <style>
+        .stTabs [role="tablist"] {
+            display: flex;
+            justify-content: space-between;
+        }
+        .small-title {
+            font-size: 14px;
+            margin-top: 2rem;
+            margin-bottom: 0rem;
+        }
+        .tight-container {
+            padding: 0.5rem;
+        }
+        .stDataFrame {
+            margin: 0;
+        }
+        [data-testid="stExpander"] details:hover summary {
+            background-color: rgba(119, 244, 121, 0.1);
+            color: darkgreen;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
+    #--------------Configure the Main filter--------------
     filter_map = get_filter()
     selection = add_sidebar(filter_map=filter_map)
-    selected_test_df = convert_selection_to_df(selection)
-    unique_test_df = (selected_test_df[['testname']]
-                      .drop_duplicates(subset=['testname'])
-                      .reset_index(drop=True)
-                      .sort_values(by='testname'))
-    print(selected_test_df)
-    st.divider()  
+    #-----------------------------------------------------
 
-    test_list_col, sub_filter_panel = st.columns([0.14, 0.86], gap="small")
+    #--------------Configure center columns---------------
+    center_filter_col, test_list_col = st.columns([0.86, 0.14], gap="medium")
     
-    ## passing the first 100 rows to build the grid option
-    ## here 
-    grid_option = build_grid_option(unique_test_df)
-        
-    with test_list_col:
-        st.header("Test Names")
 
+    with test_list_col:
+        st.divider()  
+        st.header("Test Names")
+        selected_test_df = convert_selection_to_df(selection)
+        selected_test_df.to_csv("test.csv")
+        unique_test_df = (
+            selected_test_df[['testname']]
+            .drop_duplicates(subset=['testname'])
+            .reset_index(drop=True)
+            .sort_values(by='testname')
+        )
+        grid_option = build_grid_option(unique_test_df)
         grid_table = AgGrid(
             data=unique_test_df,
             gridOptions=grid_option,
@@ -82,12 +112,32 @@ def main():
             height=1000,
             theme=AgGridTheme.MATERIAL
         )
+    with center_filter_col:
+        st.divider()  
+        st.header('Sub-Filters')
+        st.markdown("""<div style="height:0px;"></div>""", unsafe_allow_html=True)
+
+        # If user selected specfic test/tests in the left panel, refine the selected selected_test_df
+        if isinstance(grid_table['selected_rows'], pd.DataFrame):
+            sel_row_testname_lst = grid_table['selected_rows']['testname'].to_list()
+            selected_test_df = selected_test_df[selected_test_df['testname'].isin(sel_row_testname_lst)]
+
+        tab_titles = list(cetner_filter_dict.keys())
+        center_filter_tabs = st.tabs(tab_titles)
+
+        for tab_title, center_filter_tab in zip(tab_titles, center_filter_tabs):
+            with center_filter_tab:
+                tab_df_titles = cetner_filter_dict[tab_title]
+                generate_tab_content(tab_title, tab_df_titles, selected_test_df)
+
         # sel_row = grid_table['selected_rows'] # this return list of selected row in test name panel
 
     #-------------------------------FIX START------------------------
-    with sub_filter_panel:
-        num_subfilters = len(sub_filter.keys())
-        sub_filter_cols = st.columns(num_subfilters)
+    # with sub_filter_panel:
+    #     num_subfilters = len(center_filter.keys())
+    #     sub_filter_cols = st.columns(num_subfilters)
+    #     for sub_filter_col in sub_filter_cols:
+    #         st.header()
 
 
 
@@ -95,7 +145,7 @@ def main():
 
 
 
-        
+
     #-------------------------------FIX END------------------------
 
     #-------------------------------REMOVE START------------------------

@@ -1,48 +1,101 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
+import random
+import string
 
-# Function to compare multiple lists and create a DataFrame
-def compare_lists(data: dict) -> pd.DataFrame:
-    labels = list(data.keys())
-    lists = list(data.values())
+# Set page configuration
+st.set_page_config(page_title="Single Row of Tabs Example", layout="wide")
 
-    # Determine the maximum length of the lists
-    max_length = max(len(lst) for lst in lists)
-    
-    # Pad the shorter lists with empty strings
-    extended_lists = [lst + [""] * (max_length - len(lst)) for lst in lists]
-    
-    # Transpose the lists to get rows
-    rows = list(zip(*extended_lists))
-    
-    # Function to sort items in each row in descending order
-    def sort_row(row):
-        return sorted(row, reverse=True)
-    
-    # Sort each row
-    sorted_rows = [sort_row(row) for row in rows]
-    
-    # Create a DataFrame for comparison
-    comparison_df = pd.DataFrame(sorted_rows, columns=labels)
-    return comparison_df
+# Function to generate a random string of given length
+def generate_random_string(length):
+    letters = string.ascii_letters
+    return ''.join(random.choice(letters) for i in range(length))
 
-# Example input data
-input_data = {
-    "Coagulation": [
-        "Pathophysiology", "DiffDiagnosis", "Complication", "CoMorbidity",
-        "Toxicity", "Dosing/Safety", "Diagnosis", "Monitoring"
-    ], 
-    "Fibrinogen":[
-        "DiffDiagnosis", "Complication", "Toxicity", "Dosing/Safety", "Diagnosis", "Monitoring"
-    ], 
-    "Another Test": [
-         "Diagnosis", "Monitoring", "Toxicity", "Dosing/Safety", "Pathophysiology"
+# Function to generate random DataFrame with random column names
+def generate_random_dataframe(rows, min_cols=3, max_cols=8):
+    num_cols = random.randint(min_cols, max_cols)
+    col_names = [generate_random_string(random.randint(12, 20)) for _ in range(num_cols)]
+    return pd.DataFrame(np.random.rand(rows, num_cols), columns=col_names)
+
+# Function to generate random title
+def generate_random_title():
+    titles = [
+        "Data Overview", "Performance Metrics", "Test Results", "Summary Report",
+        "Analysis Data", "Statistical Data", "Experimental Results", "Data Summary",
+        "Research Findings", "Data Insights"
     ]
-}
+    return random.choice(titles)
 
-# Create the comparison DataFrame
-comparison_df = compare_lists(input_data)
+# Inject custom CSS
+st.markdown(
+    """
+    <style>
+    .stTabs [role="tablist"] {
+        display: flex;
+        justify-content: space-between;
+    }
+    .small-title {
+        font-size: 18px;
+        margin-bottom: 0.5rem;
+    }
+    .tight-container {
+        padding: 0.5rem;
+    }
+    .stDataFrame {
+        margin: 0;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
-# Display the comparison table in Streamlit with a fixed height for scrolling
-st.title("Comparison of Test Reasons")
-st.dataframe(comparison_df, height=400)  # Adjust the height as needed
+# Single row of tabs with 8 tabs
+st.markdown("### Single Row of Tabs")
+tabs = st.tabs([
+    "Lab-Specific-01", "Test-By-Cond-02", "Cond-By-Test-03", "Another-Tab-04",
+    "Specific-05", "By-Cond-Test-06", "By-Test-Cond-07", "Different-Tab-08"
+])
+
+# Function to add a random number of dataframes to a tab and display them side by side with titles
+def add_dataframes_to_tab():
+    num_dataframes = random.randint(1, 3)
+    dataframes = [generate_random_dataframe(10) for _ in range(num_dataframes)]
+    total_columns = sum(df.shape[1] for df in dataframes)
+    
+    # Calculate the column width percentage for each DataFrame
+    col_widths = [df.shape[1] / total_columns for df in dataframes]
+    
+    cols = st.columns(num_dataframes)
+    for i in range(num_dataframes):
+        with cols[i]:
+            width_percent = col_widths[i] * 100
+            title = generate_random_title()
+            st.markdown(f"<div class='small-title'>{title}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='tight-container' style='width: {width_percent}%;'>", unsafe_allow_html=True)
+            st.dataframe(dataframes[i])
+            st.markdown("</div>", unsafe_allow_html=True)
+
+with tabs[0]:
+    add_dataframes_to_tab()
+
+with tabs[1]:
+    add_dataframes_to_tab()
+
+with tabs[2]:
+    add_dataframes_to_tab()
+
+with tabs[3]:
+    add_dataframes_to_tab()
+
+with tabs[4]:
+    add_dataframes_to_tab()
+
+with tabs[5]:
+    add_dataframes_to_tab()
+
+with tabs[6]:
+    add_dataframes_to_tab()
+
+with tabs[7]:
+    add_dataframes_to_tab()
