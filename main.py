@@ -4,8 +4,10 @@ from utils.utils import *
 import pandas as pd
 from typing import Dict
 from st_aggrid import AgGrid, GridUpdateMode, AgGridTheme
-from utils.center_filter import cetner_filter_dict
-from utils.utils_center_filter import *
+from utils.center_tabs import cetner_tab_dict
+from utils.utils_center_tab import *
+from style import get_style_markdown
+
 
 # Create the database tables (if they don't already exist)
 Base.metadata.create_all(bind=engine)
@@ -39,9 +41,10 @@ def add_sidebar(filter_map):
 
         st.divider()  
         st.header('Current Filter Selection')
+
         with st.expander("Current Filter Selection"):
             st.json(agg_filter_selection)    
-
+        
     return agg_filter_selection
 
 
@@ -57,32 +60,8 @@ def main():
         layout="wide",
         initial_sidebar_state="expanded"
     )
-    st.markdown(
-        """
-        <style>
-        .stTabs [role="tablist"] {
-            display: flex;
-            justify-content: space-between;
-        }
-        .small-title {
-            font-size: 14px;
-            margin-top: 2rem;
-            margin-bottom: 0rem;
-        }
-        .tight-container {
-            padding: 0.5rem;
-        }
-        .stDataFrame {
-            margin: 0;
-        }
-        [data-testid="stExpander"] details:hover summary {
-            background-color: rgba(119, 244, 121, 0.1);
-            color: darkgreen;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+    
+    get_style_markdown()
 
     #--------------Configure the Main filter--------------
     filter_map = get_filter()
@@ -114,9 +93,11 @@ def main():
         )
 
     #--------------Configure Center Tab--------------------
+    collected_dataframes = list()
     with center_tab_col:
+        
         st.divider()  
-        st.header('Sub-Filters')
+        st.header('Tabs')
         st.markdown("""<div style="height:0px;"></div>""", unsafe_allow_html=True)
 
         # If user selected specfic test/tests in the left panel, refine the selected selected_test_df
@@ -124,13 +105,32 @@ def main():
             sel_row_testname_lst = grid_table['selected_rows']['testname'].to_list()
             selected_test_df = selected_test_df[selected_test_df['testname'].isin(sel_row_testname_lst)]
 
-        tab_titles = list(cetner_filter_dict.keys())
+        tab_titles = list(cetner_tab_dict.keys())
         center_filter_tabs = st.tabs(tab_titles)
 
         for tab_title, center_filter_tab in zip(tab_titles, center_filter_tabs):
+            print(tab_title)
             with center_filter_tab:
-                tab_df_titles = cetner_filter_dict[tab_title]
-                generate_tab_content(tab_title, tab_df_titles, selected_test_df)
+                tab_df_titles = cetner_tab_dict[tab_title]
+                print(f'\t{tab_df_titles}')
+                collected_dataframes.extend(generate_tab_content(tab_title, tab_df_titles, selected_test_df))
 
+    #---------Main Filter Addition for download------------
+    with st.sidebar:        
+        st.divider()  
+        st.header('Download Current Tables')
+
+        if st.button('Download'):
+            # for a,b in collected_dataframes:
+            #     st.write(a)
+            #     st.write(b.shape)
+            #     st.write('   ')
+            zip_buffer = collect_and_generate_zip(collected_dataframes)
+            st.download_button(
+                label="Download ZIP",
+                data=zip_buffer,
+                file_name="dataframes.zip",
+                mime="application/zip"
+            )
 if __name__ == "__main__":
     main()

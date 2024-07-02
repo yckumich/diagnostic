@@ -9,14 +9,15 @@ from typing import Dict, List, Any
 
 import streamlit as st
 import pandas as pd
-import math
+import zipfile
+import io
 
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 
 
-def local_css(file_name):
-    with open(file_name) as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+# def local_css(file_name):
+#     with open(file_name) as f:
+#         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 
 def convert_query_to_df(query:Query, 
@@ -261,4 +262,40 @@ def create_comparison_expandable(data: dict):
         # Create an expander for each test detail
         with st.expander(label=detail):
             st.dataframe(comparison_df)
+
+
+# def generate_zip(selected_filters, dataframes):
+def generate_zip(dataframes:List[Any]):
+    # Create a byte stream to hold the zip file in memory
+    zip_buffer = io.BytesIO()
+    
+    # Create a new zip file
+    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zf:
+        # Add the filters to the zip file
+        # filters_csv = pd.DataFrame.from_dict(selected_filters, orient='index').reset_index()
+        # filters_csv.columns = ['Filter', 'Values']
+        # filters_bytes = filters_csv.to_csv(index=False).encode('utf-8')
+        # zf.writestr('selected_filters.csv', filters_bytes)
+        
+        # Add each dataframe to the zip file
+        for title, df in dataframes:
+            if not df.empty and title in ['Test By Condition', 'Test By Laboratory Section', 'Format By Test', 'Format and Tiers']:
+                print(f'generating zip for {title}')
+                df_bytes = df.to_csv(index=False).encode('utf-8')
+                zf.writestr(f'{title}.csv', df_bytes)
+        
+    # Seek to the beginning of the stream
+    zip_buffer.seek(0)
+    
+    return zip_buffer
+
+def collect_and_generate_zip(collected_dataframes):
+    # Fetch the selected filters
+    # selected_filters = agg_filter_selection
+    # Generate the zip file
+    # zip_buffer = generate_zip(selected_filters, collected_dataframes)
+    zip_buffer = generate_zip(collected_dataframes)
+
+    # Provide a download link
+    return zip_buffer
 

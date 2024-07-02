@@ -86,13 +86,7 @@ def get_lab_specific_format_and_tiers(df):
 
 
 def get_test_by_medicine_test_by_medicine(df):
-    """
-    Medicine
-    Test
-    Test Reason
-    Test Note
-    Med/Cond Note
-    """
+
     df = df[[
             'medicine',
             'test_name_short',
@@ -140,6 +134,7 @@ def get_test_indication_test_indication(df):
 
 @st.cache_data(ttl=3600)
 def generate_tab_content(tab_title, df_titles, df):
+    tab_dataframes = list()
 
     tab_func_names = [
         "get_" +
@@ -160,3 +155,6 @@ def generate_tab_content(tab_title, df_titles, df):
                 use_container_width=True,
                 height=900,
             )
+        # print(f'adding {df_titles[i]} to collected_dataframes')
+        tab_dataframes.append((df_titles[i], result_df))
+    return tab_dataframes

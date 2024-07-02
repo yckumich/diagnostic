@@ -1,4 +1,4 @@
-cetner_filter_dict = {
+cetner_tab_dict = {
 
     "Test By Condition":[
         "Test By Condition",
@@ -37,5 +37,5 @@ cetner_filter_dict = {
     "Test Indication":[
         "Test Indication",
     ],
-    
+
 }
