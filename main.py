@@ -89,15 +89,15 @@ def main():
     selection = add_sidebar(filter_map=filter_map)
     #-----------------------------------------------------
 
-    #--------------Configure center columns---------------
-    center_filter_col, test_list_col = st.columns([0.86, 0.14], gap="medium")
+    #--------------Configure center pane------------------
+    center_tab_col, test_list_col = st.columns([0.86, 0.14], gap="medium")
     
 
+    #--------------Configure Test List--------------------
     with test_list_col:
         st.divider()  
         st.header("Test Names")
         selected_test_df = convert_selection_to_df(selection)
-        selected_test_df.to_csv("test.csv")
         unique_test_df = (
             selected_test_df[['testname']]
             .drop_duplicates(subset=['testname'])
@@ -112,7 +112,9 @@ def main():
             height=1000,
             theme=AgGridTheme.MATERIAL
         )
-    with center_filter_col:
+
+    #--------------Configure Center Tab--------------------
+    with center_tab_col:
         st.divider()  
         st.header('Sub-Filters')
         st.markdown("""<div style="height:0px;"></div>""", unsafe_allow_html=True)
@@ -129,48 +131,6 @@ def main():
             with center_filter_tab:
                 tab_df_titles = cetner_filter_dict[tab_title]
                 generate_tab_content(tab_title, tab_df_titles, selected_test_df)
-
-        # sel_row = grid_table['selected_rows'] # this return list of selected row in test name panel
-
-    #-------------------------------FIX START------------------------
-    # with sub_filter_panel:
-    #     num_subfilters = len(center_filter.keys())
-    #     sub_filter_cols = st.columns(num_subfilters)
-    #     for sub_filter_col in sub_filter_cols:
-    #         st.header()
-
-
-
-
-
-
-
-
-    #-------------------------------FIX END------------------------
-
-    #-------------------------------REMOVE START------------------------
-        # if isinstance(sel_row, pd.DataFrame):
-        #     with test_detail_col:
-        #         st.header('Test Detail')
-        #         st.markdown("""<div style="height:23px;"></div>""", unsafe_allow_html=True)
-        #         st.divider()
-        #         test_name_list = list(sel_row['testname'])
-                
-        #         if len(test_name_list) == 1 :
-        #             test_df = selected_test_df[selected_test_df['testname'] == test_name_list[0]]
-        #             test_detail = create_test_detail(test_df)
-        #             for detail_title, details in test_detail.items():
-        #                 create_detail_expander(detail_title, details)
-        #         else:
-        #             test_df = selected_test_df[selected_test_df['testname'].isin(test_name_list)]
-        #             for col_name, test_detail_df in iter(generate_test_detail_dataframe(test_df)):
-        #                 with st.expander(label=col_name):
-        #                     st.dataframe(
-        #                         test_detail_df,
-        #                         use_container_width=True
-        #                     )
-    #-------------------------------REMOVE END------------------------
-
 
 if __name__ == "__main__":
     main()
