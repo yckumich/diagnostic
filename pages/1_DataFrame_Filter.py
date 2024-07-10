@@ -9,16 +9,31 @@ from utils.dataframe_utils.utils_center_tab import *
 from style import get_style_markdown
 
 
+##INITIALIZE SESSION STATE
+if "custom_condition_list" not in st.session_state:
+    st.session_state.custom_condition_list = []
+
+if "custom_condition_df" not in st.session_state:
+    st.session_state.custom_condition_df = None
+
+if 'show_plot' not in st.session_state:
+    st.session_state['show_plot'] = False
+
 # Create the database tables (if they don't already exist)
 Base.metadata.create_all(bind=engine)
 agg_filter_selection = dict()
+
 
 #------------------------------HELPERS------------------------------
 def create_filter_expander(expander_title:str, subfilter_map:dict) -> Dict:
     selected_option_map = {k:[] for k in subfilter_map.keys()}
     with st.expander(expander_title):
+        
         for subfilter_title, options_list in subfilter_map.items():
-            selected_option_map[subfilter_title] = st.multiselect(subfilter_title, options_list, default=[])
+            selected_option_map[subfilter_title] = st.multiselect(
+                subfilter_title, 
+                options_list, 
+                default=['Blood bank', ] if subfilter_title == 'Laboratory' else [])
     return selected_option_map
 
 
@@ -48,90 +63,87 @@ def add_sidebar(filter_map):
     return agg_filter_selection
 
 #------------------------------MAIN------------------------------
-def main():
 
-    st.set_page_config(
-        page_title="EDL Dashboard",
-        page_icon="📋", 
-        layout="wide",
-        initial_sidebar_state="expanded"
+st.set_page_config(
+    page_title="EDL Dashboard",
+    page_icon="📋", 
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+get_style_markdown()
+
+#--------------Configure the Main filter--------------
+filter_map = get_filter()
+selection = add_sidebar(filter_map=filter_map)
+
+#--------------Configure center pane------------------
+center_tab_col, test_list_col = st.columns([0.86, 0.14], gap="medium")
+
+
+#--------------Configure Test List--------------------
+with test_list_col:
+    st.markdown("""<div style="height:72px;"></div>""", unsafe_allow_html=True)
+    st.divider()  
+    st.header("Test Names")
+    selected_test_df = convert_selection_to_df(selection)
+    unique_test_df = (
+        selected_test_df[['testname']]
+        .drop_duplicates(subset=['testname'])
+        .reset_index(drop=True)
+        .sort_values(by='testname')
     )
-    
-    get_style_markdown()
+    grid_option = build_grid_option(unique_test_df)
+    grid_table = AgGrid(
+        data=unique_test_df,
+        gridOptions=grid_option,
+        update_mode=GridUpdateMode.SELECTION_CHANGED,
+        height=1000,
+        theme=AgGridTheme.MATERIAL
+    )
 
-    #--------------Configure the Main filter--------------
-    filter_map = get_filter()
-    selection = add_sidebar(filter_map=filter_map)
+#--------------Configure Center Tab--------------------
+collected_dataframes = list()
+custom_condition_df_exist = isinstance(st.session_state.custom_condition_df, pd.DataFrame)
 
-    #--------------Configure center pane------------------
-    center_tab_col, test_list_col = st.columns([0.86, 0.14], gap="medium")
-    
+with center_tab_col:
+    if custom_condition_df_exist:
+        st.success('Custom Condition Tier Applied ✅')
+    else:
+        st.warning('Custom Condition Tier Not Applied')
 
-    #--------------Configure Test List--------------------
-    with test_list_col:
-        st.markdown("""<div style="height:72px;"></div>""", unsafe_allow_html=True)
-        st.divider()  
-        st.header("Test Names")
-        selected_test_df = convert_selection_to_df(selection)
-        unique_test_df = (
-            selected_test_df[['testname']]
-            .drop_duplicates(subset=['testname'])
-            .reset_index(drop=True)
-            .sort_values(by='testname')
-        )
-        grid_option = build_grid_option(unique_test_df)
-        grid_table = AgGrid(
-            data=unique_test_df,
-            gridOptions=grid_option,
-            update_mode=GridUpdateMode.SELECTION_CHANGED,
-            height=1000,
-            theme=AgGridTheme.MATERIAL
-        )
+    st.divider()  
+    st.header('Tabs')
+    st.markdown("""<div style="height:0px;"></div>""", unsafe_allow_html=True)
 
-    #--------------Configure Center Tab--------------------
-    collected_dataframes = list()
-    custom_condition_df_exist = isinstance(st.session_state.custom_condition_df, pd.DataFrame)
+    # If user selected specfic test/tests in the left panel, refine the selected selected_test_df
+    if isinstance(grid_table['selected_rows'], pd.DataFrame):
+        sel_row_testname_lst = grid_table['selected_rows']['testname'].to_list()
+        selected_test_df = selected_test_df[selected_test_df['testname'].isin(sel_row_testname_lst)]
 
-    with center_tab_col:
-        if custom_condition_df_exist:
-            st.success('Custom Condition Tier Applied ✅')
-        else:
-            st.warning('Custom Condition Tier Not Applied')
+    tab_titles = list(cetner_tab_dict.keys())
+    center_filter_tabs = st.tabs(tab_titles)
 
-        st.divider()  
-        st.header('Tabs')
-        st.markdown("""<div style="height:0px;"></div>""", unsafe_allow_html=True)
+    for tab_title, center_filter_tab in zip(tab_titles, center_filter_tabs):
+        with center_filter_tab:
+            tab_df_titles = cetner_tab_dict[tab_title]
+            collected_dataframes.extend(generate_tab_content(
+                tab_title,
+                tab_df_titles,
+                selected_test_df,
+                st.session_state.custom_condition_df if custom_condition_df_exist else None
+            ))
 
-        # If user selected specfic test/tests in the left panel, refine the selected selected_test_df
-        if isinstance(grid_table['selected_rows'], pd.DataFrame):
-            sel_row_testname_lst = grid_table['selected_rows']['testname'].to_list()
-            selected_test_df = selected_test_df[selected_test_df['testname'].isin(sel_row_testname_lst)]
+#---------Main Filter Addition for download------------
+# with st.sidebar:        
+#     st.divider()  
+#     st.header('Download Current Tables')
 
-        tab_titles = list(cetner_tab_dict.keys())
-        center_filter_tabs = st.tabs(tab_titles)
-
-        for tab_title, center_filter_tab in zip(tab_titles, center_filter_tabs):
-            with center_filter_tab:
-                tab_df_titles = cetner_tab_dict[tab_title]
-                collected_dataframes.extend(generate_tab_content(
-                    tab_title,
-                    tab_df_titles,
-                    selected_test_df,
-                    st.session_state.custom_condition_df if custom_condition_df_exist else None
-                ))
-
-    #---------Main Filter Addition for download------------
-    with st.sidebar:        
-        st.divider()  
-        st.header('Download Current Tables')
-
-        if st.button('Download'):
-            zip_buffer = collect_and_generate_zip(collected_dataframes)
-            st.download_button(
-                label="Download ZIP",
-                data=zip_buffer,
-                file_name="dataframes.zip",
-                mime="application/zip"
-            )
-if __name__ == "__main__":
-    main()
+#     if st.button('Download'):
+#         zip_buffer = collect_and_generate_zip(collected_dataframes)
+#         st.download_button(
+#             label="Download ZIP",
+#             data=zip_buffer,
+#             file_name="dataframes.zip",
+#             mime="application/zip"
+#         )

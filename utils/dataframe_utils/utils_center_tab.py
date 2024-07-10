@@ -121,31 +121,31 @@ def get_test_by_medicine_test_by_medicine(df, custom_condition_tier=False):
         inplace=True,
     )
     df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
-    return df
+    return df.head()
 
 def get_test_by_med_and_cond_test_by_medicine_and_condition(df, custom_condition_tier=False):
     df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
-    return df
+    return df.head()
 
 def get_test_tests(df, custom_condition_tier=False):
     df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
-    return df
+    return df.head()
 
 def get_condition_by_test_conditions_per_test(df, custom_condition_tier=False):
     df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
-    return df
+    return df.head()
 
 def get_medicine_indications_medicine_indications(df, custom_condition_tier=False):
     df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
-    return df
+    return df.head()
 
 def get_tests_and_cond_test_lists_by_condition(df, custom_condition_tier=False):
     df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
-    return df
+    return df.head()
 
 def get_test_indication_test_indication(df, custom_condition_tier=False):
     df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
-    return df
+    return df.head()
 
 
 @st.cache_data(ttl=3600)
@@ -167,7 +167,6 @@ def generate_tab_content(tab_title, df_titles, df, custom_condition_tier_df=None
             on=['conditionname', 'conditionlevel'],
             how='left',
         )
-
 
     cols = st.columns(len(tab_func_names))
     for i, (col, tab_func_name) in enumerate(zip(cols, tab_func_names)):

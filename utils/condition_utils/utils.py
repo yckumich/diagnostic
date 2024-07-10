@@ -127,8 +127,12 @@ def delete_callback():
 
     edited_rows = st.session_state["data_editor"]["edited_rows"]
     for idx, value in edited_rows.items():
-        if value["delete"] is True:
+        if ('delete' in value.keys()) and (value["delete"] is True):
             st.session_state["custom_condition_list"].pop(idx)
+        else:
+            for k,v in value.items():
+                st.session_state["custom_condition_list"][idx][k] = v
+
 
 
 def display_custom_condition_df():
@@ -140,8 +144,20 @@ def display_custom_condition_df():
 
     custom_condition_df = pd.DataFrame(st.session_state["custom_condition_list"])
     column_config = {
-        column: st.column_config.Column(disabled=True) 
-        for column in custom_condition_df.columns
+        'conditionname': st.column_config.Column(
+            disabled=True,
+            help='Condition Name'
+        ),
+        'conditionlevel': st.column_config.SelectboxColumn(
+            help='Condition Level',
+            options=['triage','moderate','severe'],
+            required=True,
+        ),
+        'custom_condition_tier': st.column_config.SelectboxColumn(
+            help='Custom Condition Tier',
+            options=['Primary','Secondary','Tertiary'],
+            required=True,
+        )
     }
     custom_condition_df["delete"] = False
 

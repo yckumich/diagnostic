@@ -148,17 +148,6 @@ def get_unique_values(input_list: List[Any]) -> List[Any]:
 
     return list(set(map(str, input_list)))
     
-    # def is_nan(value):
-    #     return isinstance(value, float) and math.isnan(value)
-
-    # nans = list(filter(is_nan, input_list))
-    # non_nans = list(filter(lambda x: not is_nan(x), input_list))
-    # unique_non_nans = list(set(non_nans))
-    # if nans:
-    #     unique_non_nans.append(float('nan'))
-    # return unique_non_nans
-
-
 @st.cache_resource(ttl=3600)
 def create_test_detail(df:pd.DataFrame) -> Dict:
     """
@@ -265,12 +254,7 @@ def generate_zip(dataframes:List[Any]):
     
     # Create a new zip file
     with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zf:
-        # Add the filters to the zip file
-        # filters_csv = pd.DataFrame.from_dict(selected_filters, orient='index').reset_index()
-        # filters_csv.columns = ['Filter', 'Values']
-        # filters_bytes = filters_csv.to_csv(index=False).encode('utf-8')
-        # zf.writestr('selected_filters.csv', filters_bytes)
-        
+
         # Add each dataframe to the zip file
         for title, df in dataframes:
             if not df.empty and title in ['Test By Condition', 'Test By Laboratory Section', 'Format By Test', 'Format and Tiers']:
@@ -284,10 +268,6 @@ def generate_zip(dataframes:List[Any]):
     return zip_buffer
 
 def collect_and_generate_zip(collected_dataframes):
-    # Fetch the selected filters
-    # selected_filters = agg_filter_selection
-    # Generate the zip file
-    # zip_buffer = generate_zip(selected_filters, collected_dataframes)
     zip_buffer = generate_zip(collected_dataframes)
 
     # Provide a download link
