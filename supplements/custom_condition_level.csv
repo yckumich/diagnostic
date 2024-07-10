@@ -1,0 +1,56 @@
+conditionname,conditionlevel,custom_condition_tier
+Acute coronary syndrome,moderate,Primary
+Acute coronary syndrome,severe,Secondary
+Acute coronary syndrome,triage,Tertiary
+Antenatal care,triage,Primary
+"Breast cancer, metastatic",moderate,Secondary
+"Breast cancer, metastatic",severe,Primary
+"Breast cancer, metastatic",triage,Tertiary
+COPD,moderate,Secondary
+COPD,severe,Tertiary
+COPD,triage,Secondary
+Chronic kidney disease,moderate,Tertiary
+Chronic kidney disease,severe,Primary
+Chronic kidney disease,triage,Secondary
+"Colorectal cancer, metastatic",moderate,Tertiary
+"Colorectal cancer, metastatic",severe,Primary
+"Colorectal cancer, metastatic",triage,Primary
+Dementia,moderate,Secondary
+Dementia,severe,Primary
+Dementia,triage,Tertiary
+Diabetes mellitus,moderate,Tertiary
+Diabetes mellitus,severe,Primary
+Diabetes mellitus,triage,Primary
+Diarrhoea acute invasive bacterial ,moderate,Tertiary
+Diarrhoea acute invasive bacterial ,severe,Primary
+Diarrhoea acute invasive bacterial ,triage,Primary
+HIV,moderate,Primary
+HIV,severe,Tertiary
+HIV,triage,Primary
+Hypertensive heart disease,moderate,Secondary
+Hypertensive heart disease,severe,Tertiary
+Hypertensive heart disease,triage,Primary
+Liver cancer,moderate,Tertiary
+Liver cancer,severe,Primary
+Liver cancer,triage,Secondary
+"Lung cancer, non small cell",moderate,Tertiary
+"Lung cancer, non small cell",severe,Primary
+"Lung cancer, non small cell",triage,Secondary
+Malaria,moderate,Primary
+Malaria,severe,Tertiary
+Malaria,triage,Primary
+Pneumonia community (severe),moderate,Secondary
+Pneumonia community (severe),severe,Tertiary
+Pneumonia community (severe),triage,Primary
+"Preeclampsia, HELLP",moderate,Secondary
+"Preeclampsia, HELLP",severe,Primary
+"Preeclampsia, HELLP",triage,Tertiary
+Stroke,moderate,Secondary
+Stroke,severe,Tertiary
+Stroke,triage,Secondary
+Trauma,moderate,Tertiary
+Trauma,severe,Primary
+Trauma,triage,Secondary
+Tuberculosis,moderate,Tertiary
+Tuberculosis,severe,Primary
+Tuberculosis,triage,Tertiary
