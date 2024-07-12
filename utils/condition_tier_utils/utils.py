@@ -213,41 +213,41 @@ def save_current_coustom_df():
 def add_sidebar():
     with st.sidebar:
         st.markdown("""
-            # Custom Condition Level Page
-            
-            Welcome to the **Custom Condition Level** page. This page allows users to create, manage, and visualize a custom condition level dataset for diagnostic purposes. Here, you can build a condition table by adding individual records, uploading a CSV file, or directly editing the existing dataset. The main features and functionalities of this page are as follows:
+                    # Custom Condition Tier Page
 
-            ### Key Features:
-            - **Add New Condition Records:**
-              - You can manually add new condition records by specifying the condition name, condition level (triage, moderate, severe, not applicable), and condition tier (Primary, Secondary, Tertiary).
-            
-            - **Upload Custom Condition Level CSV:**
-              - If you have a pre-existing dataset, you can upload it in CSV format. The uploaded file must contain columns 'condition_name', 'condition_level', and 'condition_tier'.
+                    Welcome to the **Custom Condition Tier** page. This page allows users to create, manage, and visualize a custom condition tier dataset for diagnostic purposes. Here, you can build a condition table by adding individual records, uploading a CSV file, or directly editing the existing dataset. The main features and functionalities of this page are as follows:
 
-            - **Display and Edit Condition Table:**
-              - The current condition table is displayed for easy viewing and editing. You can mark records for deletion directly within the table.
+                    ### Key Features:
+                    - **Add New Condition Records:**
+                    - You can manually add new condition records by specifying the condition name, condition level (triage, moderate, severe, not applicable), and condition tier (Primary, Secondary, Tertiary).
 
-            - **Save and Delete Condition Table:**
-              - You can save the current custom condition table or delete the entire table if needed.
+                    - **Upload Custom Condition Tier CSV:**
+                    - If you have a pre-existing dataset, you can upload it in CSV format. The uploaded file must contain columns 'conditionname', 'conditionlevel', and 'custom_condition_tier'.
 
-            - **Render Custom Condition Level Plot:**
-              - Once the condition table is built or uploaded, you can render a custom condition level plot to visualize the distribution of condition levels across different health facility tiers. You can redraw or delete the plot as needed.
+                    - **Display and Edit Condition Table:**
+                    - The current condition table is displayed for easy viewing and editing. You can mark records for deletion directly within the table.
 
-            ### Instructions:
-            1. **Add a New Condition Record:**
-               - Use the form provided to select the condition name, level, and tier, then click 'Add' to append the new record to the table.
+                    - **Save and Delete Condition Table:**
+                    - You can save the current custom condition table or delete the entire table if needed.
 
-            2. **Upload a Custom Condition Level CSV:**
-               - Use the file uploader to select and upload your CSV file. Ensure that your file contains the required columns.
+                    - **Render Custom Condition Tier Plot:**
+                    - Once the condition table is built or uploaded, you can render a custom condition tier plot to visualize the distribution of condition levels across different health facility tiers. You can redraw or delete the plot as needed.
 
-            3. **Display and Edit Condition Table:**
-               - View the current condition table and mark any records for deletion. Changes will be reflected instantly.
+                    ### Instructions:
+                    1. **Add a New Condition Record:**
+                    - Use the form provided to select the condition name, level, and tier, then click 'Add' to append the new record to the table.
 
-            4. **Save or Delete the Condition Table:**
-               - Use the provided buttons to save the current table for future use or delete the existing table to start fresh.
+                    2. **Upload a Custom Condition Tier CSV:**
+                    - Use the file uploader to select and upload your CSV file. Ensure that your file contains the required columns.
 
-            5. **Render and Manage Plot:**
-               - Click 'Render Custom Condition Level Plot' to visualize your data. You can also redraw or delete the plot using the respective buttons.
+                    3. **Display and Edit Condition Table:**
+                    - View the current condition table and mark any records for deletion. Changes will be reflected instantly.
 
-            This page empowers users to customize and visualize condition levels efficiently, supporting better diagnostic planning and resource allocation.
-        """)
+                    4. **Save or Delete the Condition Table:**
+                    - Use the provided buttons to save the current table for future use or delete the existing table to start fresh.
+
+                    5. **Render and Manage Plot:**
+                    - Click 'Render Custom Condition Tier Plot' to visualize your data. You can also redraw or delete the plot using the respective buttons.
+
+                    This page empowers users to customize and visualize condition tiers efficiently, supporting better diagnostic planning and resource allocation.
+                    """)

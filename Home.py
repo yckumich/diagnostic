@@ -18,6 +18,15 @@ if "custom_condition_df" not in st.session_state:
 if 'show_plot' not in st.session_state:
     st.session_state['show_plot'] = False
 
+if "custom_test_tier_list" not in st.session_state:
+    st.session_state.custom_test_tier_list = []
+
+if "custom_test_tier_df" not in st.session_state:
+    st.session_state.custom_test_tier_df = None
+
+if 'show_test_tier_plot' not in st.session_state:
+    st.session_state['show_test_tier_plot'] = False
+
 st.title("Essential Diagnostics Network for Universal Health Coverage")
 
 st.sidebar.success("Select a feature above.")
