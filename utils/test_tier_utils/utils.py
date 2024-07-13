@@ -8,14 +8,13 @@ import time
 
 
 @st.cache_data(ttl=3600)
-def retrieve_gbd_tests():
+def retrieve_gbd_test_formats():
     """
-    Fetches and returns a sorted list of test names from the database based on the conditions
-    where the 'lancet_gbd' field is 'Yes'. The data is cached for 3600 seconds to improve performance.
+    Fetches and returns a sorted list of condition names from the 'conditions' table
+    where the 'lancet_gbd' field is 'Yes'. The data is cached for 3600 seconds.
     """
-
-    from data.models import Condition as condition_table
     from data.models import t_tableau3_t2_tjfs_join_edl_dashadmin as table
+    from data.models import Condition as condition_table
     from sqlalchemy import select
 
     db = next(get_db())
@@ -23,21 +22,21 @@ def retrieve_gbd_tests():
     try:
         condition_names = db.query(condition_table.condition_name).filter(condition_table.lancet_gbd == 'Yes').all()
         condition_names_list = [_[0] for _ in condition_names]
-        stmt = select([table.c.testname]).distinct().where(table.c.conditionname.in_(condition_names_list))
-        test_names = db.execute(stmt).fetchall()
+        stmt = select([table.c.test_format]).distinct().where(table.c.conditionname.in_(condition_names_list))
+        test_format_list = db.execute(stmt).fetchall()
     finally:
         db.close()
-
+        
     del condition_table, table, select
-    return sorted([_[0] for _ in test_names])
+    return sorted([_[0] for _ in test_format_list  if isinstance(_[0], str)], key=str.casefold)
 
-
+@st.cache_data(ttl=3600)
 def create_test_tier_plot(df):
     """
     Creates and returns a test tier plot based on the given DataFrame.
     
     Parameters:
-    df (DataFrame): DataFrame containing 'testname' and 'test_format_lancet_tier' columns.
+    df (DataFrame): DataFrame containing 'test_format' and 'test_format_lancet_tier' columns.
     
     Returns:
     Figure: A matplotlib figure object representing the test tiers by health facility tier.
@@ -49,16 +48,16 @@ def create_test_tier_plot(df):
 
     # Define the tiers and tests
     tiers = ["Primary", "Secondary", "Tertiary"]
-    tests = df["testname"].unique()
+    tests = sorted(df["test_format"].unique(), key=str.casefold)
 
     # Create a figure and axis
-    fig, ax = plt.subplots(figsize=(10, int(df['testname'].nunique()/3.5)))
+    fig, ax = plt.subplots(figsize=(10, int(df['test_format'].nunique()/3.5)))
 
     # Draw the grid and rectangles
     for i, test in enumerate(tests):
         for j, tier in enumerate(tiers):
             # Get the test tiers for this cell
-            cell_data = df[(df["testname"] == test) & (df["custom_test_tier"] == tier)]
+            cell_data = df[(df["test_format"] == test) & (df["custom_test_tier"] == tier)]
             
             if not cell_data.empty:
                 rect = patches.Rectangle(
@@ -104,11 +103,11 @@ def create_test_tier_plot(df):
 def add_new_test_tier():
     """
     Adds a new test tier record to the custom test tier list stored in the session state.
-    The new record is added based on the current values of 'testname' and 'custom_test_tier' in the session state.
+    The new record is added based on the current values of 'test_format' and 'custom_test_tier' in the session state.
     """
     st.session_state.custom_test_tier_list.append(
         {
-            "testname": st.session_state.testname,
+            "test_format": st.session_state.test_format,
             "custom_test_tier": st.session_state.custom_test_tier,
         }
     )
@@ -139,9 +138,9 @@ def display_custom_test_tier_df():
 
     custom_test_tier_df = pd.DataFrame(st.session_state["custom_test_tier_list"])
     column_config = {
-        'testname': st.column_config.Column(
+        'test_format': st.column_config.Column(
             disabled=True,
-            help='Test Name'
+            help='Test Format'
         ),
         'custom_test_tier': st.column_config.SelectboxColumn(
             help='Custom Test Tier',
@@ -209,7 +208,7 @@ def add_sidebar():
 
             ### Key Features:
             - **Add New Test Records:**
-              - You can manually add new test records by specifying the test name and test tier (Primary, Secondary, Tertiary).
+              - You can manually add new test records by specifying the test format and test tier (Primary, Secondary, Tertiary).
 
             - **Upload Custom Test Tier CSV:**
               - If you have a pre-existing dataset, you can upload it in CSV format. The uploaded file must contain columns 'testname' and 'custom_test_tier'.
@@ -225,7 +224,7 @@ def add_sidebar():
 
             ### Instructions:
             1. **Add a New Test Record:**
-              - Use the form provided to select the test name and tier, then click 'Add' to append the new record to the table.
+              - Use the form provided to select the test format and tier, then click 'Add' to append the new record to the table.
 
             2. **Upload a Custom Test Tier CSV:**
               - Use the file uploader to select and upload your CSV file. Ensure that your file contains the required columns.
@@ -241,3 +240,5 @@ def add_sidebar():
 
             This page empowers users to customize and visualize test tiers efficiently, supporting better diagnostic planning and resource allocation.
         """)
+
+    

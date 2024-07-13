@@ -19,6 +19,15 @@ if "custom_condition_df" not in st.session_state:
 if 'show_plot' not in st.session_state:
     st.session_state['show_plot'] = False
 
+if "custom_test_tier_list" not in st.session_state:
+    st.session_state.custom_test_tier_list = []
+
+if "custom_test_tier_df" not in st.session_state:
+    st.session_state.custom_test_tier_df = None
+
+if 'show_test_tier_plot' not in st.session_state:
+    st.session_state['show_test_tier_plot'] = False
+
 # Create the database tables (if they don't already exist)
 Base.metadata.create_all(bind=engine)
 agg_filter_selection = dict()
@@ -105,12 +114,20 @@ with test_list_col:
 #--------------Configure Center Tab--------------------
 collected_dataframes = list()
 custom_condition_df_exist = isinstance(st.session_state.custom_condition_df, pd.DataFrame)
+custom_test_tier_df_exist = isinstance(st.session_state.custom_test_tier_df, pd.DataFrame)
 
 with center_tab_col:
-    if custom_condition_df_exist:
-        st.success('Custom Condition Tier Applied ✅')
-    else:
-        st.warning('Custom Condition Tier Not Applied')
+    condition_tier_col, test_tier_col = st.columns([0.5, 0.5])
+    with condition_tier_col:
+        if custom_condition_df_exist:
+            st.success('Custom Condition Tier Applied ✅')
+        else:
+            st.warning('Custom Condition Tier Not Applied 🚨')
+    with test_tier_col:
+        if custom_test_tier_df_exist:
+            st.success('Custom Test Tier Applied ✅')
+        else:
+            st.warning('Custom Test Tier Not Applied 🚨')
 
     st.divider()  
     st.header('Tabs')
@@ -131,7 +148,8 @@ with center_tab_col:
                 tab_title,
                 tab_df_titles,
                 selected_test_df,
-                st.session_state.custom_condition_df if custom_condition_df_exist else None
+                st.session_state.custom_condition_df if custom_condition_df_exist else None,
+                st.session_state.custom_test_tier_df if custom_test_tier_df_exist else None
             ))
 
 #---------Main Filter Addition for download------------

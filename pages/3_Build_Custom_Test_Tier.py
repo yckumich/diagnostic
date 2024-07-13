@@ -18,7 +18,7 @@ if "custom_test_tier_df" not in st.session_state:
 if 'show_test_tier_plot' not in st.session_state:
     st.session_state['show_test_tier_plot'] = False
 
-GDB_TEST_LIST = retrieve_gbd_tests()
+GDB_TEST_FORMAT_LIST = retrieve_gbd_test_formats()
 
 
 #----------------------MAIN-----------------------
@@ -40,7 +40,7 @@ with build_col:
     # Form to add a new condition
     st.write("### Add a New Condition Tier")
     with st.form("new_test_tier", clear_on_submit=True):
-        st.selectbox("Test Name", GDB_TEST_LIST, key="testname")
+        st.selectbox("Test Format", GDB_TEST_FORMAT_LIST, key="test_format")
         st.selectbox("Test Tier", ["Primary", "Secondary", "Tertiary"], key="custom_test_tier")
         st.form_submit_button("Add", on_click=add_new_test_tier)
 
@@ -49,10 +49,10 @@ with build_col:
     if (test_tier_csv is not None) and (st.button("Upload")):
         uploaded_df = pd.read_csv(test_tier_csv)
         uploaded_df_cols = list(uploaded_df.columns)
-        essential_cols =  ['testname','custom_test_tier',]
+        essential_cols =  ['test_format','custom_test_tier',]
         if (len(uploaded_df_cols) != 2) or len(set(uploaded_df_cols).intersection(set(essential_cols))) != 2:
             st.warning(
-                body="columns 'testname' and 'custom_test_tier' must be presented in the uploaded csv file",
+                body="columns 'test_format' and 'custom_test_tier' must be presented in the uploaded csv file",
                 icon="⚠️"
             )
 
@@ -86,7 +86,7 @@ with display_col:
                     st.rerun()        
             with col3:
                 st.download_button(
-                    label="Download Plot",
+                    label="Download Table",
                     data=pd.DataFrame(st.session_state["custom_test_tier_list"]).to_csv(index=False),
                     file_name='custom_test_tier.csv',
                     mime='text/csv',
@@ -95,9 +95,3 @@ with display_col:
         st.markdown("""<div style="height:400px;"></div>""", unsafe_allow_html=True)
         st.markdown("<h2 style='text-align: center; color: grey;'>Must build/upload custom test tier dataframe to render the plot</h2>", unsafe_allow_html=True)
 
-
-
-
-
-
-# LAB SPECIFIC - MUST FIND (TEST FORMAT, TEST FORMAT LANCET TIER)

@@ -22,7 +22,8 @@ def retrieve_gbd_conditions():
     finally:
         db.close()
 
-    return sorted([_[0] for _ in conditions])
+    return sorted([_[0] for _ in conditions], key=str.casefold)
+
 
 
 def create_condition_plot(df):
@@ -46,7 +47,7 @@ def create_condition_plot(df):
 
     # Define the tiers and conditions
     tiers = ["Primary", "Secondary", "Tertiary"]
-    conditions = df["conditionname"].unique()
+    conditions = sorted(df["conditionname"].unique(), key=str.casefold)
 
     # Create a mapping for condition levels to ensure specific order
     level_order = {"triage": 1, "moderate": 2, "severe": 3}

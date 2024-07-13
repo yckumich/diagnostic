@@ -1,175 +1,54 @@
-testname,custom_test_tier
-25 hydroxyvitamin D,Secondary
+test_format,custom_test_tier
 Advanced breast imaging,Tertiary
-AgCholera,Primary
-AgCholera,Secondary
-AgEntamoeba,Secondary
-AgHIV,Primary
-AgHIV,Secondary
-AgLegionellaUrine,Primary
-AgLegionellaUrine,Secondary
-AgMalaria,Primary
-AgPneumococcusUrine,Primary
-AgShiga,Primary
-AgShiga,Secondary
-Albumin,Secondary
-Alkaline phosphatase,Secondary
-Alpha 1 antitrypson deficiency,Secondary
-Alpha fetoprotein,Secondary
-Amylase,Secondary
-Antinuclear antibody screen,Tertiary
-Antiphospholipid antibodies,Secondary
-B-type natriuretic peptide,Secondary
-Bicarbonate,Secondary
-Bilirubin,Secondary
-Biochemical bacterial typing,Secondary
-Blood gas,Secondary
-Blood urea nitrogen,Secondary
-CA 19-9,Secondary
-CBC,Secondary
-CBC with differential,Secondary
-CEA,Secondary
-CSF analysis,Secondary
+Antimicrobial susceptibility testing,Secondary
+"Antimicrobial susceptibility testing, TB",Tertiary
+Automated biochemical microbial identification,Secondary
+Automated chemistry analyzer,Secondary
+Automated coagulation analyzer,Secondary
+Automated hematology analyzer,Secondary
+Automated immunoassay analyzer,Secondary
+"Automated immunoassay analyzer, specialized",Tertiary
+Automated nucleic acid analyzer,Tertiary
+Benchtop/handheld analyzer,Secondary
 CT scan,Tertiary
-CYP2C19,NULL
-Calcium,Secondary
-Coagulation function,Secondary
-Cooximetry,Secondary
-Creatine kinase,Secondary
-Creatinine clearance,Secondary
-D dimer products,Secondary
-Direct antiglobulin test,Secondary
-Drugs of abuse panel,Primary
-Drugs of abuse panel,Secondary
-ESR/CRP,Primary
-ESR/CRP,Secondary
+Culture,Secondary
+ELISA,Secondary
 Echocardiogram,Tertiary
-Electrolytes,Secondary
-Estrogen receptor,Secondary
-Estrogen receptor,Tertiary
-Ethanol,Secondary
-Fecal Immunochemical Test,Primary
-Fecal leukocytes,Secondary
-Fecal occult blood,Primary
-Fibrinogen,Secondary
+Flow cytometry,Tertiary
+Fluorescence microscopy,Tertiary
 Fluoroscopy,Tertiary
-G6PD,Primary
-G6PD,Tertiary
-Glucose,Primary
-Glucose,Secondary
-Glycated albumin,Secondary
-HER2,Secondary
-HER2,Tertiary
-HLA B5701,NULL
-HLA typing,NULL
-Haptoglobin,Secondary
-HbA1c,Secondary
-HbA1c,Tertiary
-Hemoglobin,Primary
-"IgA, quantitative",Secondary
-"IgA, quantitative",Tertiary
-Indirect antiglobulin test,Secondary
+Glucometer,Primary
+Hematology smear microscopy,Secondary
+Hemocytometer,Secondary
+Hemoglobinometer,Primary
+High performance liquid chromatography,Tertiary
+Indirect immunofluorescence,Tertiary
 "Interventional radiology, basic",Tertiary
 "Interventional radiology, complex",Tertiary
-Iron deficiency panel,Secondary
-"Ketones, serum",Secondary
-"Ketones, urine",Primary
-Lactate,Secondary
-Lactate dehydrogenase,Secondary
-Lipase,Secondary
-Lipid panel,Secondary
-Liver enzymes,Secondary
-Liver function,Secondary
-Lymphocyte CD4,Secondary
-Lymphocyte CD4,Tertiary
+Latex agglutination,Secondary
 MRI,Tertiary
-Magnesium,Secondary
+Malaria smear microscopy,Primary
 Mammography,Tertiary
-Microsatellite instability,Tertiary
+Mass Spectrometry,Tertiary
+"Microscopy, with immunohistochemistry",Tertiary
+"Microscopy, with stains",Secondary
+No instrument,Primary
 Nuclear radiology,Tertiary
-Oral Glucose Tolerance,NULL
-"Osmolality, plasma",Secondary
-Osteocalcin,NULL
+Nucleic acid sequencing,Tertiary
+Osmometer,Secondary
 PET scan,Tertiary
-"Parathyroid hormone, intact",Secondary
-Phosphorus,Secondary
-Platelet aggregation assay,NULL
-"Protein, urine",Primary
-"Protein, urine",Secondary
-Red blood cell typing,Secondary
-Renal function,Secondary
-TB LF LAM,Primary
-TB commercial dst,Tertiary
-TB line probe assays,Tertiary
-TB noncommercial DST,Secondary
-TSH,Secondary
-Triglycerides,Secondary
-Troponin,Secondary
+Particle agglutination assay,Secondary
+RDT,Primary
+Radial immunodiffusion,Tertiary
+Red blood cell agglutination,Secondary
+Semi-quantitative fluorescent spot test,Tertiary
+Slide agglutination,Secondary
+Stool microscopy,Primary
+TB Culture,Tertiary
+Tube agglutination test,Secondary
 Ultrasound,Secondary
 "Ultrasound, POC",Primary
-Uric acid,Secondary
-Urinalysis,Primary
 "Urinalysis, microscopic",Primary
-Urine albumin/creatinine,Secondary
-Urine protein/creatinine,Secondary
-Viscosity plasma,NULL
-Vitamin B12,Secondary
+Urine Dipstick,Primary
+Widal,Secondary
 X-ray,Secondary
-anti HLA antibodies,NULL
-anti Neutrophil antibodies (TRALI),NULL
-anti factor Xa,Secondary
-bhCG,Primary
-bhCG,Secondary
-cultureBacteria,Secondary
-cultureFungus,Secondary
-cultureTB,Tertiary
-dstBacteria,Secondary
-geneticHBOC,Tertiary
-microscopyAFB,Secondary
-microscopyBacteria,Secondary
-microscopyCBC,Secondary
-microscopyFluorescent,Tertiary
-microscopyImmunohistochemistry,Tertiary
-microscopyMalaria,Primary
-microscopyStool,Primary
-microscopyTissue,Secondary
-natBreastCancer,Tertiary
-natChlamydia,Tertiary
-natColonCancer,Tertiary
-natEGFR,Tertiary
-natHIVdna,Secondary
-natHIVdna,Tertiary
-natHIVrna qualitative,Secondary
-natHIVrna qualitative,Tertiary
-natHIVrna quantitative,Secondary
-natHIVrna quantitative,Tertiary
-natNSSLC,Tertiary
-natNgonorrhoeae,Tertiary
-natRespiratoryVirusPanel,Tertiary
-natShiga,Tertiary
-natTB,Secondary
-natTB,Tertiary
-no medicine-related tests,Primary
-serologyChikungunya,Secondary
-serologyDengue,Primary
-serologyDengue,Secondary
-serologyEntamoeba,Secondary
-serologyHBV,Secondary
-serologyHCV,Primary
-serologyHCV,Secondary
-serologyHIV,Primary
-serologyHIV,Secondary
-serologySyphilis,Primary
-serologySyphilis,Secondary
-serologyTyphi,Secondary
-serologyYellowFever,Secondary
-tdmAmikacin,Secondary
-tdmCapreomycin,Tertiary
-tdmCiprofloxacin,Tertiary
-tdmCycloserine,Tertiary
-tdmDigoxin,Secondary
-tdmEthambutol,Tertiary
-tdmGentamicin,Secondary
-tdmKanamycin,Secondary
-tdmMethotrexate,Secondary
-tdmMethotrexate,Tertiary

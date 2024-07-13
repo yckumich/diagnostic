@@ -29,7 +29,7 @@ if 'show_test_tier_plot' not in st.session_state:
 
 st.title("Essential Diagnostics Network for Universal Health Coverage")
 
-st.sidebar.success("Select a feature above.")
+st.sidebar.success("Select a desired page above.")
 
 st.markdown("""<div style="height:30px;"></div>""", unsafe_allow_html=True)
 

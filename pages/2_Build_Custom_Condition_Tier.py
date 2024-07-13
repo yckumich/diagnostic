@@ -87,7 +87,7 @@ with display_col:
                     st.rerun()        
             with col3:
                 st.download_button(
-                    label="Download Plot",
+                    label="Download Table",
                     data=pd.DataFrame(st.session_state["custom_condition_list"]).to_csv(index=False),
                     file_name='custom_condition_level.csv',
                     mime='text/csv',
@@ -96,9 +96,3 @@ with display_col:
         st.markdown("""<div style="height:400px;"></div>""", unsafe_allow_html=True)
         st.markdown("<h2 style='text-align: center; color: grey;'>Must build/upload custom condition tier dataframe to render the plot</h2>", unsafe_allow_html=True)
 
-
-
-
-
-
-# LAB SPECIFIC - MUST FIND (TEST FORMAT, TEST FORMAT LANCET TIER)
