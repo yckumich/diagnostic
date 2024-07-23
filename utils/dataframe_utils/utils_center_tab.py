@@ -26,6 +26,9 @@ def get_test_by_condition_test_by_condition(df, custom_condition_tier=False, cus
 
 
 def get_lab_specific_test_by_laboratory_section(df, custom_condition_tier=False, custom_test_tier=False):
+    if "temp_custom_lab_specific_test_by_laboratory_section_df" not in st.session_state:
+        st.session_state.temp_custom_lab_specific_test_by_laboratory_section_df = None
+
     columns = [
         'laboratory',
         'testname',
@@ -54,6 +57,10 @@ def get_lab_specific_test_by_laboratory_section(df, custom_condition_tier=False,
         inplace=True,
     )
     df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
+
+    if 'Custom Test Tier' in df.columns:
+        st.session_state.temp_custom_lab_specific_test_by_laboratory_section_df = df
+
     return df
 
 
