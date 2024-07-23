@@ -27,7 +27,7 @@ add_sidebar()
 build_col, display_col = st.columns([1,1], gap="small")
     
 with build_col:
-    st.write("### Custom Condition Tier Table")
+    st.write("### Custom Test Tier Table")
     # Display the current condition data
     display_custom_test_tier_df()
 
