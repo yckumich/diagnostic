@@ -1,7 +1,33 @@
 import pandas as pd
 import numpy as np
 import warnings
+import streamlit as st
+
 warnings.filterwarnings("ignore")
+
+empty_selection = {
+    'Diagnostic': {
+        'Laboratory': ['Blood bank'], 
+        'Test Format': [], 
+        'Test Reason': [], 
+        'Category': []
+    }, 
+    'Medicine': {
+        'Medicine': []
+    }, 
+    'Condition': {
+        'High Burden Disease': [], 
+        'Clinical Service': [], 
+        'Condition Name': []
+    }, 
+    'WHO EDL/EML': {
+        'WHO EDL v2': [],
+        'WHO EDL v2 Tier': [],
+        'WHO EML v20': [], 
+        'EML Category': []
+    }
+}
+
 
 def remove_stars(s: str) -> str:
     if s.endswith('**'):
@@ -28,7 +54,7 @@ def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
     - pd.DataFrame: A formatted DataFrame summarizing the diagnostic tests by their respective tiers (Primary, 
       Secondary, and Tertiary) and services (laboratories).
     """
-    
+    tests_by_tier_long = pd.DataFrame.from_dict(tests_by_tier_long)
     test_by_tier_long_desiredprimary = tests_by_tier_long[tests_by_tier_long['Custom Test Tier'] == "Primary"]
     test_by_tier_long_desiredprimary = test_by_tier_long_desiredprimary.drop(columns=['Custom Test Tier',])
     test_by_tier_long_desiredprimary = test_by_tier_long_desiredprimary.drop_duplicates()
@@ -234,3 +260,79 @@ def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
 
 def add_sidebar():
     return "..."
+
+
+
+
+def display_test_by_lab_df(df_list):
+    df = pd.DataFrame.from_dict(df_list)
+    column_config = {col:st.column_config.Column(disabled=True,) for col in df.columns if col != 'Custom Test Tier'}
+    column_config['Custom Test Tier'] = st.column_config.SelectboxColumn(
+            help='Custom Condition Tier',
+            options=['Primary','Secondary','Tertiary'],
+            required=True,
+    )
+    df["delete"] = False
+
+    # Make Delete be the first column
+    df = df[
+        ["delete"] + df.columns[:-1].tolist()
+    ]
+
+    st.data_editor(
+        df,
+        key="test_summary_editor",
+        on_change=delete_callback,
+        hide_index=False,
+        column_config=column_config,
+        use_container_width=True,
+        height=700,
+    )
+
+def delete_callback():
+    """
+    Callback function to delete rows from the custom condition list based on user interaction.
+    If the 'delete' checkbox is checked for a row, that row is removed from the custom condition list.
+    """
+
+    edited_rows = st.session_state["test_summary_editor"]["edited_rows"]
+    for idx, value in edited_rows.items():
+        if ('delete' in value.keys()) and (value["delete"] is True):
+            st.session_state["custom_lab_specific_test_by_laboratory_section_list"].pop(idx)
+        else:
+            for k,v in value.items():
+                st.session_state["custom_lab_specific_test_by_laboratory_section_list"][idx][k] = v
+                print(f"{k} changed to {v}")
+
+
+
+
+# def summary_get_lab_specific_test_by_laboratory_section(df):
+#     print("before df.shape: ", df.shape)
+#     columns = [
+#         'laboratory',
+#         'testname',
+#         'test_name_short',
+#         'test_name_pretty',
+#         'test_format',
+#         'test_format_lancet_tier',
+#         'custom_test_tier',
+#     ]
+#     rename_map = {
+#         'laboratory': 'Laboratory',
+#         'testname': 'Test Name',
+#         'test_name_short': 'Test Name Short',
+#         'test_name_pretty': 'Test Name Pretty',
+#         'test_format': 'Test Format',
+#         'test_format_lancet_tier': 'Test Format Lancet Tier',
+#         'custom_test_tier': 'Custom Test Tier',
+#     }
+#     df = df[columns].copy()
+
+#     df.rename(
+#             columns=rename_map,
+#             inplace=True,
+#             )
+#     df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
+#     print("after df.shape: ", df.shape)
+#     return df 

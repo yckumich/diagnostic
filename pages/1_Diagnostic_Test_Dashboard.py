@@ -85,7 +85,6 @@ get_style_markdown()
 #--------------Configure the Main filter--------------
 filter_map = get_filter()
 selection = add_sidebar(filter_map=filter_map)
-
 #--------------Configure center pane------------------
 center_tab_col, test_list_col = st.columns([0.86, 0.14], gap="medium")
 
@@ -137,10 +136,9 @@ with center_tab_col:
     if isinstance(grid_table['selected_rows'], pd.DataFrame):
         sel_row_testname_lst = grid_table['selected_rows']['testname'].to_list()
         selected_test_df = selected_test_df[selected_test_df['testname'].isin(sel_row_testname_lst)]
-
+        print(selected_test_df.shape)
     tab_titles = list(cetner_tab_dict.keys())
     center_filter_tabs = st.tabs(tab_titles)
-
     for tab_title, center_filter_tab in zip(tab_titles, center_filter_tabs):
         with center_filter_tab:
             tab_df_titles = cetner_tab_dict[tab_title]

@@ -175,7 +175,8 @@ def delete_current_custom_test_tier_df():
         st.session_state["custom_test_tier_list"] = []
         st.session_state['show_test_tier_plot'] = False
         st.session_state.custom_test_tier_df = None
-
+        st.session_state.temp_custom_lab_specific_test_by_laboratory_section_df  = None
+        st.session_state.custom_lab_specific_test_by_laboratory_section_df  = None
         msg = st.toast('Deleting Custom Test Tier...')
         time.sleep(0.7)
         msg.toast('Deleted 🗑️')

@@ -1,6 +1,7 @@
 import pandas as pd
 import streamlit as st
 
+@st.cache_data(ttl=3600)
 def get_test_by_condition_test_by_condition(df, custom_condition_tier=False, custom_test_tier=False):
     df = df[[
             'conditionname',
@@ -63,7 +64,7 @@ def get_lab_specific_test_by_laboratory_section(df, custom_condition_tier=False,
 
     return df
 
-
+@st.cache_data(ttl=3600)
 def get_lab_specific_format_by_test(df, custom_condition_tier=False, custom_test_tier=False):
     df = df[[
             'test_name_pretty',
@@ -82,7 +83,7 @@ def get_lab_specific_format_by_test(df, custom_condition_tier=False, custom_test
     df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
     return df
 
-
+@st.cache_data(ttl=3600)
 def get_lab_specific_format_and_tiers(df, custom_condition_tier=False, custom_test_tier=False):
     columns = [
         'test_format',
@@ -108,7 +109,7 @@ def get_lab_specific_format_and_tiers(df, custom_condition_tier=False, custom_te
     return df
 
 
-
+@st.cache_data(ttl=3600)
 def get_test_by_medicine_test_by_medicine(df, custom_condition_tier=False, custom_test_tier=False):
 
     df = df[[
@@ -131,37 +132,50 @@ def get_test_by_medicine_test_by_medicine(df, custom_condition_tier=False, custo
     df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
     return df.head()
 
+
+@st.cache_data(ttl=3600)
 def get_test_by_med_and_cond_test_by_medicine_and_condition(df, custom_condition_tier=False, custom_test_tier=False):
-    df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
-    return df.head()
-
-def get_test_tests(df, custom_condition_tier=False, custom_test_tier=False):
-    df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
-    return df.head()
-
-def get_condition_by_test_conditions_per_test(df, custom_condition_tier=False, custom_test_tier=False):
-    df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
-    return df.head()
-
-def get_medicine_indications_medicine_indications(df, custom_condition_tier=False, custom_test_tier=False):
-    df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
-    return df.head()
-
-def get_tests_and_cond_test_lists_by_condition(df, custom_condition_tier=False, custom_test_tier=False):
-    df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
-    return df.head()
-
-def get_test_indication_test_indication(df, custom_condition_tier=False, custom_test_tier=False):
     df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
     return df.head()
 
 
 @st.cache_data(ttl=3600)
+def get_test_tests(df, custom_condition_tier=False, custom_test_tier=False):
+    df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
+    return df.head()
+
+
+@st.cache_data(ttl=3600)
+def get_condition_by_test_conditions_per_test(df, custom_condition_tier=False, custom_test_tier=False):
+    df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
+    return df.head()
+
+
+@st.cache_data(ttl=3600)
+def get_medicine_indications_medicine_indications(df, custom_condition_tier=False, custom_test_tier=False):
+    df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
+    return df.head()
+
+
+@st.cache_data(ttl=3600)
+def get_tests_and_cond_test_lists_by_condition(df, custom_condition_tier=False, custom_test_tier=False):
+    df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
+    return df.head()
+
+
+@st.cache_data(ttl=3600)
+def get_test_indication_test_indication(df, custom_condition_tier=False, custom_test_tier=False):
+    df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
+    return df.head()
+
+
+# @st.cache_data(ttl=3600)
 def generate_tab_content(tab_title, 
                          df_titles, 
                          df, 
                          custom_condition_tier_df=None,
                          custom_test_tier_df=None):
+
     tab_dataframes = list()
 
     tab_func_names = [
