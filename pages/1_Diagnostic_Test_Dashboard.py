@@ -67,8 +67,10 @@ def add_sidebar(filter_map):
         st.header('Current Filter Selection')
 
         with st.expander("Current Filter Selection"):
-            st.json(agg_filter_selection)    
+            st.json(agg_filter_selection)   
         
+        st.divider()  
+        st.markdown(sidebar_instruction)
     return agg_filter_selection
 
 #------------------------------MAIN------------------------------

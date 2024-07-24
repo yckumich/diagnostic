@@ -27,15 +27,13 @@ if "custom_test_tier_df" not in st.session_state:
 if 'show_test_tier_plot' not in st.session_state:
     st.session_state['show_test_tier_plot'] = False
 
-st.title("Essential Diagnostics Network for Universal Health Coverage")
-
-st.sidebar.success("Select a desired page above.")
+st.title("Essential Diagnostics for Universal Health Coverage")
 
 st.markdown("""<div style="height:30px;"></div>""", unsafe_allow_html=True)
 
 st.markdown(
     """  
-    The **Essential Diagnostics Network project** aims to support Universal Health Coverage (UHC) 
+    The **Essential Diagnostics project** aims to support Universal Health Coverage (UHC) 
     by developing a rational and effective network of diagnostic services. This initiative is rooted
     in the principles outlined in a comprehensive study focused on optimizing the availability
     and utilization of essential diagnostic tests. The core objectives of the project include 

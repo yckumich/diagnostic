@@ -3,9 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import streamlit as st
 from data.database import get_db
-
 import time
-
 
 @st.cache_data(ttl=3600)
 def retrieve_gbd_test_formats():
@@ -200,7 +198,8 @@ def save_current_coustom_test_tier_df():
 
         else:
             st.toast("Could Not Find Custom Test Tier Dataframe")
-def add_sidebar():
+
+def add_sidebar(): 
     with st.sidebar:
         st.markdown("""
             # Custom Test Tier Page
@@ -212,7 +211,7 @@ def add_sidebar():
               - You can manually add new test records by specifying the test format and test tier (Primary, Secondary, Tertiary).
 
             - **Upload Custom Test Tier CSV:**
-              - If you have a pre-existing dataset, you can upload it in CSV format. The uploaded file must contain columns 'testname' and 'custom_test_tier'.
+              - If you have a pre-developed dataset, you can upload it in CSV format. The uploaded file must contain columns 'testname' and 'custom_test_tier'.
 
             - **Display and Edit Test Table:**
               - The current test table is displayed for easy viewing and editing. You can mark records for deletion directly within the table.
@@ -241,5 +240,3 @@ def add_sidebar():
 
             This page empowers users to customize and visualize test tiers efficiently, supporting better diagnostic planning and resource allocation.
         """)
-
-    

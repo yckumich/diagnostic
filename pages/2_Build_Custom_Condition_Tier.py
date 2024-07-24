@@ -31,7 +31,7 @@ with build_col:
     # Display the current condition data
     display_custom_condition_df()
 
-    _, col_1, col_2, _ = st.columns([0.1, 0.4, 0.4, 0.1])
+    _, col_1, col_2, _ = st.columns([0.2, 0.3, 0.3, 0.2])
     with col_1:
         delete_current_coustom_df()
     with col_2:

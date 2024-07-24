@@ -3,31 +3,26 @@ import numpy as np
 import warnings
 import streamlit as st
 
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.colors import Color
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, PageBreak
+from reportlab.lib.units import inch
+
+from io import BytesIO
+import base64
 warnings.filterwarnings("ignore")
 
-empty_selection = {
-    'Diagnostic': {
-        'Laboratory': ['Blood bank'], 
-        'Test Format': [], 
-        'Test Reason': [], 
-        'Category': []
-    }, 
-    'Medicine': {
-        'Medicine': []
-    }, 
-    'Condition': {
-        'High Burden Disease': [], 
-        'Clinical Service': [], 
-        'Condition Name': []
-    }, 
-    'WHO EDL/EML': {
-        'WHO EDL v2': [],
-        'WHO EDL v2 Tier': [],
-        'WHO EML v20': [], 
-        'EML Category': []
-    }
-}
 
+# Function to generate PDF
+def generate_base64pdf(dataframe):
+    pdf_file = BytesIO()
+    dataframe_to_pdf(dataframe, pdf_file)
+    pdf_file.seek(0)
+    # Encode PDF to base64
+    base64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
+
+    return base64_pdf
 
 def remove_stars(s: str) -> str:
     if s.endswith('**'):
@@ -35,7 +30,6 @@ def remove_stars(s: str) -> str:
     elif s.endswith('*'):
         return s.replace("*","").strip()
     return s.strip()
-
 def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
     """
     Generates a summary of diagnostic tests by their respective tiers from the given DataFrame.
@@ -54,7 +48,7 @@ def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
     - pd.DataFrame: A formatted DataFrame summarizing the diagnostic tests by their respective tiers (Primary, 
       Secondary, and Tertiary) and services (laboratories).
     """
-    tests_by_tier_long = pd.DataFrame.from_dict(tests_by_tier_long)
+    
     test_by_tier_long_desiredprimary = tests_by_tier_long[tests_by_tier_long['Custom Test Tier'] == "Primary"]
     test_by_tier_long_desiredprimary = test_by_tier_long_desiredprimary.drop(columns=['Custom Test Tier',])
     test_by_tier_long_desiredprimary = test_by_tier_long_desiredprimary.drop_duplicates()
@@ -170,6 +164,7 @@ def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
     tests_out = pd.DataFrame(columns=['Diagnostics', 'Tier'])
     
     i = 0
+    seperator = ';_;'
     
     for level in tests_by_tier_long_clean['desired_test_location'].unique():
         filtered_tests_clean = tests_by_tier_long_clean[
@@ -203,14 +198,14 @@ def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
                 ]['desired_test_location']
                 
                 if len(spectrans_to) == 1:
-                    t_str += t + '*;'
+                    t_str += t + f'*{seperator}'
                 elif len(spectrans_to) == 2:
-                    t_str += t + '**;'
+                    t_str += t + f'**{seperator}'
                 elif len(spectrans_to) == 0:
-                    t_str += t + ';'
+                    t_str += t + f'{seperator}'
             
             # Remove the trailing '; '
-            t_str = t_str.rstrip(';')
+            t_str = t_str.rstrip(seperator)
             tests_out.at[i, 'Diagnostics'] = t_str
             i += 1
     
@@ -223,7 +218,7 @@ def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
     for _,row in tests_out.iterrows():
         temp_diagonostic = row['Diagnostics']
         temp_test_format = temp_diagonostic.split(":")[0]
-        temp_tests = temp_diagonostic.split(":")[1].split(";")
+        temp_tests = temp_diagonostic.split(":")[1].split(seperator)
         temp_tier = row['Tier']
         for test in temp_tests:
             temp_lab = tests_by_tier_long_clean[
@@ -256,17 +251,10 @@ def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
             
     return pd.DataFrame.from_dict(formatted_out_list)
 
-
-
-def add_sidebar():
-    return "..."
-
-
-
-
 def display_test_by_lab_df(df_list):
+
     df = pd.DataFrame.from_dict(df_list)
-    column_config = {col:st.column_config.Column(disabled=True,) for col in df.columns if col != 'Custom Test Tier'}
+    column_config = {col: st.column_config.Column(disabled=True,) for col in df.columns if col != 'Custom Test Tier'}
     column_config['Custom Test Tier'] = st.column_config.SelectboxColumn(
             help='Custom Condition Tier',
             options=['Primary','Secondary','Tertiary'],
@@ -275,21 +263,19 @@ def display_test_by_lab_df(df_list):
     df["delete"] = False
 
     # Make Delete be the first column
-    df = df[
-        ["delete"] + df.columns[:-1].tolist()
-    ]
+    df = df[["delete"] + df.columns[:-1].tolist()]
 
     st.data_editor(
         df,
         key="test_summary_editor",
-        on_change=delete_callback,
+        on_change=test_summary_delete_callback,
         hide_index=False,
         column_config=column_config,
         use_container_width=True,
-        height=700,
+        height=1000,
     )
 
-def delete_callback():
+def test_summary_delete_callback():
     """
     Callback function to delete rows from the custom condition list based on user interaction.
     If the 'delete' checkbox is checked for a row, that row is removed from the custom condition list.
@@ -298,14 +284,159 @@ def delete_callback():
     edited_rows = st.session_state["test_summary_editor"]["edited_rows"]
     for idx, value in edited_rows.items():
         if ('delete' in value.keys()) and (value["delete"] is True):
-            st.session_state["custom_lab_specific_test_by_laboratory_section_list"].pop(idx)
+            st.session_state["curr_clstbls_list"].pop(idx)
         else:
             for k,v in value.items():
-                st.session_state["custom_lab_specific_test_by_laboratory_section_list"][idx][k] = v
-                print(f"{k} changed to {v}")
+                st.session_state["curr_clstbls_list"][idx][k] = v
+    
+    st.session_state.test_summary_df = generate_tests_summary(pd.DataFrame.from_dict(st.session_state.curr_clstbls_list))
+            
 
 
+def wrap_text(text, style):
+    return Paragraph(text, style)
 
+def get_merge_span(item_list):
+    merge_indices = []
+    curr_val, start_idx, end_idx = item_list[0], 1, 1
+
+    for val in item_list[1:]:
+        if val == curr_val:
+            end_idx += 1
+        else:
+            curr_val = val
+            merge_indices.append([start_idx, end_idx])
+            start_idx = end_idx + 1
+            end_idx += 1
+
+    merge_indices.append([start_idx, end_idx])
+    return merge_indices
+
+def dataframe_to_pdf(dataframe, pdf_file='output.pdf'):
+    pdf = SimpleDocTemplate(
+        pdf_file,
+        pagesize=letter,
+        topMargin=0.35 * inch,
+        bottomMargin=0.35 * inch
+    )    
+    
+    elements = []
+
+    # Define the styles
+    style = getSampleStyleSheet()
+    header_style = ParagraphStyle(
+        name='HeaderStyle',
+        parent=style['BodyText'],
+        fontName='Helvetica-Bold',
+        fontSize=10,
+        alignment=1,  # Center alignment
+        leading=14,   # Line height
+        spaceBefore=6,
+        spaceAfter=6
+    )
+    body_style = ParagraphStyle(
+        name='BodyStyle',
+        parent=style['BodyText'],
+        fontSize=8,
+        alignment=1,  # Center alignment
+        leading=10,   # Line height
+        spaceBefore=6,
+        spaceAfter=6
+    )
+
+    # Define the style for the table
+    table_style = TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), Color(211/255, 211/255, 211/255)),  # Grey background for header
+        ('TEXTCOLOR', (0, 0), (-1, 0), Color(255/255, 255/255, 255/255)),   # White text for header
+        ('BACKGROUND', (0, 1), (0, -1), Color(240/255, 240/255, 240/255)),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('BACKGROUND', (1, 1), (-1, -1), Color(255/255, 255/255, 255/255)), # White background for body
+        ('GRID', (0, 0), (-1, -1), 1, Color(55/255, 55/255, 55/255)),       # Black grid lines
+        ('VALIGN', (1, 1), (-1, -1), 'MIDDLE'),  # Vertically align text in the first column to the middle
+        ('VALIGN', (0, 0), (-1, 0), 'MIDDLE')    # Vertically align text in the first column to the middle
+    ])
+
+    # Define column widths
+    col_widths = [1 * inch, 2.15 * inch, 2.15 * inch, 2.15 * inch]
+
+    # Split the DataFrame into chunks
+    max_rows_per_page = 22  # Adjust based on your page size and content
+    chunks = [dataframe.iloc[i:i + max_rows_per_page] for i in range(0, dataframe.shape[0], max_rows_per_page)]
+
+    for chunk in chunks:
+        # Prepare data for the table, wrapping text to fit the column width
+        data = []
+
+        # Wrap column headers separately to apply the header style
+        wrapped_headers = [wrap_text(col, header_style) for col in dataframe.columns]
+        data.append(wrapped_headers)
+
+        # Wrap body cells with the body style
+        for index, row in chunk.iterrows():
+            wrapped_row = [wrap_text(str(row[col]), body_style) for col in dataframe.columns]
+            data.append(wrapped_row)
+
+        # Create the table
+        table = Table(data, colWidths=col_widths)
+
+        # Apply the merging spans to the table
+        merge_indices = get_merge_span(chunk['service'].tolist())
+        for start, end in merge_indices:
+            table_style.add('SPAN', (0, start), (0, end))
+            table_style.add('VALIGN', (0, start), (0, end), 'MIDDLE')  # Ensure vertical alignment in merged cells
+
+        table.setStyle(table_style)
+        elements.append(table)
+        elements.append(PageBreak())
+
+    # Build the PDF
+    pdf.build(elements)
+
+
+def convert_df(df):
+   return df.to_csv(index=False).encode('utf-8')
+
+def add_sidebar():
+    with st.sidebar:
+        st.markdown("""
+        # Diagnostic Test Summary Instructions
+
+        Welcome to the **Diagnostic Test Summary** page. This page is designed to help you generate a comprehensive summary of diagnostic tests categorized by their respective tiers. Follow the instructions below to make the most out of this functionality.
+
+        ## Purpose
+        The **Diagnostic Test Summary** page allows you to:
+        1. **Fetch the existing Lab Specific - Test By Laboratory table**.
+        2. **Generate and view a summary of diagnostic tests** categorized into primary, secondary, and tertiary tiers.
+        3. **Manage the custom test tiers and their respective diagnostic tests**.
+
+        ## Steps to Use This Page
+
+        ### Step 1: Create/Upload Custom Test Tier
+        Before generating the test summary, ensure you have created or uploaded a custom test tier. This can be done on the **Build Custom Test Tier** page. If you have already done this, you will see the "Custom Test Tier" column displayed in the "Test By Laboratory" table on the Diagnostic Test Dashboard under the Lab Specific tab
+
+        ### Step 2: Fetch the Current "Test By Laboratory" Table
+        If the "Lab Specific - Test By Laboratory" table is not displayed, click on the "Fetch current 'Test By Laboratory' table" button. This will load the table based on your custom test tier.
+
+        ### Step 3: Manage Current Table
+        Once the table is fetched and displayed, you have the following options:
+        - **Refresh Current Table**: Click this button to fetch the latest table.
+        - **Delete Current Table**: Click this button to delete the current table.
+        - **Generate Test Summary**: Click this button to generate the test summary based on the current table.
+
+        ### Step 4: View Test Summary
+        After generating the test summary, it will be displayed in the "Test Summary" section. You can view the summary of diagnostic tests categorized into primary, secondary, and tertiary tiers.
+
+        ### Step 5: Edit Test Summary
+        You can edit the test summary using the data editor. To delete a row, check the "delete" checkbox next to the row. The row will be removed from the custom condition list. (After the edit, you must click **Generate Test Summary** to reflect the changed to summary table)
+
+        ## Notes
+        - The **Generate Test Summary** button will process the custom test tiers and generate a comprehensive summary of diagnostic tests.
+        - Ensure that you have created or uploaded the custom test tier and check the generated Lab Specific - Test By Laboratory table before attempting to generate the test summary.
+        - Use the "Refresh Current Table" and "Delete Current Table" buttons to manage the current table effectively.
+        """)
+
+    
 
 # def summary_get_lab_specific_test_by_laboratory_section(df):
 #     print("before df.shape: ", df.shape)
@@ -336,3 +467,27 @@ def delete_callback():
 #     df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
 #     print("after df.shape: ", df.shape)
 #     return df 
+
+
+# empty_selection = {
+#     'Diagnostic': {
+#         'Laboratory': ['Blood bank'], 
+#         'Test Format': [], 
+#         'Test Reason': [], 
+#         'Category': []
+#     }, 
+#     'Medicine': {
+#         'Medicine': []
+#     }, 
+#     'Condition': {
+#         'High Burden Disease': [], 
+#         'Clinical Service': [], 
+#         'Condition Name': []
+#     }, 
+#     'WHO EDL/EML': {
+#         'WHO EDL v2': [],
+#         'WHO EDL v2 Tier': [],
+#         'WHO EML v20': [], 
+#         'EML Category': []
+#     }
+# }
