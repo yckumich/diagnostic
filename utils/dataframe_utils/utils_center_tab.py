@@ -1,5 +1,7 @@
 import pandas as pd
 import streamlit as st
+import time
+
 
 @st.cache_data(ttl=3600)
 def get_test_by_condition_test_by_condition(df, custom_condition_tier=False, custom_test_tier=False):
@@ -219,6 +221,14 @@ def generate_tab_content(tab_title,
                 use_container_width=True,
                 height=900,
             )
-        # print(f'adding {df_titles[i]} to collected_dataframes')
+        if (df_titles[i] == 'Test By Laboratory Section') and ('Custom Test Tier' in result_df.columns):
+            if st.button("Save Current 'Test By Laboratory Section' Table"):
+                st.session_state.temp_clstbls_df = result_df
+                msg = st.toast("Saving current 'Test By Laboratory' table...")
+                time.sleep(0.7)
+                msg.toast('Saved ✅')
+                time.sleep(0.7)
+                st.rerun()
+
         tab_dataframes.append((df_titles[i], result_df))
     return tab_dataframes
