@@ -49,9 +49,13 @@ def get_lab_specific_test_by_laboratory_section(df, custom_condition_tier=False,
         'test_format_lancet_tier': 'Test Format Lancet Tier',
     }
 
+    if custom_condition_tier:
+        columns.append('custom_condition_tier')
+        rename_map['custom_condition_tier'] = 'Custom Condition Tier'
+
     if custom_test_tier:
         columns.append('custom_test_tier')
-        rename_map['custom_test_tier'] = 'Custom Test Tier'
+        rename_map['custom_test_tier'] = 'Test Format Custom Tier'
 
     df = df[columns].copy()
 
@@ -59,10 +63,20 @@ def get_lab_specific_test_by_laboratory_section(df, custom_condition_tier=False,
         columns=rename_map,
         inplace=True,
     )
-    df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
+    df = df.drop_duplicates().dropna().sort_values(by=list(df.columns)).reset_index(drop=True)
+    
+    custom_col_list = []
+    for col in ['Custom Condition Tier','Test Format Custom Tier']:
+        if col in df.columns:
+            custom_col_list.append(col)
 
-    if 'Custom Test Tier' in df.columns:
-        st.session_state.temp_clstbls_df = df
+    def apply_color(_):
+        return f"background-color: lightblue;"
+
+    df = df.style.map(apply_color, subset=custom_col_list)
+
+    if len(custom_col_list) ==  2:
+        st.session_state.temp_clstbls_df = df.data
 
     return df
 
@@ -221,9 +235,9 @@ def generate_tab_content(tab_title,
                 use_container_width=True,
                 height=900,
             )
-        if (df_titles[i] == 'Test By Laboratory Section') and ('Custom Test Tier' in result_df.columns):
+        if (df_titles[i] == 'Test By Laboratory Section') and ('Custom Condition Tier' in result_df.columns)  and  ('Custom Condition Tier' in result_df.columns):
             if st.button("Save Current 'Test By Laboratory Section' Table"):
-                st.session_state.temp_clstbls_df = result_df
+                st.session_state.temp_clstbls_df = result_df.data
                 msg = st.toast("Saving current 'Test By Laboratory' table...")
                 time.sleep(0.7)
                 msg.toast('Saved ✅')

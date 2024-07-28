@@ -24,12 +24,15 @@ def generate_base64pdf(dataframe):
 
     return base64_pdf
 
+
 def remove_stars(s: str) -> str:
     if s.endswith('**'):
         return s.replace("**","").strip()
     elif s.endswith('*'):
         return s.replace("*","").strip()
     return s.strip()
+
+
 def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
     """
     Generates a summary of diagnostic tests by their respective tiers from the given DataFrame.
@@ -41,37 +44,41 @@ def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
     the final summary in a formatted DataFrame.
 
     Parameters:
-    - tests_by_tier_long (pd.DataFrame): A DataFrame containing columns such as 'Custom Test Tier', 'Test Name', 
-      'Test Name Pretty', 'Test Format', 'Test Format Lancet Tier', 'Laboratory', and 'DesiredTestLocation'.
+    - tests_by_tier_long (pd.DataFrame): A DataFrame containing columns such as 'Custom Condition Tier', 'Test Name', 
+      'Test Name Pretty', 'Test Format', 'Test Format Custom Tier', 'Laboratory', and 'DesiredTestLocation'.
 
     Returns:
     - pd.DataFrame: A formatted DataFrame summarizing the diagnostic tests by their respective tiers (Primary, 
       Secondary, and Tertiary) and services (laboratories).
     """
+    tests_by_tier_long = tests_by_tier_long[
+        ['Laboratory', 'Test Name', 'Test Name Short', 'Test Name Pretty',
+         'Test Format', 'Test Format Custom Tier', 'Custom Condition Tier']
+    ]
     
-    test_by_tier_long_desiredprimary = tests_by_tier_long[tests_by_tier_long['Custom Test Tier'] == "Primary"]
-    test_by_tier_long_desiredprimary = test_by_tier_long_desiredprimary.drop(columns=['Custom Test Tier',])
+    test_by_tier_long_desiredprimary = tests_by_tier_long[tests_by_tier_long['Custom Condition Tier'] == "Primary"]
+    test_by_tier_long_desiredprimary = test_by_tier_long_desiredprimary.drop(columns=['Custom Condition Tier',])
     test_by_tier_long_desiredprimary = test_by_tier_long_desiredprimary.drop_duplicates()
     test_by_tier_long_desiredprimary['desired_test_location'] = "Primary"
     
     # Filtering for Primary or Secondary condition tier
     test_by_tier_long_desiredsecondary = tests_by_tier_long[
-        (tests_by_tier_long['Custom Test Tier'] == "Primary") | 
-        (tests_by_tier_long['Custom Test Tier'] == "Secondary")
+        (tests_by_tier_long['Custom Condition Tier'] == "Primary") | 
+        (tests_by_tier_long['Custom Condition Tier'] == "Secondary")
     ]
     
-    test_by_tier_long_desiredsecondary = test_by_tier_long_desiredsecondary.drop(columns=['Custom Test Tier',])
+    test_by_tier_long_desiredsecondary = test_by_tier_long_desiredsecondary.drop(columns=['Custom Condition Tier',])
     test_by_tier_long_desiredsecondary = test_by_tier_long_desiredsecondary.drop_duplicates()
     test_by_tier_long_desiredsecondary['desired_test_location'] = "Secondary"
     
     # Filtering for Primary, Secondary, or Tertiary condition tier
     test_by_tier_long_desiredtertiary = tests_by_tier_long[
-        (tests_by_tier_long['Custom Test Tier'] == "Primary") | 
-        (tests_by_tier_long['Custom Test Tier'] == "Secondary") | 
-        (tests_by_tier_long['Custom Test Tier'] == "Tertiary")
+        (tests_by_tier_long['Custom Condition Tier'] == "Primary") | 
+        (tests_by_tier_long['Custom Condition Tier'] == "Secondary") | 
+        (tests_by_tier_long['Custom Condition Tier'] == "Tertiary")
     ]
     
-    test_by_tier_long_desiredtertiary = test_by_tier_long_desiredtertiary.drop(columns=['Custom Test Tier',])
+    test_by_tier_long_desiredtertiary = test_by_tier_long_desiredtertiary.drop(columns=['Custom Condition Tier',])
     test_by_tier_long_desiredtertiary = test_by_tier_long_desiredtertiary.drop_duplicates()
     test_by_tier_long_desiredtertiary['desired_test_location'] = "Tertiary"
     
@@ -93,10 +100,10 @@ def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
     tests_by_tier_long = tests_by_tier_long.drop_duplicates().reset_index(drop=True)
     
     # Initialize new columns with NaN
-    tests_by_tier_long['test_format_lancet_tier_num'] = np.nan
-    tests_by_tier_long.loc[tests_by_tier_long['Test Format Lancet Tier'] == 'Primary', 'test_format_lancet_tier_num'] = int(1)
-    tests_by_tier_long.loc[tests_by_tier_long['Test Format Lancet Tier'] == 'Secondary', 'test_format_lancet_tier_num'] = int(2)
-    tests_by_tier_long.loc[tests_by_tier_long['Test Format Lancet Tier'] == 'Tertiary', 'test_format_lancet_tier_num'] = int(3)
+    tests_by_tier_long['test_format_custom_tier_num'] = np.nan
+    tests_by_tier_long.loc[tests_by_tier_long['Test Format Custom Tier'] == 'Primary', 'test_format_custom_tier_num'] = int(1)
+    tests_by_tier_long.loc[tests_by_tier_long['Test Format Custom Tier'] == 'Secondary', 'test_format_custom_tier_num'] = int(2)
+    tests_by_tier_long.loc[tests_by_tier_long['Test Format Custom Tier'] == 'Tertiary', 'test_format_custom_tier_num'] = int(3)
     
     tests_by_tier_long['desired_test_location_num'] = np.nan
     tests_by_tier_long.loc[tests_by_tier_long['desired_test_location'] == 'Primary', 'desired_test_location_num'] = int(1)
@@ -107,8 +114,8 @@ def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
     tests_by_tier_long['placed'] = np.nan
     tests_by_tier_long['spectransport'] = np.nan
     
-    tests_by_tier_long.loc[tests_by_tier_long['test_format_lancet_tier_num'] <= tests_by_tier_long['desired_test_location_num'], 'placed'] = 'Placed'
-    tests_by_tier_long.loc[tests_by_tier_long['test_format_lancet_tier_num'] > tests_by_tier_long['desired_test_location_num'], 'spectransport'] = 'SpecimenTransport'
+    tests_by_tier_long.loc[tests_by_tier_long['test_format_custom_tier_num'] <= tests_by_tier_long['desired_test_location_num'], 'placed'] = 'Placed'
+    tests_by_tier_long.loc[tests_by_tier_long['test_format_custom_tier_num'] > tests_by_tier_long['desired_test_location_num'], 'spectransport'] = 'SpecimenTransport'
     
     # Filter out rows where both 'placed' and 'spectransport' are NaN
     tests_by_tier_long_clean = tests_by_tier_long[tests_by_tier_long['placed'].notna() | tests_by_tier_long['spectransport'].notna()]
@@ -118,11 +125,11 @@ def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
     tests_by_tier_long_spectransport = tests_by_tier_long_clean[tests_by_tier_long_clean['spectransport'].notna()]
     
     tests_by_tier_long_placed = tests_by_tier_long_placed.sort_values(
-        by=['Laboratory', 'Test Name', 'Test Format', 'Test Format Lancet Tier','desired_test_location'], key=lambda col: col.str.lower()
+        by=['Laboratory', 'Test Name', 'Test Format', 'Test Format Custom Tier','desired_test_location'], key=lambda col: col.str.lower()
     ).reset_index(drop=True)
     
     tests_by_tier_long_spectransport = tests_by_tier_long_spectransport.sort_values(
-        by=['Laboratory', 'Test Name', 'Test Format', 'Test Format Lancet Tier', 'desired_test_location'], key=lambda col: col.str.lower()
+        by=['Laboratory', 'Test Name', 'Test Format', 'Test Format Custom Tier', 'desired_test_location'], key=lambda col: col.str.lower()
     ).reset_index(drop=True)
     
     tests_placed_tmp = tests_by_tier_long_placed['Test Name'].unique()
@@ -158,7 +165,7 @@ def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
     tests_by_tier_long_clean = pd.concat([tests_by_tier_long_placed, tests_by_tier_long_spectransport])
     
     tests_by_tier_long_clean = tests_by_tier_long_clean.sort_values(
-        by=['Laboratory', 'Test Name', 'Test Format', 'Test Format Lancet Tier', 'desired_test_location'], key=lambda col: col.str.lower()
+        by=['Laboratory', 'Test Name', 'Test Format', 'Test Format Custom Tier', 'desired_test_location'], key=lambda col: col.str.lower()
     ).reset_index(drop=True)
     
     tests_out = pd.DataFrame(columns=['Diagnostics', 'Tier'])
@@ -189,8 +196,8 @@ def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
                 spectrans_to = tests_by_tier_long_spectransport[
                     (tests_by_tier_long_spectransport['Test Name'] == t) & 
                     (tests_by_tier_long_spectransport['Test Format'] == f) & 
-                    (tests_by_tier_long_spectransport['Test Format Lancet Tier'] == level)
-                ]['Test Format Lancet Tier']
+                    (tests_by_tier_long_spectransport['Test Format Custom Tier'] == level)
+                ]['Test Format Custom Tier']
                 
                 spectrans_from = tests_by_tier_long_spectransport[
                     (tests_by_tier_long_spectransport['Test Name'] == t) & 
@@ -254,8 +261,8 @@ def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
 def display_test_by_lab_df(df_list):
 
     df = pd.DataFrame.from_dict(df_list)
-    column_config = {col: st.column_config.Column(disabled=True,) for col in df.columns if col != 'Custom Test Tier'}
-    column_config['Custom Test Tier'] = st.column_config.SelectboxColumn(
+    column_config = {col: st.column_config.Column(disabled=True,) for col in df.columns if col != 'Custom Condition Tier'}
+    column_config['Custom Condition Tier'] = st.column_config.SelectboxColumn(
             help='Custom Condition Tier',
             options=['Primary','Secondary','Tertiary'],
             required=True,
@@ -408,15 +415,15 @@ def add_sidebar():
         The **Diagnostic Test Summary** page allows you to:
         1. **Fetch the existing Lab Specific - Test By Laboratory table**.
         2. **Generate and view a summary of diagnostic tests** categorized into primary, secondary, and tertiary tiers.
-        3. **Manage the custom test tiers and their respective diagnostic tests**.
+        3. **Manage the Custom Condition Tiers and their respective diagnostic tests**.
 
         ## Steps to Use This Page
 
-        ### Step 1: Create/Upload Custom Test Tier
-        Before generating the test summary, ensure you have created or uploaded a custom test tier. This can be done on the **Build Custom Test Tier** page. If you have already done this, you will see the "Custom Test Tier" column displayed in the "Test By Laboratory" table on the Diagnostic Test Dashboard under the Lab Specific tab
+        ### Step 1: Create/Upload Custom Condition Tier
+        Before generating the test summary, ensure you have created or uploaded a Custom Condition Tier. This can be done on the **Build Custom Condition Tier** page. If you have already done this, you will see the "Custom Condition Tier" column displayed in the "Test By Laboratory" table on the Diagnostic Test Dashboard under the Lab Specific tab
 
         ### Step 2: Fetch the Current "Test By Laboratory" Table
-        If the "Lab Specific - Test By Laboratory" table is not displayed, click on the "Fetch current 'Test By Laboratory' table" button. This will load the table based on your custom test tier.
+        If the "Lab Specific - Test By Laboratory" table is not displayed, click on the "Fetch current 'Test By Laboratory' table" button. This will load the table based on your Custom Condition Tier.
 
         ### Step 3: Manage Current Table
         Once the table is fetched and displayed, you have the following options:
@@ -431,8 +438,8 @@ def add_sidebar():
         You can edit the test summary using the data editor. To delete a row, check the "delete" checkbox next to the row. The row will be removed from the custom condition list. (After the edit, you must click **Generate Test Summary** to reflect the changed to summary table)
 
         ## Notes
-        - The **Generate Test Summary** button will process the custom test tiers and generate a comprehensive summary of diagnostic tests.
-        - Ensure that you have created or uploaded the custom test tier and check the generated Lab Specific - Test By Laboratory table before attempting to generate the test summary.
+        - The **Generate Test Summary** button will process the Custom Condition Tiers and generate a comprehensive summary of diagnostic tests.
+        - Ensure that you have created or uploaded the Custom Condition Tier and check the generated Lab Specific - Test By Laboratory table before attempting to generate the test summary.
         - Use the "Refresh Current Table" and "Delete Current Table" buttons to manage the current table effectively.
         """)
 
@@ -455,8 +462,8 @@ def add_sidebar():
 #         'test_name_short': 'Test Name Short',
 #         'test_name_pretty': 'Test Name Pretty',
 #         'test_format': 'Test Format',
-#         'test_format_lancet_tier': 'Test Format Lancet Tier',
-#         'custom_test_tier': 'Custom Test Tier',
+#         'test_format_lancet_tier': 'Test Format Custom Tier',
+#         'custom_test_tier': 'Custom Condition Tier',
 #     }
 #     df = df[columns].copy()
 
