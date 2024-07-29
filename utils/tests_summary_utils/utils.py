@@ -8,10 +8,11 @@ from reportlab.lib.colors import Color
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, PageBreak
 from reportlab.lib.units import inch
-
+import time
 from io import BytesIO
 import base64
 warnings.filterwarnings("ignore")
+name_map = {"test_format": "Test Format", "custom_test_tier": "Test Format Custom Tier"}
 
 
 # Function to generate PDF
@@ -55,7 +56,7 @@ def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
         ['Laboratory', 'Test Name', 'Test Name Short', 'Test Name Pretty',
          'Test Format', 'Test Format Custom Tier', 'Custom Condition Tier']
     ]
-    
+
     test_by_tier_long_desiredprimary = tests_by_tier_long[tests_by_tier_long['Custom Condition Tier'] == "Primary"]
     test_by_tier_long_desiredprimary = test_by_tier_long_desiredprimary.drop(columns=['Custom Condition Tier',])
     test_by_tier_long_desiredprimary = test_by_tier_long_desiredprimary.drop_duplicates()
@@ -258,29 +259,34 @@ def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
             
     return pd.DataFrame.from_dict(formatted_out_list)
 
+
 def display_test_by_lab_df(df_list):
 
     df = pd.DataFrame.from_dict(df_list)
-    column_config = {col: st.column_config.Column(disabled=True,) for col in df.columns if col != 'Custom Condition Tier'}
-    column_config['Custom Condition Tier'] = st.column_config.SelectboxColumn(
-            help='Custom Condition Tier',
-            options=['Primary','Secondary','Tertiary'],
-            required=True,
-    )
-    df["delete"] = False
+    st.dataframe(df, 
+                 use_container_width=True,
+                 height=1000,)
+    # column_config = {col: st.column_config.Column(disabled=True,) for col in df.columns if col != 'Custom Condition Tier'}
+    # column_config['Custom Condition Tier'] = st.column_config.SelectboxColumn(
+    #         help='Custom Condition Tier',
+    #         options=['Primary','Secondary','Tertiary'],
+    #         required=True,
+    # )
+    # df["delete"] = False
 
-    # Make Delete be the first column
-    df = df[["delete"] + df.columns[:-1].tolist()]
+    # # Make Delete be the first column
+    # df = df[["delete"] + df.columns[:-1].tolist()]
 
-    st.data_editor(
-        df,
-        key="test_summary_editor",
-        on_change=test_summary_delete_callback,
-        hide_index=False,
-        column_config=column_config,
-        use_container_width=True,
-        height=1000,
-    )
+    # st.data_editor(
+    #     df,
+    #     key="test_summary_editor",
+    #     on_change=test_summary_delete_callback,
+    #     hide_index=False,
+    #     column_config=column_config,
+    #     use_container_width=True,
+    #     height=1000,
+    # )
+
 
 def test_summary_delete_callback():
     """
@@ -299,9 +305,9 @@ def test_summary_delete_callback():
     st.session_state.test_summary_df = generate_tests_summary(pd.DataFrame.from_dict(st.session_state.curr_clstbls_list))
             
 
-
 def wrap_text(text, style):
     return Paragraph(text, style)
+
 
 def get_merge_span(item_list):
     merge_indices = []
@@ -318,6 +324,7 @@ def get_merge_span(item_list):
 
     merge_indices.append([start_idx, end_idx])
     return merge_indices
+
 
 def dataframe_to_pdf(dataframe, pdf_file='output.pdf'):
     pdf = SimpleDocTemplate(
@@ -404,6 +411,7 @@ def dataframe_to_pdf(dataframe, pdf_file='output.pdf'):
 def convert_df(df):
    return df.to_csv(index=False).encode('utf-8')
 
+
 def add_sidebar():
     with st.sidebar:
         st.markdown("""
@@ -443,7 +451,235 @@ def add_sidebar():
         - Use the "Refresh Current Table" and "Delete Current Table" buttons to manage the current table effectively.
         """)
 
-    
+
+## ----------------CONDITON-RELATED FUNCTIONS--------------------
+
+def inline_custom_condition_delete_callback():
+    """
+    Callback function to delete rows from the custom condition list based on user interaction.
+    If the 'delete' checkbox is checked for a row, that row is removed from the custom condition list.
+    """
+
+    edited_rows = st.session_state["inline_custom_condition_data_editor"]["edited_rows"]
+    for idx, value in edited_rows.items():
+        if ('delete' in value.keys()) and (value["delete"] is True):
+            st.session_state["inline_custom_condition_list"].pop(idx)
+        else:
+            for k,v in value.items():
+                st.session_state["inline_custom_condition_list"][idx][k] = v
+
+
+def inline_display_custom_condition_df():
+    """
+    Displays the custom condition list as a data editor in Streamlit.
+    Allows users to view and mark rows for deletion. The 'delete' column is added
+    to allow users to mark rows for deletion.
+    """
+
+    custom_condition_df = pd.DataFrame(st.session_state["inline_custom_condition_list"])
+    column_config = {
+        'conditionname': st.column_config.Column(
+            disabled=True,
+            help='Condition Name'
+        ),
+        'conditionlevel': st.column_config.SelectboxColumn(
+            help='Condition Level',
+            options=['triage','moderate','severe'],
+            required=True,
+        ),
+        'custom_condition_tier': st.column_config.SelectboxColumn(
+            help='Custom Condition Tier',
+            options=['Primary','Secondary','Tertiary'],
+            required=True,
+        )
+    }
+    custom_condition_df["delete"] = False
+
+    # Make Delete be the first column
+    custom_condition_df = custom_condition_df[
+        ["delete"] + custom_condition_df.columns[:-1].tolist()
+    ]
+
+    st.data_editor(
+        custom_condition_df,
+        key="inline_custom_condition_data_editor",
+        on_change=inline_custom_condition_delete_callback,
+        hide_index=False,
+        column_config=column_config,
+        use_container_width=True
+    )
+
+
+def inline_refresh_condition_df():
+    if st.button("Fetch Original Current Custom Condition Table"):
+        st.session_state.inline_custom_condition_list = st.session_state.custom_condition_list.copy()
+        msg = st.toast('Fetching Original Custom Condition Level...')
+        time.sleep(0.7)
+        msg.toast('Fetched ✅ ')
+        st.rerun()
+
+def inline_apply_coustom_condition_df_to_tbls():
+    if st.button("Apply Changes to Test by Laboratory"):
+        cached_clstbls_df_all_cols = st.session_state.cached_tbls_all_cols
+
+        if ('custom_condition_tier' not in cached_clstbls_df_all_cols.columns) or ('custom_test_tier' not in cached_clstbls_df_all_cols.columns):
+            st.warning('Must create/upload custom condition tier and test tier to apply the change(s).')
+            st.rerun()
+        else:
+            cached_clstbls_df_all_cols = cached_clstbls_df_all_cols.drop(columns=['custom_condition_tier', 'custom_test_tier'])
+            
+        inline_custom_condition_df = pd.DataFrame.from_dict(st.session_state.inline_custom_condition_list)
+        inline_custom_test_df = pd.DataFrame.from_dict(st.session_state.inline_custom_test_list)
+
+
+        merged_df = pd.merge(
+            left=cached_clstbls_df_all_cols,
+            right=inline_custom_condition_df[['conditionname', 'conditionlevel', 'custom_condition_tier']], 
+            on=['conditionname', 'conditionlevel'],
+            how='left',
+        )
+
+        merged_df = pd.merge(
+            left=merged_df,
+            right=inline_custom_test_df[['test_format', 'custom_test_tier']], 
+            on=['test_format'],
+            how='left',
+        )
+        
+        st.session_state.cached_tbls_all_cols = merged_df
+
+        columns = [
+            'laboratory',
+            'testname',
+            'test_name_short',
+            'test_name_pretty',
+            'test_format',
+            'test_format_lancet_tier',
+            'custom_condition_tier',
+            'custom_test_tier',
+        ]
+        rename_map = {
+            'laboratory': 'Laboratory',
+            'testname': 'Test Name',
+            'test_name_short': 'Test Name Short',
+            'test_name_pretty': 'Test Name Pretty',
+            'test_format': 'Test Format',
+            'test_format_lancet_tier': 'Test Format Lancet Tier',
+            'custom_condition_tier': 'Custom Condition Tier',
+            'custom_test_tier': 'Test Format Custom Tier'
+        }
+        merged_df = merged_df[columns].rename(columns=rename_map).dropna(axis=0).drop_duplicates()
+        st.session_state.curr_clstbls_list = merged_df.sort_values(by=list(merged_df.columns)).to_dict(orient='records')
+        
+        
+        # print(merged_df.columns)
+        # print(merged_df.shape)
+        # print(merged_df.to_dict(orient='records'))
+
+        # print(merged_df.shape)
+        
+        st.session_state.display_test_summary = False
+        st.rerun()
+        
+
+
+
+        # print("inline_custom_tst_df.columns:", inline_custom_cnd_df.columns)
+        # print("temp_tbls_df.columns:", temp_tbls_df.columns)
+        # st.session_state.curr_clstbls_list = pd.merge(
+        #     left=temp_tbls_df,
+        #     right=inline_custom_cnd_df[['conditionname', 'conditionlevel', 'custom_condition_tier']], 
+        #     on=['conditionname', 'conditionlevel'],
+        #     how='left',
+        # ).to_dict(orient='records')
+
+        # st.rerun()
+
+
+## ----------------TEST-RELATED FUNCTIONS--------------------
+
+def inline_custom_test_delete_callback():
+    """
+    Callback function to delete rows from the custom test tier list based on user interaction.
+    If the 'delete' checkbox is checked for a row, that row is removed from the custom test tier list.
+    Otherwise, updates the values in the custom test tier list based on user edits.
+    """
+
+    edited_rows = st.session_state["inline_test_tier_data_editor"]["edited_rows"]
+
+    for idx, value in edited_rows.items():
+        if ('delete' in value.keys()) and (value["delete"] is True):
+            st.session_state["inline_custom_test_list"].pop(idx)
+        else:
+            for k,v in value.items():
+                st.session_state["inline_custom_test_list"][idx][k] = v
+
+
+def inline_display_custom_test_tier_df():
+    """
+    Displays the custom test tier list as a data editor in Streamlit.
+    Allows users to view and mark rows for deletion. The 'delete' column is added
+    to allow users to mark rows for deletion.
+    """
+
+    custom_test_tier_df = pd.DataFrame(st.session_state["inline_custom_test_list"])
+    column_config = {
+        'test_format': st.column_config.Column(
+            disabled=True,
+        ),
+        'custom_test_tier': st.column_config.SelectboxColumn(
+            options=['Primary','Secondary','Tertiary'],
+            required=True,
+        )
+    }
+    custom_test_tier_df["delete"] = False
+
+    # Make Delete be the first column
+    custom_test_tier_df = custom_test_tier_df[
+        ["delete"] + custom_test_tier_df.columns[:-1].tolist()
+    ]
+
+    st.data_editor(
+        custom_test_tier_df,
+        key="inline_test_tier_data_editor",
+        on_change=inline_custom_test_delete_callback,
+        hide_index=False,
+        column_config=column_config,
+        use_container_width=True
+    )
+
+def inline_refresh_test_df():
+    if st.button("Fetch Original Current Custom Test Table"):
+        st.session_state.inline_custom_test_list = st.session_state.custom_test_tier_list.copy()
+        msg = st.toast('Fetching Original Custom Test Level...')
+        time.sleep(0.7)
+        msg.toast('Fetched ✅ ')
+        st.rerun()
+
+def inline_apply_custom_test_df_to_tbls():
+    if st.button("Apply Changes in Test To Test by Laboratory"):
+        if (('curr_clstbls_list' not in st.session_state) 
+        or (not isinstance(st.session_state.curr_clstbls_list, list)) 
+        or (len(st.session_state.curr_clstbls_list) == 0)):
+            msg = st.toast('You must Fetch Test by Laboratory Section to apply changes...')
+            time.sleep(0.7)
+            msg.toast('Refreshing... ')
+            time.sleep(0.7)
+            st.rerun()
+
+        inline_custom_test_df = pd.DataFrame.from_dict(st.session_state.inline_custom_test_list).rename(columns=name_map)
+        temp_tbls_df = pd.DataFrame.from_dict(st.session_state.curr_clstbls_list).drop(columns=['Test Format Custom Tier'])
+
+        st.session_state.curr_clstbls_list = pd.merge(
+            left=temp_tbls_df,
+            right=inline_custom_test_df[['Test Format', 'Test Format Custom Tier']], 
+            on=['Test Format'],
+            how='left',
+        ).to_dict(orient='records')
+        
+        st.session_state.display_test_summary = False
+        st.rerun()
+
 
 # def summary_get_lab_specific_test_by_laboratory_section(df):
 #     print("before df.shape: ", df.shape)

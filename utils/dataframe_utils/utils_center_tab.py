@@ -32,6 +32,12 @@ def get_lab_specific_test_by_laboratory_section(df, custom_condition_tier=False,
     if "temp_clstbls_df" not in st.session_state:
         st.session_state.temp_clstbls_df = None
 
+    if "cached_tbls_all_cols" not in st.session_state:
+        st.session_state.cached_tbls_all_cols = None
+    
+    if custom_condition_tier and custom_test_tier:
+        st.session_state.cached_tbls_all_cols = df
+
     columns = [
         'laboratory',
         'testname',
