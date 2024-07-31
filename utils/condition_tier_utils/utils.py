@@ -2,9 +2,27 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import streamlit as st
-from data.database import get_db
+# from data.database import get_db
 import time
 
+
+# @st.cache_data(ttl=3600)
+# def retrieve_gbd_conditions():
+#     """
+#     Fetches and returns a sorted list of condition names from the 'conditions' table
+#     where the 'lancet_gbd' field is 'Yes'. The data is cached for 3600 seconds.
+#     """
+
+#     from data.models import Condition as condition_table
+#     db = next(get_db())
+
+#     try:
+#         query = db.query(condition_table.condition_name)
+#         conditions = query.filter(condition_table.lancet_gbd == 'Yes').all()
+#     finally:
+#         db.close()
+
+#     return sorted([_[0] for _ in conditions], key=str.casefold)
 
 @st.cache_data(ttl=3600)
 def retrieve_gbd_conditions():
@@ -13,17 +31,7 @@ def retrieve_gbd_conditions():
     where the 'lancet_gbd' field is 'Yes'. The data is cached for 3600 seconds.
     """
 
-    from data.models import Condition as condition_table
-    db = next(get_db())
-
-    try:
-        query = db.query(condition_table.condition_name)
-        conditions = query.filter(condition_table.lancet_gbd == 'Yes').all()
-    finally:
-        db.close()
-
-    return sorted([_[0] for _ in conditions], key=str.casefold)
-
+    return sorted(pd.read_csv("static/conditions.csv").query("lancet_gbd == 'Yes'")['condition_name'].to_list(), key=str.casefold)
 
 
 def create_condition_plot(df):
@@ -211,6 +219,7 @@ def save_current_coustom_df():
 
         else:
             st.toast("Could Not Find Custom Condition Level Dataframe")
+            
 def add_sidebar():
     with st.sidebar:
         st.markdown("""

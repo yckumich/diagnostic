@@ -1,7 +1,7 @@
 import pandas as pd
 from utils.tests_summary_utils.utils import *
-from utils.dataframe_utils.utils import convert_selection_to_df
-from utils.dataframe_utils.utils_center_tab import get_lab_specific_test_by_laboratory_section
+# from utils.dataframe_utils.utils import convert_selection_to_df
+# from utils.dataframe_utils.utils_center_tab import get_lab_specific_test_by_laboratory_section
 from utils.test_tier_utils.utils import *
 from utils.condition_tier_utils.utils import *
 
@@ -136,7 +136,7 @@ with build_col:
                 with col_2:
                     if st.button("Generate Test Summary"):
                         st.session_state.display_test_summary = True
-                        print(st.session_state.curr_clstbls_list)
+                        # print(st.session_state.curr_clstbls_list)
                         st.session_state.test_summary_df = generate_tests_summary(pd.DataFrame.from_dict(st.session_state.curr_clstbls_list))
                         st.rerun()
 

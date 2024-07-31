@@ -2,31 +2,41 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import streamlit as st
-from data.database import get_db
+# from data.database import get_db
 import time
+
+# @st.cache_data(ttl=3600)
+# def retrieve_gbd_test_formats():
+#     """
+#     Fetches and returns a sorted list of condition names from the 'conditions' table
+#     where the 'lancet_gbd' field is 'Yes'. The data is cached for 3600 seconds.
+#     """
+#     from data.models import t_tableau3_t2_tjfs_join_edl_dashadmin as table
+#     from data.models import Condition as condition_table
+#     from sqlalchemy import select
+
+#     db = next(get_db())
+
+#     try:
+#         condition_names = db.query(condition_table.condition_name).filter(condition_table.lancet_gbd == 'Yes').all()
+#         condition_names_list = [_[0] for _ in condition_names]
+#         stmt = select([table.c.test_format]).distinct().where(table.c.conditionname.in_(condition_names_list))
+#         test_format_list = db.execute(stmt).fetchall()
+#     finally:
+#         db.close()
+        
+#     del condition_table, table, select
+#     return sorted([_[0] for _ in test_format_list  if isinstance(_[0], str)], key=str.casefold)
 
 @st.cache_data(ttl=3600)
 def retrieve_gbd_test_formats():
-    """
-    Fetches and returns a sorted list of condition names from the 'conditions' table
-    where the 'lancet_gbd' field is 'Yes'. The data is cached for 3600 seconds.
-    """
-    from data.models import t_tableau3_t2_tjfs_join_edl_dashadmin as table
-    from data.models import Condition as condition_table
-    from sqlalchemy import select
 
-    db = next(get_db())
+    from data.database import view_df
+    condition_names_list = sorted(pd.read_csv("static/conditions.csv").query("lancet_gbd == 'Yes'")['condition_name'].to_list(), key=str.casefold)
+    test_format_list = set(view_df[view_df['conditionname'].isin(condition_names_list)]['test_format'].dropna())
+    del view_df
 
-    try:
-        condition_names = db.query(condition_table.condition_name).filter(condition_table.lancet_gbd == 'Yes').all()
-        condition_names_list = [_[0] for _ in condition_names]
-        stmt = select([table.c.test_format]).distinct().where(table.c.conditionname.in_(condition_names_list))
-        test_format_list = db.execute(stmt).fetchall()
-    finally:
-        db.close()
-        
-    del condition_table, table, select
-    return sorted([_[0] for _ in test_format_list  if isinstance(_[0], str)], key=str.casefold)
+    return sorted(test_format_list, key=str.casefold)
 
 @st.cache_data(ttl=3600)
 def create_test_tier_plot(df):

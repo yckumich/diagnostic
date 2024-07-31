@@ -1,29 +1,43 @@
-from sqlalchemy.orm.query import Query
+# from sqlalchemy.orm.query import Query
 # from sqlalchemy.orm import Session
+# from data.database import get_db
+# from data.models import t_tableau3_t2_tjfs_join_edl_dashadmin as table
 
-from data.database import get_db
-from data.models import t_tableau3_t2_tjfs_join_edl_dashadmin as table
-
+from data.database import view_df
 from utils.dataframe_utils.filter import high_level_filter_map
 from typing import Dict, List, Any
 
 import streamlit as st
 import pandas as pd
+import numpy as np
 import zipfile
 import io
 
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 
-def convert_query_to_df(query:Query, 
-                        limit:int=None) -> pd.DataFrame:
-    """
-    Converts a SQLAlchemy query result into a pandas DataFrame.
-    """
-    column_names = query.statement.columns.keys()
-    query_result = query.limit(limit).all() if limit else query.all()
-    
-    return pd.DataFrame(columns=column_names, data=query_result)
 
+# import warnings
+# warnings.filterwarnings('ignore')
+
+# def convert_query_to_df(query:Query, 
+#                         limit:int=None) -> pd.DataFrame:
+#     """
+#     Converts a SQLAlchemy query result into a pandas DataFrame.
+#     """
+#     column_names = query.statement.columns.keys()
+#     query_result = query.limit(limit).all() if limit else query.all()
+    
+#     return pd.DataFrame(columns=column_names, data=query_result)
+
+## CHANGED!
+@st.cache_resource(ttl=3600)
+def convert_query_to_df(query_stmt:str) -> pd.DataFrame:
+    global view_df
+
+    if query_stmt != "":
+        return view_df.query(query_stmt)
+    else:
+        return view_df
 
 def extract_unique_values(df: pd.DataFrame, 
                           filter_map: Dict[str, Dict[str, str]], 
@@ -40,7 +54,7 @@ def extract_unique_values(df: pd.DataFrame,
 
 
 def create_filter_map(df:pd.DataFrame, 
-                  filter_map:dict) -> Dict[str, Dict[str, List]]:
+                      filter_map:dict) -> Dict[str, Dict[str, List]]:
     """
     Creates a comprehensive dictionary of unique values for each sub-filter associated with all main filters.
     """
@@ -52,21 +66,27 @@ def create_filter_map(df:pd.DataFrame,
     return complete_filter
 
 
+# @st.cache_resource(ttl=3600)
+# def get_filter()-> Dict:
+#     """
+#     Retrieves a comprehensive filter dictionary from the database query results.
+#     """
+#     global table
+#     db = next(get_db())
+#     try:
+#         query = db.query(table)
+#         df = convert_query_to_df(query, None)
+#         filter = create_filter_map(df, high_level_filter_map)
+#     finally:
+#         db.close()
+#     return filter
+
+## CHANGED!
 @st.cache_resource(ttl=3600)
 def get_filter()-> Dict:
-    """
-    Retrieves a comprehensive filter dictionary from the database query results.
-    """
-    global table
-    db = next(get_db())
-    try:
-        query = db.query(table)
-        df = convert_query_to_df(query, None)
-        filter = create_filter_map(df, high_level_filter_map)
-    finally:
-        db.close()
-    return filter
-
+    global view_df, high_level_filter_map
+    
+    return create_filter_map(view_df, high_level_filter_map)
 
 @st.cache_data(ttl=3600)
 def convert_selection_to_filter(selection: Dict[str,Dict[str,List[str]]]) -> Dict[str,List[str]]:
@@ -82,26 +102,31 @@ def convert_selection_to_filter(selection: Dict[str,Dict[str,List[str]]]) -> Dic
         for k, v in ll_filter.items():
             if v:
                 selection_to_filter[title_to_col[k]] = v
-            
+    
     return selection_to_filter
 
 
-@st.cache_resource(ttl=3600)
-def convert_filter_to_query(filters:Dict[str,List[str]]) -> Query:
-    """
-    Fetch filtered data from a specified database table based on provided filter conditions.
-    """
-    global table
+# @st.cache_resource(ttl=3600)
+# def convert_filter_to_query(filters:Dict[str,List[str]]) -> Query:
+#     """
+#     Fetch filtered data from a specified database table based on provided filter conditions.
+#     """
+#     global table
 
-    db = next(get_db())
-    try:
-        query = db.query(table)
-        for column, values in filters.items():
-            if values:
-                query = query.filter(table.c[column].in_(values))
-    finally:
-        db.close()
-    return query
+#     db = next(get_db())
+#     try:
+#         query = db.query(table)
+#         for column, values in filters.items():
+#             if values:
+#                 query = query.filter(table.c[column].in_(values))
+#     finally:
+#         db.close()
+#     return query
+
+## CHANGED!
+def convert_filter_to_query(filters:Dict[str,List[str]]) -> str:
+    return " and ".join([f"{k} in {v}" for k,v in filters.items()])
+
 
 @st.cache_data(ttl=3600)
 def convert_selection_to_df(selection: Dict[str,Dict[str,List[str]]]) -> pd.DataFrame:

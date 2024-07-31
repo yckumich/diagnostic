@@ -1,15 +1,25 @@
 import streamlit as st
-from data.database import engine, Base
-from utils.dataframe_utils.utils import *
+
+## PAGE CONFIG
+st.set_page_config(
+    page_title="EDL Dashboard",
+    page_icon="📋", 
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
 import pandas as pd
-from typing import Dict
+from typing import Dict, List
 from st_aggrid import AgGrid, GridUpdateMode, AgGridTheme
 from utils.dataframe_utils.center_tabs import cetner_tab_dict
 from utils.dataframe_utils.utils_center_tab import *
+from utils.dataframe_utils.utils import *
 from style import get_style_markdown
 
+#------------------------------INIT------------------------------
 
-##INITIALIZE SESSION STATE
+
+## SESSION STATE
 if "custom_condition_list" not in st.session_state:
     st.session_state.custom_condition_list = []
 
@@ -28,10 +38,10 @@ if "custom_test_tier_df" not in st.session_state:
 if 'show_test_tier_plot' not in st.session_state:
     st.session_state['show_test_tier_plot'] = False
 
-# Create the database tables (if they don't already exist)
-Base.metadata.create_all(bind=engine)
-agg_filter_selection = dict()
 
+# Create the database tables (if they don't already exist)
+# Base.metadata.create_all(bind=engine)
+agg_filter_selection = dict()
 
 #------------------------------HELPERS------------------------------
 def create_filter_expander(expander_title:str, subfilter_map:dict) -> Dict:
@@ -74,22 +84,14 @@ def add_sidebar(filter_map):
     return agg_filter_selection
 
 #------------------------------MAIN------------------------------
-
-st.set_page_config(
-    page_title="EDL Dashboard",
-    page_icon="📋", 
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
-
 get_style_markdown()
 
 #--------------Configure the Main filter--------------
 filter_map = get_filter()
 selection = add_sidebar(filter_map=filter_map)
+
 #--------------Configure center pane------------------
 center_tab_col, test_list_col = st.columns([0.86, 0.14], gap="medium")
-
 
 #--------------Configure Test List--------------------
 with test_list_col:
@@ -138,7 +140,7 @@ with center_tab_col:
     if isinstance(grid_table['selected_rows'], pd.DataFrame):
         sel_row_testname_lst = grid_table['selected_rows']['testname'].to_list()
         selected_test_df = selected_test_df[selected_test_df['testname'].isin(sel_row_testname_lst)]
-        print(selected_test_df.shape)
+        # print(selected_test_df.shape)
     tab_titles = list(cetner_tab_dict.keys())
     center_filter_tabs = st.tabs(tab_titles)
     for tab_title, center_filter_tab in zip(tab_titles, center_filter_tabs):
