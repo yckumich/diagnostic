@@ -24,6 +24,7 @@ import time
 
 #     return sorted([_[0] for _ in conditions], key=str.casefold)
 
+
 @st.cache_data(ttl=3600)
 def retrieve_gbd_conditions():
     """
