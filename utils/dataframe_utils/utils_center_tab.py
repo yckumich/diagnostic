@@ -45,6 +45,7 @@ def get_lab_specific_test_by_laboratory_section(df, custom_condition_tier=False,
         'test_name_pretty',
         'test_format',
         'test_format_lancet_tier',
+        'lancet_condition_tier',
     ]
     rename_map = {
         'laboratory': 'Laboratory',
@@ -53,15 +54,16 @@ def get_lab_specific_test_by_laboratory_section(df, custom_condition_tier=False,
         'test_name_pretty': 'Test Name Pretty',
         'test_format': 'Test Format',
         'test_format_lancet_tier': 'Test Format Lancet Tier',
+        'lancet_condition_tier': 'Lancet Condition Tier'
     }
-
-    if custom_condition_tier:
-        columns.append('custom_condition_tier')
-        rename_map['custom_condition_tier'] = 'Custom Condition Tier'
 
     if custom_test_tier:
         columns.append('custom_test_tier')
         rename_map['custom_test_tier'] = 'Test Format Custom Tier'
+        
+    if custom_condition_tier:
+        columns.append('custom_condition_tier')
+        rename_map['custom_condition_tier'] = 'Custom Condition Tier'
 
     df = df[columns].copy()
 
