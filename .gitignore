@@ -8,3 +8,6 @@ jupyter_code
 **/._.DS_Store
 
 __pycache__/
+
+Dockerfile
+nginx.conf

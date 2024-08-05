@@ -3,7 +3,7 @@
 # from data.database import get_db
 # from data.models import t_tableau3_t2_tjfs_join_edl_dashadmin as table
 
-from data.database import view_df
+from data.database import get_view_df
 from utils.dataframe_utils.filter import high_level_filter_map
 from typing import Dict, List, Any
 
@@ -15,6 +15,7 @@ import io
 
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 
+# view_df = get_view_df()
 
 # import warnings
 # warnings.filterwarnings('ignore')
@@ -29,10 +30,13 @@ from st_aggrid.grid_options_builder import GridOptionsBuilder
     
 #     return pd.DataFrame(columns=column_names, data=query_result)
 
+
 ## CHANGED!
-@st.cache_resource(ttl=3600)
+# @st.cache_resource(ttl=3600)
 def convert_query_to_df(query_stmt:str) -> pd.DataFrame:
-    global view_df
+    print(f"convert_query_to_df calling view_df")
+    print(" ")
+    view_df = get_view_df()
 
     if query_stmt != "":
         return view_df.query(query_stmt)
@@ -82,9 +86,12 @@ def create_filter_map(df:pd.DataFrame,
 #     return filter
 
 ## CHANGED!
-@st.cache_resource(ttl=3600)
+# @st.cache_resource(ttl=3600)
 def get_filter()-> Dict:
-    global view_df, high_level_filter_map
+    global high_level_filter_map
+    print(f"get_filter calling view_df")
+    print()
+    view_df = get_view_df()
     
     return create_filter_map(view_df, high_level_filter_map)
 

@@ -47,16 +47,20 @@ if "inline_custom_test_list" not in st.session_state:
 
 
 #----------------------MAIN-----------------------
-add_sidebar()
+# add_sidebar()
 
 build_col, display_col = st.columns([1, 1], gap="medium")
 
 with build_col:
-    (custom_cond_tier_tab, 
-    custom_test_tier_tab, 
-    test_by_lab_tab)  = st.tabs(['Custom Condition Tier', 
-                                 'Custom Test Tier', 
-                                 'Test by Laboratory Section'])
+    (
+        custom_cond_tier_tab, 
+        custom_test_tier_tab,
+        test_by_lab_tab
+    )  = st.tabs([
+        'Custom Condition Tier', 
+        'Custom Test Tier', 
+        'Test by Laboratory Section'
+        ])
 
     with custom_cond_tier_tab:
         if len(st.session_state.custom_condition_list) == 0:

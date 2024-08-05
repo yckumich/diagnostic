@@ -38,6 +38,12 @@ if "custom_test_tier_df" not in st.session_state:
 if 'show_test_tier_plot' not in st.session_state:
     st.session_state['show_test_tier_plot'] = False
 
+if 'merge_custom_condition' not in st.session_state:
+      st.session_state['merge_custom_condition'] = False
+      
+if 'merge_custom_test' not in st.session_state:
+      st.session_state['merge_custom_test'] = False
+
 
 # Create the database tables (if they don't already exist)
 # Base.metadata.create_all(bind=engine)

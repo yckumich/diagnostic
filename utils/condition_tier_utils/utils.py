@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import streamlit as st
-# from data.database import get_db
+from data.database import get_view_df
 import time
 
 
@@ -197,6 +197,10 @@ def delete_current_coustom_df():
         st.session_state['show_plot'] = False
         st.session_state.custom_condition_df = None
 
+        # if 'merge_custom_condition' not in st.session_state:
+        #     st.session_state['merge_custom_condition'] = False
+        # st.session_state['merge_custom_condition'] = True
+
         msg = st.toast('Deleting Custom Condition Level...')
         time.sleep(0.7)
         msg.toast('Deleted 🗑️')
@@ -215,6 +219,15 @@ def save_current_coustom_df():
         if len(st.session_state.custom_condition_list):
             st.session_state.custom_condition_df = pd.DataFrame(st.session_state["custom_condition_list"])
             msg = st.toast('Saving/Applying Custom Condition Level...')
+
+            # if 'merge_custom_condition' not in st.session_state:
+            #     st.session_state['merge_custom_condition'] = False
+            # st.session_state['merge_custom_condition'] = True
+
+            # if 'get_raw_condition' not in st.session_state:
+            #     st.session_state.get_raw_condition = False
+            # st.session_state.get_raw_condition = False
+
             time.sleep(0.7)
             msg.toast('Saved & Applied ✅ ')
 

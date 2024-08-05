@@ -4,7 +4,7 @@ import streamlit as st
 
 #----------------------INIT-----------------------
 st.set_page_config(
-    page_title="Custom Test Tier",
+    page_title="Custom Test Format Tier",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -27,7 +27,7 @@ add_sidebar()
 build_col, display_col = st.columns([1,1], gap="small")
     
 with build_col:
-    st.write("### Custom Test Tier Table")
+    st.write("### Custom Test Format Tier Table")
     # Display the current condition data
     display_custom_test_tier_df()
 
@@ -38,13 +38,13 @@ with build_col:
         save_current_coustom_test_tier_df()
 
     # Form to add a new condition
-    st.write("### Add a New Condition Tier")
+    st.write("### Add a New Test Format Instance")
     with st.form("new_test_tier", clear_on_submit=True):
         st.selectbox("Test Format", GDB_TEST_FORMAT_LIST, key="test_format")
         st.selectbox("Test Tier", ["Primary", "Secondary", "Tertiary"], key="custom_test_tier")
         st.form_submit_button("Add", on_click=add_new_test_tier)
 
-    st.write("### Upload a Custom Test Tier CSV")
+    st.write("### Upload a Custom Test Format Tier CSV")
     test_tier_csv = st.file_uploader("upload a CSV file", type={"csv", "txt"})
     if (test_tier_csv is not None) and (st.button("Upload")):
         uploaded_df = pd.read_csv(test_tier_csv)

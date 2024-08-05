@@ -38,7 +38,7 @@ with build_col:
         save_current_coustom_df()
 
     # Form to add a new condition
-    st.write("### Add a New Condition Tier")
+    st.write("### Add a New Custom Condition Instance ")
     with st.form("new_condition", clear_on_submit=True):
         st.selectbox("Condition Name", GDB_CONDITION_LIST, key="conditionname")
         st.selectbox("Condition Level", ["triage", "moderate", "severe", "not applicable"], key="conditionlevel")

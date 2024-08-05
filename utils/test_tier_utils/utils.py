@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import streamlit as st
-# from data.database import get_db
+from data.database import get_view_df
 import time
 
 # @st.cache_data(ttl=3600)
@@ -28,10 +28,9 @@ import time
 #     del condition_table, table, select
 #     return sorted([_[0] for _ in test_format_list  if isinstance(_[0], str)], key=str.casefold)
 
-@st.cache_data(ttl=3600)
+# @st.cache_data(ttl=3600)
 def retrieve_gbd_test_formats():
-
-    from data.database import view_df
+    view_df = get_view_df()
     condition_names_list = sorted(pd.read_csv("static/conditions.csv").query("lancet_gbd == 'Yes'")['condition_name'].to_list(), key=str.casefold)
     test_format_list = set(view_df[view_df['conditionname'].isin(condition_names_list)]['test_format'].dropna())
     del view_df
@@ -185,6 +184,11 @@ def delete_current_custom_test_tier_df():
         st.session_state.custom_test_tier_df = None
         st.session_state.temp_custom_lab_specific_test_by_laboratory_section_df  = None
         st.session_state.custom_lab_specific_test_by_laboratory_section_df  = None
+
+        # if 'merge_custom_test' not in st.session_state:
+        #     st.session_state['merge_custom_test'] = False
+        # st.session_state['merge_custom_test'] = True
+
         msg = st.toast('Deleting Custom Test Tier...')
         time.sleep(0.7)
         msg.toast('Deleted 🗑️')
@@ -202,6 +206,11 @@ def save_current_coustom_test_tier_df():
     if st.button("Save Current Custom Test Tier Table"):
         if len(st.session_state.custom_test_tier_list):
             st.session_state.custom_test_tier_df = pd.DataFrame(st.session_state.custom_test_tier_list)
+
+            # if 'merge_custom_test' not in st.session_state:
+            #     st.session_state['merge_custom_test'] = False
+            # st.session_state['merge_custom_test'] = True
+
             msg = st.toast('Saving/Applying Custom Test Tier...')
             time.sleep(0.7)
             msg.toast('Saved & Applied ✅ ')
