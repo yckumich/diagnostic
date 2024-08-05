@@ -35,6 +35,90 @@ def remove_stars(s: str) -> str:
     return s.strip()
 
 
+def generate_and_display_test_summary(input_key):
+    key = "Generate Test Summary with Current Condition Tier" if input_key == 'cond_tab' else "Generate Test Summary Table with Current Test Format Tier"
+    if st.button(key):
+        tests_by_tier_long = generate_tests_by_tier_long()
+        if not isinstance(tests_by_tier_long, pd.DataFrame):
+            msg = st.toast('Must create/upload custom test tier and generate Lab Specific - Test By Laboratory table (Check instruction on the sidebar).')
+            time.sleep(0.7)
+            msg.toast('Refreshing Page...')
+            st.rerun()
+        else:
+            st.session_state.test_summary_df = generate_tests_summary(tests_by_tier_long)
+            st.session_state.display_test_summary = True
+            st.rerun()
+
+
+
+
+def generate_tests_by_tier_long():
+    if (('temp_clstbls_df' not in st.session_state) or 
+        (not isinstance(st.session_state.temp_clstbls_df, pd.DataFrame))):
+        return None
+
+    cached_clstbls_df_all_cols = st.session_state.cached_tbls_all_cols.drop(columns=['custom_condition_tier','custom_test_tier'])
+    
+    custom_condition_df = pd.DataFrame.from_dict(st.session_state.custom_condition_list)
+    custom_test_df = pd.DataFrame.from_dict(st.session_state.custom_test_tier_list)
+
+    # print("*********cached_clstbls_df_all_cols*********")
+    # print(cached_clstbls_df_all_cols.shape)
+    # print(f"cached_clstbls_df_all_cols = {cached_clstbls_df_all_cols.head(30).to_dict(orient='records')}")
+    # print("  ")
+
+    # print("*********custom_condition_df*********")
+    # print(custom_condition_df.shape)
+    # print(f"custom_condition_df = {custom_condition_df.to_dict(orient='records')}")
+    # print("  ")
+
+    # print("*********custom_test_df*********")
+    # print(custom_test_df.shape)
+    # print(f"custom_test_df = {custom_test_df.to_dict(orient='records')}")
+    # print("  ")
+
+    merged_df = pd.merge(
+        left=cached_clstbls_df_all_cols,
+        right=custom_condition_df[['conditionname', 'conditionlevel', 'custom_condition_tier']], 
+        on=['conditionname', 'conditionlevel'],
+        how='left',
+    )
+
+    merged_df = pd.merge(
+        left=merged_df,
+        right=custom_test_df[['test_format', 'custom_test_tier']], 
+        on=['test_format'],
+        how='left',
+    )
+
+    columns = [ 'laboratory',
+                'testname',
+                'test_name_short',
+                'test_name_pretty',
+                'test_format',
+                'test_format_lancet_tier',
+                'lancet_condition_tier',
+                'custom_condition_tier',
+                'custom_test_tier',]
+    
+    rename_map = {
+                'laboratory': 'Laboratory',
+                'testname': 'Test Name',
+                'test_name_short': 'Test Name Short',
+                'test_name_pretty': 'Test Name Pretty',
+                'test_format': 'Test Format',
+                'test_format_lancet_tier': 'Test Format Lancet Tier',
+                'lancet_condition_tier': 'Lancet Condition Tier',
+                'custom_condition_tier': 'Custom Condition Tier',
+                'custom_test_tier': 'Test Format Custom Tier'
+                }
+    merged_df = merged_df[columns].rename(columns=rename_map).dropna(axis=0).drop_duplicates()
+    return merged_df
+
+    #마지막에 st.session_state.test_summary_df 에 test summary를 저장해야됨
+    # st.session_state.test_summary_df = generate_tests_summary(pd.DataFrame.from_dict(st.session_state.curr_clstbls_list))
+
+
 def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
     """
     Generates a summary of diagnostic tests by their respective tiers from the given DataFrame.
@@ -261,12 +345,12 @@ def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
     return pd.DataFrame.from_dict(formatted_out_list)
 
 
-def display_test_by_lab_df(df_list):
+# def display_test_by_lab_df(df_list):
 
-    df = pd.DataFrame.from_dict(df_list)
-    st.dataframe(df, 
-                 use_container_width=True,
-                 height=1000,)
+#     df = pd.DataFrame.from_dict(df_list)
+#     st.dataframe(df, 
+#                  use_container_width=True,
+#                  height=1000,)
     # column_config = {col: st.column_config.Column(disabled=True,) for col in df.columns if col != 'Custom Condition Tier'}
     # column_config['Custom Condition Tier'] = st.column_config.SelectboxColumn(
     #         help='Custom Condition Tier',
@@ -289,21 +373,21 @@ def display_test_by_lab_df(df_list):
     # )
 
 
-def test_summary_delete_callback():
-    """
-    Callback function to delete rows from the custom condition list based on user interaction.
-    If the 'delete' checkbox is checked for a row, that row is removed from the custom condition list.
-    """
+# def test_summary_delete_callback():
+#     """
+#     Callback function to delete rows from the custom condition list based on user interaction.
+#     If the 'delete' checkbox is checked for a row, that row is removed from the custom condition list.
+#     """
 
-    edited_rows = st.session_state["test_summary_editor"]["edited_rows"]
-    for idx, value in edited_rows.items():
-        if ('delete' in value.keys()) and (value["delete"] is True):
-            st.session_state["curr_clstbls_list"].pop(idx)
-        else:
-            for k,v in value.items():
-                st.session_state["curr_clstbls_list"][idx][k] = v
+#     edited_rows = st.session_state["test_summary_editor"]["edited_rows"]
+#     for idx, value in edited_rows.items():
+#         if ('delete' in value.keys()) and (value["delete"] is True):
+#             st.session_state["curr_clstbls_list"].pop(idx)
+#         else:
+#             for k,v in value.items():
+#                 st.session_state["curr_clstbls_list"][idx][k] = v
     
-    st.session_state.test_summary_df = generate_tests_summary(pd.DataFrame.from_dict(st.session_state.curr_clstbls_list))
+#     st.session_state.test_summary_df = generate_tests_summary(pd.DataFrame.from_dict(st.session_state.curr_clstbls_list))
             
 
 def wrap_text(text, style):
@@ -511,90 +595,86 @@ def inline_display_custom_condition_df():
     )
 
 
-def inline_refresh_condition_df():
-    if st.button("Fetch Original Current Custom Condition Table"):
-        st.session_state.inline_custom_condition_list = st.session_state.custom_condition_list.copy()
-        msg = st.toast('Fetching Original Custom Condition Level...')
+def inline_fetch_custom_condition_tier():
+    if st.button("Fetch Custom Condition Tier Table"):
+        # st.session_state.inline_custom_condition_list = st.session_state.custom_condition_list.copy()
+        msg = st.toast('Fetching Custom Condition Tier Table...')
         time.sleep(0.7)
         msg.toast('Fetched ✅ ')
         st.rerun()
 
-def inline_apply_coustom_condition_df_to_tbls():
-    if st.button("Apply Changes to Test by Laboratory"):
-        cached_clstbls_df_all_cols = st.session_state.cached_tbls_all_cols
 
-        if ('custom_condition_tier' not in cached_clstbls_df_all_cols.columns) or ('custom_test_tier' not in cached_clstbls_df_all_cols.columns):
-            st.warning('Must create/upload custom condition tier and test tier to apply the change(s).')
+def inline_update_custom_condition_tier():
+    if st.button("Update Custom Condition Tier Table"):
+        if len(st.session_state.inline_custom_condition_list) > 0:
+            st.session_state.custom_condition_list = st.session_state.inline_custom_condition_list
+            msg = st.toast('Updating Custom Condition Tier Table...')
+            time.sleep(0.7)
+            msg.toast('Updated ✅ ')
             st.rerun()
         else:
-            cached_clstbls_df_all_cols = cached_clstbls_df_all_cols.drop(columns=['custom_condition_tier', 'custom_test_tier'])
+            msg = st.toast('You have not made any changes to the custom condition tier table ')
+            time.sleep(0.7)
+            msg.toast('Refreshing page')
+            st.rerun()
+
+
+# def inline_apply_coustom_condition_df_to_tbls():
+#     if st.button("Apply Changes to Test by Laboratory"):
+#         cached_clstbls_df_all_cols = st.session_state.cached_tbls_all_cols
+
+#         if ('custom_condition_tier' not in cached_clstbls_df_all_cols.columns) or ('custom_test_tier' not in cached_clstbls_df_all_cols.columns):
+#             st.warning('Must create/upload custom condition tier and test tier to apply the change(s).')
+#             st.rerun()
+#         else:
+#             cached_clstbls_df_all_cols = cached_clstbls_df_all_cols.drop(columns=['custom_condition_tier', 'custom_test_tier'])
             
-        inline_custom_condition_df = pd.DataFrame.from_dict(st.session_state.inline_custom_condition_list)
-        inline_custom_test_df = pd.DataFrame.from_dict(st.session_state.inline_custom_test_list)
+#         inline_custom_condition_df = pd.DataFrame.from_dict(st.session_state.inline_custom_condition_list)
+#         inline_custom_test_df = pd.DataFrame.from_dict(st.session_state.inline_custom_test_list)
 
 
-        merged_df = pd.merge(
-            left=cached_clstbls_df_all_cols,
-            right=inline_custom_condition_df[['conditionname', 'conditionlevel', 'custom_condition_tier']], 
-            on=['conditionname', 'conditionlevel'],
-            how='left',
-        )
+#         merged_df = pd.merge(
+#             left=cached_clstbls_df_all_cols,
+#             right=inline_custom_condition_df[['conditionname', 'conditionlevel', 'custom_condition_tier']], 
+#             on=['conditionname', 'conditionlevel'],
+#             how='left',
+#         )
 
-        merged_df = pd.merge(
-            left=merged_df,
-            right=inline_custom_test_df[['test_format', 'custom_test_tier']], 
-            on=['test_format'],
-            how='left',
-        )
+#         merged_df = pd.merge(
+#             left=merged_df,
+#             right=inline_custom_test_df[['test_format', 'custom_test_tier']], 
+#             on=['test_format'],
+#             how='left',
+#         )
         
-        st.session_state.cached_tbls_all_cols = merged_df
+#         st.session_state.cached_tbls_all_cols = merged_df
 
-        columns = [
-            'laboratory',
-            'testname',
-            'test_name_short',
-            'test_name_pretty',
-            'test_format',
-            'test_format_lancet_tier',
-            'custom_condition_tier',
-            'custom_test_tier',
-        ]
-        rename_map = {
-            'laboratory': 'Laboratory',
-            'testname': 'Test Name',
-            'test_name_short': 'Test Name Short',
-            'test_name_pretty': 'Test Name Pretty',
-            'test_format': 'Test Format',
-            'test_format_lancet_tier': 'Test Format Lancet Tier',
-            'custom_condition_tier': 'Custom Condition Tier',
-            'custom_test_tier': 'Test Format Custom Tier'
-        }
-        merged_df = merged_df[columns].rename(columns=rename_map).dropna(axis=0).drop_duplicates()
-        st.session_state.curr_clstbls_list = merged_df.sort_values(by=list(merged_df.columns)).to_dict(orient='records')
+#         columns = [
+#             'laboratory',
+#             'testname',
+#             'test_name_short',
+#             'test_name_pretty',
+#             'test_format',
+#             'test_format_lancet_tier',
+#             'custom_condition_tier',
+#             'custom_test_tier',
+#         ]
+#         rename_map = {
+#             'laboratory': 'Laboratory',
+#             'testname': 'Test Name',
+#             'test_name_short': 'Test Name Short',
+#             'test_name_pretty': 'Test Name Pretty',
+#             'test_format': 'Test Format',
+#             'test_format_lancet_tier': 'Test Format Lancet Tier',
+#             'custom_condition_tier': 'Custom Condition Tier',
+#             'custom_test_tier': 'Test Format Custom Tier'
+#         }
+#         merged_df = merged_df[columns].rename(columns=rename_map).dropna(axis=0).drop_duplicates()
+#         st.session_state.curr_clstbls_list = merged_df.sort_values(by=list(merged_df.columns)).to_dict(orient='records')
         
-        
-        # print(merged_df.columns)
-        # print(merged_df.shape)
-        # print(merged_df.to_dict(orient='records'))
+#         st.session_state.display_test_summary = False
+#         st.rerun()
 
-        # print(merged_df.shape)
-        
-        st.session_state.display_test_summary = False
-        st.rerun()
-        
-
-
-
-        # print("inline_custom_tst_df.columns:", inline_custom_cnd_df.columns)
-        # print("temp_tbls_df.columns:", temp_tbls_df.columns)
-        # st.session_state.curr_clstbls_list = pd.merge(
-        #     left=temp_tbls_df,
-        #     right=inline_custom_cnd_df[['conditionname', 'conditionlevel', 'custom_condition_tier']], 
-        #     on=['conditionname', 'conditionlevel'],
-        #     how='left',
-        # ).to_dict(orient='records')
-
-        # st.rerun()
 
 
 ## ----------------TEST-RELATED FUNCTIONS--------------------
@@ -649,37 +729,51 @@ def inline_display_custom_test_tier_df():
         use_container_width=True
     )
 
-def inline_refresh_test_df():
-    if st.button("Fetch Original Current Custom Test Table"):
+def inline_fetch_custom_test_tier():
+    if st.button("Fetch Custom Test Format Tier Table"):
         st.session_state.inline_custom_test_list = st.session_state.custom_test_tier_list.copy()
-        msg = st.toast('Fetching Original Custom Test Level...')
+        msg = st.toast('Fetching Custom Test Format Tier Table...')
         time.sleep(0.7)
         msg.toast('Fetched ✅ ')
         st.rerun()
 
-def inline_apply_custom_test_df_to_tbls():
-    if st.button("Apply Changes in Test To Test by Laboratory"):
-        if (('curr_clstbls_list' not in st.session_state) 
-        or (not isinstance(st.session_state.curr_clstbls_list, list)) 
-        or (len(st.session_state.curr_clstbls_list) == 0)):
-            msg = st.toast('You must Fetch Test by Laboratory Section to apply changes...')
+def inline_update_custom_test_tier():
+    if st.button("Update Custom Test Format Tier Table"):
+        if len(st.session_state.inline_custom_test_list) > 0:
+            st.session_state.custom_test_tier_list = st.session_state.inline_custom_test_list
+            msg = st.toast('Updating Custom Test Format Tier Table...')
             time.sleep(0.7)
-            msg.toast('Refreshing... ')
+            msg.toast('Updated ✅ ')
+            st.rerun()
+        else:
+            msg = st.toast('You have not made any changes to the custom test format tier table...')
             time.sleep(0.7)
+            msg.toast('Refreshing page')
             st.rerun()
 
-        inline_custom_test_df = pd.DataFrame.from_dict(st.session_state.inline_custom_test_list).rename(columns=name_map)
-        temp_tbls_df = pd.DataFrame.from_dict(st.session_state.curr_clstbls_list).drop(columns=['Test Format Custom Tier'])
+# def inline_apply_custom_test_df_to_tbls():
+#     if st.button("Apply Changes in Test To Test by Laboratory"):
+#         if (('curr_clstbls_list' not in st.session_state) 
+#         or (not isinstance(st.session_state.curr_clstbls_list, list)) 
+#         or (len(st.session_state.curr_clstbls_list) == 0)):
+#             msg = st.toast('You must Fetch Test by Laboratory Section to apply changes...')
+#             time.sleep(0.7)
+#             msg.toast('Refreshing... ')
+#             time.sleep(0.7)
+#             st.rerun()
 
-        st.session_state.curr_clstbls_list = pd.merge(
-            left=temp_tbls_df,
-            right=inline_custom_test_df[['Test Format', 'Test Format Custom Tier']], 
-            on=['Test Format'],
-            how='left',
-        ).to_dict(orient='records')
+#         inline_custom_test_df = pd.DataFrame.from_dict(st.session_state.inline_custom_test_list).rename(columns=name_map)
+#         temp_tbls_df = pd.DataFrame.from_dict(st.session_state.curr_clstbls_list).drop(columns=['Test Format Custom Tier'])
+
+#         st.session_state.curr_clstbls_list = pd.merge(
+#             left=temp_tbls_df,
+#             right=inline_custom_test_df[['Test Format', 'Test Format Custom Tier']], 
+#             on=['Test Format'],
+#             how='left',
+#         ).to_dict(orient='records')
         
-        st.session_state.display_test_summary = False
-        st.rerun()
+#         st.session_state.display_test_summary = False
+#         st.rerun()
 
 
 # def summary_get_lab_specific_test_by_laboratory_section(df):
