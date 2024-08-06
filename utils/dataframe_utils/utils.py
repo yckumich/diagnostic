@@ -1,19 +1,13 @@
-# from sqlalchemy.orm.query import Query
-# from sqlalchemy.orm import Session
-# from data.database import get_db
-# from data.models import t_tableau3_t2_tjfs_join_edl_dashadmin as table
-
-from data.database import get_view_df
 from utils.dataframe_utils.filter import high_level_filter_map
+from st_aggrid.grid_options_builder import GridOptionsBuilder
+from data.database import get_view_df
 from typing import Dict, List, Any
-
 import streamlit as st
 import pandas as pd
 import numpy as np
 import zipfile
 import io
 
-from st_aggrid.grid_options_builder import GridOptionsBuilder
 
 def convert_query_to_df(query_stmt:str) -> pd.DataFrame:
     view_df = get_view_df()
@@ -22,6 +16,7 @@ def convert_query_to_df(query_stmt:str) -> pd.DataFrame:
         return view_df.query(query_stmt)
     else:
         return view_df
+
 
 def extract_unique_values(df: pd.DataFrame, 
                           filter_map: Dict[str, Dict[str, str]], 
@@ -49,10 +44,12 @@ def create_filter_map(df:pd.DataFrame,
 
     return complete_filter
 
+
 def get_filter()-> Dict:
 
     view_df = get_view_df()    
     return create_filter_map(view_df, high_level_filter_map)
+
 
 @st.cache_data(ttl=3600)
 def convert_selection_to_filter(selection: Dict[str,Dict[str,List[str]]]) -> Dict[str,List[str]]:
@@ -87,6 +84,7 @@ def convert_selection_to_df(selection: Dict[str,Dict[str,List[str]]]) -> pd.Data
     
     return convert_query_to_df(query_w_filter)
 
+
 @st.cache_resource(ttl=3600)
 def build_grid_option(df:pd.DataFrame, 
                       pagination_size:int=50, 
@@ -120,6 +118,7 @@ def get_unique_values(input_list: List[Any]) -> List[Any]:
     """
 
     return list(set(map(str, input_list)))
+    
     
 @st.cache_resource(ttl=3600)
 def create_test_detail(df:pd.DataFrame) -> Dict:

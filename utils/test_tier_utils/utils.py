@@ -16,45 +16,55 @@ def retrieve_gbd_test_formats():
 @st.cache_data(ttl=3600)
 def create_test_tier_plot(df):
     """
-    Creates and returns a test tier plot based on the given DataFrame.
+    Creates and returns a test-format tier plot based on the given DataFrame.
     
     Parameters:
-    df (DataFrame): DataFrame containing 'test_format' and 'test_format_lancet_tier' columns.
+    df (DataFrame): DataFrame containing 'test_format' and 'custom_test_tier' columns.
     
     Returns:
-    Figure: A matplotlib figure object representing the test tiers by health facility tier.
+    Figure: A matplotlib figure object representing the test-format tiers by health facility tier.
     """
 
     # Define the color for applicable tiers
-    applicable_color = "palegreen"
+    applicable_color = "skyblue"
     not_applicable_color = "white"
 
-    # Define the tiers and tests
+    # Define the tiers and their ordinal relationship
     tiers = ["Primary", "Secondary", "Tertiary"]
-    tests = sorted(df["test_format"].unique(), key=str.casefold)
+    tier_indices = {tier: idx for idx, tier in enumerate(tiers)}
+
+    # Create a column to sort the DataFrame
+    df['tier_index'] = df['custom_test_tier'].map(tier_indices)
+    df = df.sort_values(by=['tier_index', 'test_format'], key=lambda col: col.str.casefold() if col.name == 'test_format' else col).reset_index(drop=True)
+
+    # Extract the sorted test names
+    tests = df["test_format"].unique()
 
     # Create a figure and axis
     fig, ax = plt.subplots(figsize=(10, int(df['test_format'].nunique()/3.5)))
 
     # Draw the grid and rectangles
     for i, test in enumerate(tests):
+        # Determine the highest applicable tier for the current test
+        highest_tier = None
+        for tier in tiers:
+            if not df[(df["test_format"] == test) & (df["custom_test_tier"] == tier)].empty:
+                highest_tier = tier
+
         for j, tier in enumerate(tiers):
-            # Get the test tiers for this cell
-            cell_data = df[(df["test_format"] == test) & (df["custom_test_tier"] == tier)]
-            
-            if not cell_data.empty:
+            if highest_tier and tier_indices[tier] >= tier_indices[highest_tier]:
+                # Highlight this cell if it's the designated tier or above
                 rect = patches.Rectangle(
                     (j, i), 1, 1,
                     linewidth=1, edgecolor='black', facecolor=applicable_color
                 )
-                ax.add_patch(rect)
             else:
                 # Add an empty rectangle for "not applicable" cases
                 rect = patches.Rectangle(
                     (j, i), 1, 1,
                     linewidth=1, edgecolor='black', facecolor=not_applicable_color
                 )
-                ax.add_patch(rect)
+            ax.add_patch(rect)
 
     # Set the axis limits and labels
     ax.set_xlim(0, len(tiers))
@@ -62,13 +72,13 @@ def create_test_tier_plot(df):
     ax.set_xticks([0.5, 1.5, 2.5])
     ax.set_xticklabels(tiers)
     ax.set_xlabel("Health Facility Tier")
-    ax.set_title("Test Tiers by Health Facility Tier")
+    ax.set_title("Test-Format by Health Facility Tier")
 
     # Adjust y-tick positions to the center of each row
     ytick_positions = [i + 0.5 for i in range(len(tests))]
     ax.set_yticks(ytick_positions)
     ax.set_yticklabels(tests)
-    ax.set_ylabel("Test Name")
+    ax.set_ylabel("Test-Format Name")
 
     legend_elements = [
         patches.Patch(facecolor=applicable_color, edgecolor='black', label='Applicable'),
@@ -154,7 +164,7 @@ def delete_current_custom_test_tier_df():
     Resets the 'custom_test_tier_list', 'show_test_tier_plot', and 'custom_test_tier_df' session states.
     """
 
-    if st.button("Delete Current Custom Test Tier Table"):
+    if st.button("Delete Custom Test-Format Tier Table"):
         st.session_state["custom_test_tier_list"] = []
         st.session_state['show_test_tier_plot'] = False
         st.session_state.custom_test_tier_df = None
@@ -175,7 +185,7 @@ def save_current_coustom_test_tier_df():
     If the list is empty, it shows a warning toast message.
     """
 
-    if st.button("Save Current Custom Test Tier Table"):
+    if st.button("Save Custom Test-Format Tier Table"):
         if len(st.session_state.custom_test_tier_list):
             st.session_state.custom_test_tier_df = pd.DataFrame(st.session_state.custom_test_tier_list)
 

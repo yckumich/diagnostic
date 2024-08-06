@@ -29,12 +29,10 @@ def get_test_by_condition_test_by_condition(df, custom_condition_tier=False, cus
 
 
 def get_lab_specific_test_by_laboratory_section(df, custom_condition_tier=False, custom_test_tier=False):
-    if "temp_clstbls_df" not in st.session_state:
-        st.session_state.temp_clstbls_df = None
 
     if "cached_tbls_all_cols" not in st.session_state:
         st.session_state.cached_tbls_all_cols = None
-    
+
     if custom_condition_tier and custom_test_tier:
         st.session_state.cached_tbls_all_cols = df
 
@@ -82,9 +80,6 @@ def get_lab_specific_test_by_laboratory_section(df, custom_condition_tier=False,
         return f"background-color: lightblue;"
 
     df = df.style.map(apply_color, subset=custom_col_list)
-
-    if len(custom_col_list) ==  2:
-        st.session_state.temp_clstbls_df = df.data
 
     return df
 
@@ -243,14 +238,17 @@ def generate_tab_content(tab_title,
                 use_container_width=True,
                 height=900,
             )
-        if (df_titles[i] == 'Test By Laboratory Section') and ('Custom Condition Tier' in result_df.columns)  and  ('Custom Condition Tier' in result_df.columns):
-            if st.button("Save Current 'Test By Laboratory Section' Table"):
-                st.session_state.temp_clstbls_df = result_df.data
-                msg = st.toast("Saving current 'Test By Laboratory' table...")
-                time.sleep(0.7)
-                msg.toast('Saved ✅')
-                time.sleep(0.7)
-                st.rerun()
+            if (df_titles[i] == 'Test By Laboratory Section'):
+                if st.button("Save 'Test By Laboratory Section' Table"):
+                    if not isinstance(st.session_state.cached_tbls_all_cols, pd.DataFrame):
+                        st.warning('Must upload :red-background[custom condition/test format tier] to save the table')
+                        time.sleep(1.5)
+                        st.rerun()
+                    else:
+                        msg = st.toast("Saving current 'Test By Laboratory' table...")
+                        time.sleep(0.7)
+                        msg.toast('Saved ✅')
+                        time.sleep(0.7)
 
         tab_dataframes.append((df_titles[i], result_df))
     return tab_dataframes

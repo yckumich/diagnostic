@@ -18,7 +18,6 @@ from style import get_style_markdown
 
 #------------------------------INIT------------------------------
 
-
 ## SESSION STATE
 if "custom_condition_list" not in st.session_state:
     st.session_state.custom_condition_list = []
@@ -38,15 +37,6 @@ if "custom_test_tier_df" not in st.session_state:
 if 'show_test_tier_plot' not in st.session_state:
     st.session_state['show_test_tier_plot'] = False
 
-if 'merge_custom_condition' not in st.session_state:
-      st.session_state['merge_custom_condition'] = False
-      
-if 'merge_custom_test' not in st.session_state:
-      st.session_state['merge_custom_test'] = False
-
-
-# Create the database tables (if they don't already exist)
-# Base.metadata.create_all(bind=engine)
 agg_filter_selection = dict()
 
 #------------------------------HELPERS------------------------------
@@ -70,10 +60,11 @@ def create_detail_expander(detail_title:str, details:List):
                 markdown_string += "- " + str(detail) + "\n"
             st.markdown(markdown_string)
 
+
 def add_sidebar(filter_map):
     with st.sidebar:
         st.markdown("""<div style="height:0px;"></div>""", unsafe_allow_html=True)
-        # st.divider()  
+
         st.header('Filter')
         
         for main_filter in filter_map:
@@ -134,9 +125,9 @@ with center_tab_col:
             st.warning('Custom Condition Tier Not Applied 🚨')
     with test_tier_col:
         if custom_test_tier_df_exist:
-            st.success('Custom Test Tier Applied ✅')
+            st.success('Custom Test-Format Tier Applied ✅')
         else:
-            st.warning('Custom Test Tier Not Applied 🚨')
+            st.warning('Custom Test-Format Tier Not Applied 🚨')
 
     st.divider()  
     st.header('Tabs')

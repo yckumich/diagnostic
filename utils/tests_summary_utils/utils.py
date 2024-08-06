@@ -40,7 +40,7 @@ def generate_and_display_test_summary(input_key):
     if st.button(key):
         tests_by_tier_long = generate_tests_by_tier_long()
         if not isinstance(tests_by_tier_long, pd.DataFrame):
-            msg = st.toast('Must create/upload custom test tier and generate Lab Specific - Test By Laboratory table (Check instruction on the sidebar).')
+            msg = st.toast('Must create/upload custom test format/condition tier and sav Lab Specific - Test By Laboratory table in the main Dashboard.')
             time.sleep(0.7)
             msg.toast('Refreshing Page...')
             st.rerun()
@@ -50,32 +50,15 @@ def generate_and_display_test_summary(input_key):
             st.rerun()
 
 
-
-
 def generate_tests_by_tier_long():
-    if (('temp_clstbls_df' not in st.session_state) or 
-        (not isinstance(st.session_state.temp_clstbls_df, pd.DataFrame))):
+    if (('cached_tbls_all_cols' not in st.session_state) or 
+        (not isinstance(st.session_state.cached_tbls_all_cols, pd.DataFrame))):
         return None
-
+    
     cached_clstbls_df_all_cols = st.session_state.cached_tbls_all_cols.drop(columns=['custom_condition_tier','custom_test_tier'])
     
     custom_condition_df = pd.DataFrame.from_dict(st.session_state.custom_condition_list)
     custom_test_df = pd.DataFrame.from_dict(st.session_state.custom_test_tier_list)
-
-    # print("*********cached_clstbls_df_all_cols*********")
-    # print(cached_clstbls_df_all_cols.shape)
-    # print(f"cached_clstbls_df_all_cols = {cached_clstbls_df_all_cols.head(30).to_dict(orient='records')}")
-    # print("  ")
-
-    # print("*********custom_condition_df*********")
-    # print(custom_condition_df.shape)
-    # print(f"custom_condition_df = {custom_condition_df.to_dict(orient='records')}")
-    # print("  ")
-
-    # print("*********custom_test_df*********")
-    # print(custom_test_df.shape)
-    # print(f"custom_test_df = {custom_test_df.to_dict(orient='records')}")
-    # print("  ")
 
     merged_df = pd.merge(
         left=cached_clstbls_df_all_cols,
@@ -113,11 +96,8 @@ def generate_tests_by_tier_long():
                 'custom_test_tier': 'Test Format Custom Tier'
                 }
     merged_df = merged_df[columns].rename(columns=rename_map).dropna(axis=0).drop_duplicates()
+    
     return merged_df
-
-    #마지막에 st.session_state.test_summary_df 에 test summary를 저장해야됨
-    # st.session_state.test_summary_df = generate_tests_summary(pd.DataFrame.from_dict(st.session_state.curr_clstbls_list))
-
 
 def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
     """
@@ -344,51 +324,6 @@ def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
             
     return pd.DataFrame.from_dict(formatted_out_list)
 
-
-# def display_test_by_lab_df(df_list):
-
-#     df = pd.DataFrame.from_dict(df_list)
-#     st.dataframe(df, 
-#                  use_container_width=True,
-#                  height=1000,)
-    # column_config = {col: st.column_config.Column(disabled=True,) for col in df.columns if col != 'Custom Condition Tier'}
-    # column_config['Custom Condition Tier'] = st.column_config.SelectboxColumn(
-    #         help='Custom Condition Tier',
-    #         options=['Primary','Secondary','Tertiary'],
-    #         required=True,
-    # )
-    # df["delete"] = False
-
-    # # Make Delete be the first column
-    # df = df[["delete"] + df.columns[:-1].tolist()]
-
-    # st.data_editor(
-    #     df,
-    #     key="test_summary_editor",
-    #     on_change=test_summary_delete_callback,
-    #     hide_index=False,
-    #     column_config=column_config,
-    #     use_container_width=True,
-    #     height=1000,
-    # )
-
-
-# def test_summary_delete_callback():
-#     """
-#     Callback function to delete rows from the custom condition list based on user interaction.
-#     If the 'delete' checkbox is checked for a row, that row is removed from the custom condition list.
-#     """
-
-#     edited_rows = st.session_state["test_summary_editor"]["edited_rows"]
-#     for idx, value in edited_rows.items():
-#         if ('delete' in value.keys()) and (value["delete"] is True):
-#             st.session_state["curr_clstbls_list"].pop(idx)
-#         else:
-#             for k,v in value.items():
-#                 st.session_state["curr_clstbls_list"][idx][k] = v
-    
-#     st.session_state.test_summary_df = generate_tests_summary(pd.DataFrame.from_dict(st.session_state.curr_clstbls_list))
-            
 
 def wrap_text(text, style):
     return Paragraph(text, style)
