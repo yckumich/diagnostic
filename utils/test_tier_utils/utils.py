@@ -138,6 +138,7 @@ def render_custom_test_format_tier_plot_section():
             mime='text/csv',
         )
 
+
 @st.cache_data(ttl=3600)
 def create_test_tier_plot(df):
     """
@@ -217,7 +218,6 @@ def create_test_tier_plot(df):
     return fig
 
 
-##---------
 def add_new_test_tier():
     """
     Adds a new test tier record to the custom test tier list stored in the session state.
@@ -229,6 +229,7 @@ def add_new_test_tier():
             CUSTOM_TEST_TIER: st.session_state.custom_test_tier,
         }
     )
+
 
 def test_tier_delete_callback():
     """
@@ -244,7 +245,6 @@ def test_tier_delete_callback():
         else:
             for k,v in value.items():
                 st.session_state["custom_test_tier_list"][idx][k] = v
-
 
 
 def display_custom_test_tier_df():
@@ -320,6 +320,8 @@ def save_current_coustom_test_tier_df():
 
         else:
             st.toast("Could Not Find Custom Test Tier Dataframe")
+
+
 def add_sidebar(): 
     with st.sidebar:
         st.markdown("""

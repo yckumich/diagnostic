@@ -239,7 +239,7 @@ def generate_tab_content(tab_title,
                 height=900,
             )
             if (df_titles[i] == 'Test By Laboratory Section'):
-                if st.button("Save 'Test By Laboratory Section' Table"):
+                if st.button("Save Table"):
                     if not isinstance(st.session_state.cached_tbls_all_cols, pd.DataFrame):
                         st.warning('Must upload :red-background[custom condition/test format tier] to save the table')
                         time.sleep(1.5)

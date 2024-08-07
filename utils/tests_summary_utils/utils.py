@@ -14,7 +14,28 @@ import base64
 warnings.filterwarnings("ignore")
 
 name_map = {"test_format": "Test Format", "custom_test_tier": "Test Format Custom Tier"}
-data_frame_height = 900
+DATA_FRAME_HEIGHT = 800
+
+
+def display_placeholder_message(long_format_tab, pdf_tab):
+    message = generate_placeholder_message()
+    for tab in [long_format_tab, pdf_tab]:
+        with tab:
+            st.markdown(f"""<div style="height:400px;"></div>{message}""", unsafe_allow_html=True)
+
+def generate_placeholder_message():
+    if (('cached_tbls_all_cols' not in st.session_state) or 
+        (not isinstance(st.session_state.cached_tbls_all_cols, pd.DataFrame))):
+        return "<h2 style='text-align: center; color: grey;'>Please click [Save Table] button under 'Test By Laboratory Section' table under Lab Specific tab on Diagnostic Test Dashboard page</h2>"
+    elif not st.session_state.custom_condition_list and not st.session_state.custom_test_tier_list:
+        return "<h2 style='text-align: center; color: grey;'>Please upload your custom condition tier and custom test format tier and click generate the summary table.</h2>"
+    elif not st.session_state.custom_condition_list:
+        return "<h2 style='text-align: center; color: grey;'>Please upload your custom condition tier and click generate the summary table.</h2>"
+    elif not st.session_state.custom_test_tier_list:
+        return "<h2 style='text-align: center; color: grey;'>Please upload your custom test format tier and click generate the summary table.</h2>"
+    else:
+        return "<h2 style='text-align: center; color: grey;'>Please click the 'Generate the Summary' button to display your test summary table.</h2>"
+
 
 # Function to generate PDF
 def generate_base64pdf(dataframe):
@@ -36,7 +57,7 @@ def remove_stars(s: str) -> str:
 
 
 def generate_and_display_test_summary(input_key):
-    key = "Generate Test Summary with Current Condition Tier" if input_key == 'cond_tab' else "Generate Test Summary Table with Current Test Format Tier"
+    key = "Generate Test Summary Table" if input_key == 'cond_tab' else "Generate Test  Summary Table"
     if st.button(key):
         tests_by_tier_long = generate_tests_by_tier_long()
         if not isinstance(tests_by_tier_long, pd.DataFrame):
@@ -447,46 +468,22 @@ def dataframe_to_pdf(dataframe, pdf_file='output.pdf'):
 def convert_df(df):
    return df.to_csv(index=False).encode('utf-8')
 
+def display_pdf_summary():
+    base64_pdf = generate_base64pdf(generate_pdf_format_df(st.session_state.test_summary_df))
 
-def add_sidebar():
-    with st.sidebar:
-        st.markdown("""
-        # Diagnostic Test Summary Instructions
-
-        Welcome to the **Diagnostic Test Summary** page. This page is designed to help you generate a comprehensive summary of diagnostic tests categorized by their respective tiers. Follow the instructions below to make the most out of this functionality.
-
-        ## Purpose
-        The **Diagnostic Test Summary** page allows you to:
-        1. **Fetch the existing Lab Specific - Test By Laboratory table**.
-        2. **Generate and view a summary of diagnostic tests** categorized into primary, secondary, and tertiary tiers.
-        3. **Manage the Custom Condition Tiers and their respective diagnostic tests**.
-
-        ## Steps to Use This Page
-
-        ### Step 1: Create/Upload Custom Condition Tier
-        Before generating the test summary, ensure you have created or uploaded a Custom Condition Tier. This can be done on the **Build Custom Condition Tier** page. If you have already done this, you will see the "Custom Condition Tier" column displayed in the "Test By Laboratory" table on the Diagnostic Test Dashboard under the Lab Specific tab
-
-        ### Step 2: Fetch the Current "Test By Laboratory" Table
-        If the "Lab Specific - Test By Laboratory" table is not displayed, click on the "Fetch current 'Test By Laboratory' table" button. This will load the table based on your Custom Condition Tier.
-
-        ### Step 3: Manage Current Table
-        Once the table is fetched and displayed, you have the following options:
-        - **Refresh Current Table**: Click this button to fetch the latest table.
-        - **Delete Current Table**: Click this button to delete the current table.
-        - **Generate Test Summary**: Click this button to generate the test summary based on the current table.
-
-        ### Step 4: View Test Summary
-        After generating the test summary, it will be displayed in the "Test Summary" section. You can view the summary of diagnostic tests categorized into primary, secondary, and tertiary tiers.
-
-        ### Step 5: Edit Test Summary
-        You can edit the test summary using the data editor. To delete a row, check the "delete" checkbox next to the row. The row will be removed from the custom condition list. (After the edit, you must click **Generate Test Summary** to reflect the changed to summary table)
-
-        ## Notes
-        - The **Generate Test Summary** button will process the Custom Condition Tiers and generate a comprehensive summary of diagnostic tests.
-        - Ensure that you have created or uploaded the Custom Condition Tier and check the generated Lab Specific - Test By Laboratory table before attempting to generate the test summary.
-        - Use the "Refresh Current Table" and "Delete Current Table" buttons to manage the current table effectively.
-        """)
-
+    # Display PDF in Streamlit
+    pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="100%" height="{DATA_FRAME_HEIGHT}" type="application/pdf"></iframe>'
+    st.markdown(pdf_display, unsafe_allow_html=True)
+    st.markdown("""<div style="height:30px;"></div>""", unsafe_allow_html=True)
+    _, col, _ = st.columns([0.3, 0.4, 0.3], gap='small')
+    with col:
+        st.download_button(
+            "Download Test Summary",
+            convert_df(st.session_state.test_summary_df),
+            "test_summary.csv",
+            "text/csv",
+            key='download-csv'
+        )
 
 ## ----------------CONDITON-RELATED FUNCTIONS--------------------
 
@@ -543,7 +540,7 @@ def inline_display_custom_condition_df():
         hide_index=False,
         column_config=column_config,
         use_container_width=True,
-        height=data_frame_height,
+        height=DATA_FRAME_HEIGHT,
     )
 
 
@@ -569,64 +566,6 @@ def inline_update_custom_condition_tier():
             time.sleep(0.7)
             msg.toast('Refreshing page')
             st.rerun()
-
-
-# def inline_apply_coustom_condition_df_to_tbls():
-#     if st.button("Apply Changes to Test by Laboratory"):
-#         cached_clstbls_df_all_cols = st.session_state.cached_tbls_all_cols
-
-#         if ('custom_condition_tier' not in cached_clstbls_df_all_cols.columns) or ('custom_test_tier' not in cached_clstbls_df_all_cols.columns):
-#             st.warning('Must create/upload custom condition tier and test tier to apply the change(s).')
-#             st.rerun()
-#         else:
-#             cached_clstbls_df_all_cols = cached_clstbls_df_all_cols.drop(columns=['custom_condition_tier', 'custom_test_tier'])
-            
-#         inline_custom_condition_df = pd.DataFrame.from_dict(st.session_state.inline_custom_condition_list)
-#         inline_custom_test_df = pd.DataFrame.from_dict(st.session_state.inline_custom_test_list)
-
-
-#         merged_df = pd.merge(
-#             left=cached_clstbls_df_all_cols,
-#             right=inline_custom_condition_df[['conditionname', 'conditionlevel', 'custom_condition_tier']], 
-#             on=['conditionname', 'conditionlevel'],
-#             how='left',
-#         )
-
-#         merged_df = pd.merge(
-#             left=merged_df,
-#             right=inline_custom_test_df[['test_format', 'custom_test_tier']], 
-#             on=['test_format'],
-#             how='left',
-#         )
-        
-#         st.session_state.cached_tbls_all_cols = merged_df
-
-#         columns = [
-#             'laboratory',
-#             'testname',
-#             'test_name_short',
-#             'test_name_pretty',
-#             'test_format',
-#             'test_format_lancet_tier',
-#             'custom_condition_tier',
-#             'custom_test_tier',
-#         ]
-#         rename_map = {
-#             'laboratory': 'Laboratory',
-#             'testname': 'Test Name',
-#             'test_name_short': 'Test Name Short',
-#             'test_name_pretty': 'Test Name Pretty',
-#             'test_format': 'Test Format',
-#             'test_format_lancet_tier': 'Test Format Lancet Tier',
-#             'custom_condition_tier': 'Custom Condition Tier',
-#             'custom_test_tier': 'Test Format Custom Tier'
-#         }
-#         merged_df = merged_df[columns].rename(columns=rename_map).dropna(axis=0).drop_duplicates()
-#         st.session_state.curr_clstbls_list = merged_df.sort_values(by=list(merged_df.columns)).to_dict(orient='records')
-        
-#         st.session_state.display_test_summary = False
-#         st.rerun()
-
 
 
 ## ----------------TEST-RELATED FUNCTIONS--------------------
@@ -679,7 +618,7 @@ def inline_display_custom_test_tier_df():
         hide_index=False,
         column_config=column_config,
         use_container_width=True,
-        height=data_frame_height,
+        height=DATA_FRAME_HEIGHT,
         
     )
 
@@ -705,81 +644,38 @@ def inline_update_custom_test_tier():
             msg.toast('Refreshing page')
             st.rerun()
 
-# def inline_apply_custom_test_df_to_tbls():
-#     if st.button("Apply Changes in Test To Test by Laboratory"):
-#         if (('curr_clstbls_list' not in st.session_state) 
-#         or (not isinstance(st.session_state.curr_clstbls_list, list)) 
-#         or (len(st.session_state.curr_clstbls_list) == 0)):
-#             msg = st.toast('You must Fetch Test by Laboratory Section to apply changes...')
-#             time.sleep(0.7)
-#             msg.toast('Refreshing... ')
-#             time.sleep(0.7)
-#             st.rerun()
+def add_sidebar():
+    with st.sidebar:
+        st.markdown("""
+        # Diagnostic Test Summary Instructions
 
-#         inline_custom_test_df = pd.DataFrame.from_dict(st.session_state.inline_custom_test_list).rename(columns=name_map)
-#         temp_tbls_df = pd.DataFrame.from_dict(st.session_state.curr_clstbls_list).drop(columns=['Test Format Custom Tier'])
+        Welcome to the **Diagnostic Test Summary** page. This page is designed to help you generate a comprehensive summary of diagnostic tests categorized by their respective tiers. Follow the instructions below to make the most out of this functionality.
 
-#         st.session_state.curr_clstbls_list = pd.merge(
-#             left=temp_tbls_df,
-#             right=inline_custom_test_df[['Test Format', 'Test Format Custom Tier']], 
-#             on=['Test Format'],
-#             how='left',
-#         ).to_dict(orient='records')
-        
-#         st.session_state.display_test_summary = False
-#         st.rerun()
+        ## Purpose
+        The **Diagnostic Test Summary** page allows you to:
+        1. **Generate and view a summary of diagnostic tests** categorized into primary, secondary, and tertiary tiers.
+        2. **Manage the Custom Condition Tiers and their respective diagnostic tests**.
+        3. **Manage the Custom Test-Format Tiers and their respective diagnostic tests**.
 
+        ## Steps to Use This Page
 
-# def summary_get_lab_specific_test_by_laboratory_section(df):
-#     print("before df.shape: ", df.shape)
-#     columns = [
-#         'laboratory',
-#         'testname',
-#         'test_name_short',
-#         'test_name_pretty',
-#         'test_format',
-#         'test_format_lancet_tier',
-#         'custom_test_tier',
-#     ]
-#     rename_map = {
-#         'laboratory': 'Laboratory',
-#         'testname': 'Test Name',
-#         'test_name_short': 'Test Name Short',
-#         'test_name_pretty': 'Test Name Pretty',
-#         'test_format': 'Test Format',
-#         'test_format_lancet_tier': 'Test Format Custom Tier',
-#         'custom_test_tier': 'Custom Condition Tier',
-#     }
-#     df = df[columns].copy()
+        ### Step 1: Create/Upload Custom Condition Tier
+        Before generating the test summary, ensure you have created or uploaded a Custom Condition Tier. This can be done on the **Build Custom Condition Tier** page. If you have already done this, you will see the "Custom Condition Tier" column displayed in the "Test By Laboratory" table on the Diagnostic Test Dashboard under the Lab Specific tab.
 
-#     df.rename(
-#             columns=rename_map,
-#             inplace=True,
-#             )
-#     df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
-#     print("after df.shape: ", df.shape)
-#     return df 
+        ### Step 2: Create/Upload Custom Test-Format Tier
+        Similarly, create or upload a Custom Test-Format Tier on the **Build Custom Test Tier** page. This is necessary to categorize tests into different tiers.
 
+        ### Step 3: Manage Current Table
+        Once the table is fetched and displayed, you have the following options:
+        - **Fetch Current Table**: Click this button to fetch the latest table.
+        - **Update Current Table**: Click this button to apply the updates you created in this page to the original current table in **Build Custom Condition Tier** or **Build Custom Test Tier** page .
+        - **Generate Test Summary**: Click this button to generate the test summary based on the current tables.
 
-# empty_selection = {
-#     'Diagnostic': {
-#         'Laboratory': ['Blood bank'], 
-#         'Test Format': [], 
-#         'Test Reason': [], 
-#         'Category': []
-#     }, 
-#     'Medicine': {
-#         'Medicine': []
-#     }, 
-#     'Condition': {
-#         'High Burden Disease': [], 
-#         'Clinical Service': [], 
-#         'Condition Name': []
-#     }, 
-#     'WHO EDL/EML': {
-#         'WHO EDL v2': [],
-#         'WHO EDL v2 Tier': [],
-#         'WHO EML v20': [], 
-#         'EML Category': []
-#     }
-# }
+        ### Step 4: View and Edit Test Summary
+        After generating the test summary, it will be displayed in the "Test Summary" section. You can view the summary of diagnostic tests categorized into primary, secondary, and tertiary tiers.
+
+        ## Notes
+        - The **Generate Test Summary** button will process the Custom Condition Tiers and Custom Test-Format Tiers to generate a comprehensive summary of diagnostic tests.
+        - Ensure that you have created or uploaded the Custom Condition Tier and Custom Test-Format Tier and check the generated Lab Specific - Test By Laboratory table before attempting to generate the test summary.
+        - Use the "Fetch Current Table" and "Update Current Table" buttons to manage the current table effectively.
+        """)

@@ -218,6 +218,7 @@ def create_condition_plot(df):
     plt.tight_layout(rect=[0, 0, 0.85, 1])
     return fig
 
+
 def display_add_condition_form():
     st.write("### Add a New Custom Condition Instance ")
     with st.form("new_condition", clear_on_submit=True):
@@ -241,6 +242,7 @@ def add_new_condition():
         }
     )
 
+
 def handle_custom_condition_file_upload(condition_level_csv):
     
     try:
@@ -259,12 +261,14 @@ def handle_custom_condition_file_upload(condition_level_csv):
     except Exception as e:
         st.error(f"Error uploading file: {e}")
 
+
 def upload_custom_condition_csv():
     st.write("### Upload a Custom Condition Tier CSV")
     condition_level_csv = st.file_uploader("upload a CSV file", type={"csv", "txt"})
     if (condition_level_csv is not None) and (st.button("Upload")):
         handle_custom_condition_file_upload(condition_level_csv)
-        
+
+
 def render_plot():
     fig = create_condition_plot(
         process_condition_tiers(
@@ -290,6 +294,7 @@ def render_plot():
             mime='text/csv',
         )
 
+
 def delete_callback():
     """
     Callback function to delete rows from the custom condition list based on user interaction.
@@ -303,7 +308,6 @@ def delete_callback():
         else:
             for k,v in value.items():
                 st.session_state["custom_condition_list"][idx][k] = v
-
 
 
 def display_custom_condition_df():
@@ -381,6 +385,7 @@ def save_current_coustom_df():
 
         else:
             st.toast("Could Not Find Custom Condition Level Dataframe")
+  
             
 def add_sidebar():
     with st.sidebar:
