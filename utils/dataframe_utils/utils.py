@@ -4,7 +4,6 @@ from data.database import get_view_df
 from typing import Dict, List, Any
 import streamlit as st
 import pandas as pd
-import numpy as np
 import zipfile
 import io
 
