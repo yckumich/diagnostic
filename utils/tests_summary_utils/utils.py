@@ -14,7 +14,7 @@ import base64
 warnings.filterwarnings("ignore")
 
 name_map = {"test_format": "Test Format", "custom_test_tier": "Test Format Custom Tier"}
-
+data_frame_height = 900
 
 # Function to generate PDF
 def generate_base64pdf(dataframe):
@@ -45,7 +45,7 @@ def generate_and_display_test_summary(input_key):
             msg.toast('Refreshing Page...')
             st.rerun()
         else:
-            st.session_state.test_summary_df = generate_tests_summary(tests_by_tier_long)
+            st.session_state.test_summary_df = generate_tests_summary(tests_by_tier_long) #currently long-format
             st.session_state.display_test_summary = True
             st.rerun()
 
@@ -99,8 +99,10 @@ def generate_tests_by_tier_long():
     
     return merged_df
 
+
 def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
     """
+    RETURNS LONG-FORMAT SUMMARY
     Generates a summary of diagnostic tests by their respective tiers from the given DataFrame.
 
     The function processes the input DataFrame `tests_by_tier_long` to categorize tests into primary, secondary, 
@@ -284,7 +286,7 @@ def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
     
     # Remove rows where 'Diagnostics' is NaN
     tests_out = tests_out.dropna(subset=['Diagnostics'])
-
+    # return tests_out
     #------ YCK POST PROCESSING -------
     tests_out_seperated = list()
     
@@ -301,27 +303,41 @@ def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
             temp_lab = ", ".join(temp_lab)
             tests_out_seperated.append({"service": temp_lab,"test_format":temp_test_format, "test_name":test, "tier": temp_tier})
     
-    tests_out_seperated_df = pd.DataFrame.from_dict(tests_out_seperated)
+    tests_out_seperated_df = pd.DataFrame.from_dict(tests_out_seperated)[['service','tier','test_format','test_name']].sort_values(by=['service','tier','test_format','test_name'], ascending=True).reset_index(drop=True)
+
+    return tests_out_seperated_df
+
+def generate_pdf_format_df(test_summary_df):
+    pdf_format_list = list()
+    
+    for service, test_tier_format_name_df in test_summary_df.groupby(by='service'):
+        for tier, test_format_name_df in test_tier_format_name_df.groupby(by='tier'):
+            for test_format, test_name_df in test_format_name_df.groupby(by='test_format'):
+                test_name_list = ",\t".join(list(test_name_df['test_name']))
+                pdf_format_list.append({
+                    'service':service,
+                    'tier':tier,
+                    'test_format_name_list':f"{test_format}: {test_name_list}",
+                })
     
     formatted_out_list = list()
     
-    for service, service_df in tests_out_seperated_df.groupby(by='service'):
-        max_row_num = max(service_df['tier'].value_counts())
-        tmp_pri_df = service_df[service_df['tier']=='Primary'].sort_values(by=['test_format', 'test_name']).reset_index(drop=True)
-        tmp_sec_df = service_df[service_df['tier']=='Secondary'].sort_values(by=['test_format', 'test_name']).reset_index(drop=True)
-        tmp_ter_df = service_df[service_df['tier']=='Tertiary'].sort_values(by=['test_format', 'test_name']).reset_index(drop=True)
+    for service, tier_test_format_name_list in pd.DataFrame(pdf_format_list).groupby('service'):
+        max_row_num = max(tier_test_format_name_list['tier'].value_counts())
+        tmp_pri_df = tier_test_format_name_list[tier_test_format_name_list['tier']=='Primary'].sort_values(by=['test_format_name_list',]).reset_index(drop=True)
+        tmp_sec_df = tier_test_format_name_list[tier_test_format_name_list['tier']=='Secondary'].sort_values(by=['test_format_name_list',]).reset_index(drop=True)
+        tmp_ter_df = tier_test_format_name_list[tier_test_format_name_list['tier']=='Tertiary'].sort_values(by=['test_format_name_list',]).reset_index(drop=True)
     
         for i in range(max_row_num):
-            tmp_pri_val = "-" if tmp_pri_df.shape[0] <= i else str(tmp_pri_df.loc[i]["test_format"] + ": " + tmp_pri_df.loc[i]['test_name'])
-            tmp_sec_val = "-" if tmp_sec_df.shape[0] <= i else str(tmp_sec_df.loc[i]["test_format"] + ": " + tmp_sec_df.loc[i]['test_name'])
-            tmp_ter_val = "-" if tmp_ter_df.shape[0] <= i else str(tmp_ter_df.loc[i]["test_format"] + ": " + tmp_ter_df.loc[i]['test_name'])
+            tmp_pri_val = "-" if tmp_pri_df.shape[0] <= i else str(tmp_pri_df.loc[i]['test_format_name_list'])
+            tmp_sec_val = "-" if tmp_sec_df.shape[0] <= i else str(tmp_sec_df.loc[i]['test_format_name_list'])
+            tmp_ter_val = "-" if tmp_ter_df.shape[0] <= i else str(tmp_ter_df.loc[i]['test_format_name_list'])
             formatted_out_list.append({
                 'service': service,
                 'primary': tmp_pri_val,
                 'secondary': tmp_sec_val, 
                 'tertiary': tmp_ter_val,
             })
-            
     return pd.DataFrame.from_dict(formatted_out_list)
 
 
@@ -395,7 +411,7 @@ def dataframe_to_pdf(dataframe, pdf_file='output.pdf'):
     col_widths = [1 * inch, 2.15 * inch, 2.15 * inch, 2.15 * inch]
 
     # Split the DataFrame into chunks
-    max_rows_per_page = 22  # Adjust based on your page size and content
+    max_rows_per_page = 16  # Adjust based on your page size and content
     chunks = [dataframe.iloc[i:i + max_rows_per_page] for i in range(0, dataframe.shape[0], max_rows_per_page)]
 
     for chunk in chunks:
@@ -526,7 +542,8 @@ def inline_display_custom_condition_df():
         on_change=inline_custom_condition_delete_callback,
         hide_index=False,
         column_config=column_config,
-        use_container_width=True
+        use_container_width=True,
+        height=data_frame_height,
     )
 
 
@@ -661,7 +678,9 @@ def inline_display_custom_test_tier_df():
         on_change=inline_custom_test_delete_callback,
         hide_index=False,
         column_config=column_config,
-        use_container_width=True
+        use_container_width=True,
+        height=data_frame_height,
+        
     )
 
 def inline_fetch_custom_test_tier():

@@ -73,7 +73,11 @@ with display_col:
                     st.session_state['show_plot'] = True
                     st.rerun()
         else:
-            fig = create_condition_plot(pd.DataFrame(st.session_state["custom_condition_list"]))
+            fig = create_condition_plot(
+                process_condition_tiers(
+                    pd.DataFrame(st.session_state["custom_condition_list"])
+                    )
+                )
             st.pyplot(fig)
 
             st.markdown("""<div style="height:50px;"></div>""", unsafe_allow_html=True)

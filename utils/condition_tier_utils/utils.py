@@ -17,6 +17,126 @@ def retrieve_gbd_conditions():
     return sorted(pd.read_csv("static/conditions.csv").query("lancet_gbd == 'Yes'")['condition_name'].to_list(), key=str.casefold)
 
 
+
+def process_condition_tiers(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Processes the input DataFrame to ensure that each condition has the appropriate tiers (Primary, Secondary, Tertiary) based on the condition level.
+    
+    Parameters:
+    df (pd.DataFrame): DataFrame containing columns 'conditionname', 'conditionlevel', and 'custom_condition_tier'.
+    
+    Returns:
+    pd.DataFrame: A DataFrame with processed condition tiers ensuring that if a condition has a secondary or tertiary tier, 
+                  it also includes the necessary primary and/or secondary tiers as per the hierarchical order.
+    """
+    
+    # Define the order for tiers and levels and other variables 
+    tier_order = {"Primary": 1, "Secondary": 2, "Tertiary": 3}
+    level_order = {"triage": 1, "moderate": 2, "severe": 3}
+    condition_df_dict_list = list()
+    final_df_dict_list = list()
+    secondary_filled_tertiary = False
+    
+    # Group by condition name and condition level to sort custom condition tier
+    for condition_name, condition_df in df.groupby(by='conditionname'):
+        for condition_level, condition_tier_df in condition_df.groupby('conditionlevel'):
+            condition_df_dict_list.append(
+                {
+                    'conditionname': condition_name,
+                    'conditionlevel': condition_level,
+                    'custom_condition_tier': sorted(
+                        condition_tier_df['custom_condition_tier'].values, 
+                        key=lambda x: tier_order[x])[0]
+                }
+            )
+    
+    processed_df = pd.DataFrame.from_dict(condition_df_dict_list)
+    
+    # Ensure that each condition has the appropriate tiers
+    for conditionname, condition_df in processed_df.groupby(by='conditionname'):
+        if len(set(condition_df['custom_condition_tier'])) == 3:
+            for i,row in condition_df.iterrows():
+                final_df_dict_list.append(
+                    {
+                        'conditionname':conditionname,
+                        'conditionlevel':row['conditionlevel'],
+                        'custom_condition_tier':row['custom_condition_tier'],
+                    }
+                )
+        else:
+            if 'Tertiary' in set(condition_df['custom_condition_tier']):
+                df_w_tertiary = condition_df[condition_df['custom_condition_tier'] == 'Tertiary']
+                for i,row in df_w_tertiary.iterrows():
+                    final_df_dict_list.append(
+                        {
+                            'conditionname':conditionname,
+                            'conditionlevel':row['conditionlevel'],
+                            'custom_condition_tier':row['custom_condition_tier'],
+                        }
+                    )
+                    
+            if 'Secondary' in set(condition_df['custom_condition_tier']):
+                df_w_secondary = condition_df[condition_df['custom_condition_tier'] == 'Secondary']
+                for i,row in df_w_secondary.iterrows():
+                    final_df_dict_list.append(
+                        {
+                            'conditionname':conditionname,
+                            'conditionlevel':row['conditionlevel'],
+                            'custom_condition_tier':row['custom_condition_tier'],
+                        }
+                    )   
+                highest_condition_level_in_secondary = sorted(
+                    condition_df[condition_df['custom_condition_tier'] == 'Secondary']['conditionlevel'].values,
+                    key=lambda x: level_order[x]
+                )[-1]
+                
+                if 'Tertiary' not in set(condition_df['custom_condition_tier']):
+                    final_df_dict_list.append(
+                        {
+                            'conditionname':conditionname,
+                            'conditionlevel':highest_condition_level_in_secondary,
+                            'custom_condition_tier': 'Tertiary',
+                        }
+                    )
+                    secondary_filled_tertiary = True
+            
+            if 'Primary' in set(condition_df['custom_condition_tier']):
+                df_w_primary = condition_df[condition_df['custom_condition_tier'] == 'Primary']
+                for i,row in df_w_primary.iterrows():
+                    final_df_dict_list.append(
+                        {
+                            'conditionname':conditionname,
+                            'conditionlevel':row['conditionlevel'],
+                            'custom_condition_tier':row['custom_condition_tier'],
+                        }
+                )                
+                    
+                highest_condition_level_in_primary = sorted(
+                    condition_df[condition_df['custom_condition_tier'] == 'Primary']['conditionlevel'].values,
+                    key=lambda x: level_order[x]
+                )[-1]
+                
+                if 'Secondary' not in set(condition_df['custom_condition_tier']):
+                    final_df_dict_list.append(
+                        {
+                            'conditionname':conditionname,
+                            'conditionlevel':highest_condition_level_in_primary,
+                            'custom_condition_tier': 'Secondary',
+                        }
+                    )    
+                if ((not secondary_filled_tertiary) and 
+                    ('Tertiary' not in set(condition_df['custom_condition_tier']))):
+                    final_df_dict_list.append(
+                        {
+                            'conditionname':conditionname,
+                            'conditionlevel':highest_condition_level_in_primary,
+                            'custom_condition_tier': 'Tertiary',
+                        }
+                    )             
+    
+    return pd.DataFrame.from_dict(final_df_dict_list)
+        
+        
 def create_condition_plot(df):
     """
     Creates and returns a condition level plot based on the given DataFrame.
