@@ -289,7 +289,7 @@ def delete_current_custom_test_tier_df():
     Resets the 'custom_test_tier_list', 'show_test_tier_plot', and 'custom_test_tier_df' session states.
     """
 
-    if st.button("Delete Custom Test-Format Tier Table"):
+    if st.button("Delete Test-Format Tier Table"):
         st.session_state["custom_test_tier_list"] = []
         st.session_state['show_test_tier_plot'] = False
         st.session_state.custom_test_tier_df = None
@@ -310,7 +310,7 @@ def save_current_coustom_test_tier_df():
     If the list is empty, it shows a warning toast message.
     """
 
-    if st.button("Save Custom Test-Format Tier Table"):
+    if st.button("Save Test-Format Tier Table"):
         if len(st.session_state.custom_test_tier_list):
             st.session_state.custom_test_tier_df = pd.DataFrame(st.session_state.custom_test_tier_list)
 

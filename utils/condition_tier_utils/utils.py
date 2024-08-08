@@ -357,7 +357,7 @@ def delete_current_coustom_df():
     Resets the 'custom_condition_list', 'show_plot', and 'custom_condition_df' session states.
     """
 
-    if st.button("Delete Current Custom Condition Table"):
+    if st.button("Delete Custom Condition Table"):
         st.session_state["custom_condition_list"] = []
         st.session_state['show_plot'] = False
         st.session_state.custom_condition_df = None
@@ -376,7 +376,7 @@ def save_current_coustom_df():
     If the list is empty, it shows a warning toast message.
     """
 
-    if st.button("Save Current Custom Condition Table"):
+    if st.button("Save Custom Condition Table"):
         if len(st.session_state.custom_condition_list):
             st.session_state.custom_condition_df = pd.DataFrame(st.session_state["custom_condition_list"])
             msg = st.toast('Saving/Applying Custom Condition Level...')

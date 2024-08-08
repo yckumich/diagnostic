@@ -41,7 +41,7 @@ st.write("### Test Summary")
 build_col, display_col = st.columns([1, 1], gap="medium")
 
 with build_col:
-    custom_cond_tier_tab, custom_test_tier_tab  = st.tabs(['Custom Condition Tier', 'Custom Test Tier', ])
+    custom_cond_tier_tab, custom_test_tier_tab  = st.tabs(['Custom Condition Tier', 'Custom Test-Format Tier', ])
 
     with custom_cond_tier_tab:
         if len(st.session_state.custom_condition_list) == 0:

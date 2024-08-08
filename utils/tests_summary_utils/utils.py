@@ -545,7 +545,7 @@ def inline_display_custom_condition_df():
 
 
 def inline_fetch_custom_condition_tier():
-    if st.button("Fetch Custom Condition Tier Table"):
+    if st.button("Fetch Condition Tier Table"):
         # st.session_state.inline_custom_condition_list = st.session_state.custom_condition_list.copy()
         msg = st.toast('Fetching Custom Condition Tier Table...')
         time.sleep(0.7)
@@ -554,7 +554,7 @@ def inline_fetch_custom_condition_tier():
 
 
 def inline_update_custom_condition_tier():
-    if st.button("Update Custom Condition Tier Table"):
+    if st.button("Update Condition Tier Table"):
         if len(st.session_state.inline_custom_condition_list) > 0:
             st.session_state.custom_condition_list = st.session_state.inline_custom_condition_list
             msg = st.toast('Updating Custom Condition Tier Table...')
@@ -623,7 +623,7 @@ def inline_display_custom_test_tier_df():
     )
 
 def inline_fetch_custom_test_tier():
-    if st.button("Fetch Custom Test Format Tier Table"):
+    if st.button("Fetch Test Format Tier Table"):
         st.session_state.inline_custom_test_list = st.session_state.custom_test_tier_list.copy()
         msg = st.toast('Fetching Custom Test Format Tier Table...')
         time.sleep(0.7)
@@ -631,7 +631,7 @@ def inline_fetch_custom_test_tier():
         st.rerun()
 
 def inline_update_custom_test_tier():
-    if st.button("Update Custom Test Format Tier Table"):
+    if st.button("Update Test Format Tier Table"):
         if len(st.session_state.inline_custom_test_list) > 0:
             st.session_state.custom_test_tier_list = st.session_state.inline_custom_test_list
             msg = st.toast('Updating Custom Test Format Tier Table...')
