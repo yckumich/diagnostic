@@ -1,0 +1,8 @@
+[server]
+port = 8501
+enableCORS = false
+enableXsrfProtection = false
+
+[browser]
+serverAddress = "140.82.60.183"
+serverPort = 80

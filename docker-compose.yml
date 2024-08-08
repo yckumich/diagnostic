@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  streamlit_app:
+    image: diagnostic:0.0.1
+    networks:
+      - diagnostic-network
+    deploy:
+      replicas: 1
+
+  nginx:
+    image: nginx:1.27.0
+    ports:
+      - "80:80"
+    volumes:
+      - /root/nginx/conf.d:/etc/nginx/conf.d
+    networks:
+      - diagnostic-network
+
+networks:
+  diagnostic-network:
+    driver: overlay
