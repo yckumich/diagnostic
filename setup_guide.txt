@@ -1,0 +1,130 @@
+Step 1: Install Docker Engine on Ubuntu
+
+https://docs.docker.com/engine/install/ubuntu/
+
+Step 2: Set Up Docker Swarm
+
+sudo docker swarm init
+
+Step 3: Create Dockerfile for Streamlit App
+FROM python:3.10.0
+
+WORKDIR /app/
+
+RUN git clone https://github.com/yckumich/diagnostic.git
+
+WORKDIR /app/diagnostic
+
+RUN pip install -r requirements.txt
+
+EXPOSE 8501
+
+CMD ["streamlit",  "run", "Home.py"]
+
+Step 4: Create docker-compose.yml for Docker Stack/Swarm
+
+version: '3.8'
+
+services:
+  streamlit_app:
+    image: diagnostic:0.0.1
+    networks:
+      - diagnostic-network
+    deploy:
+      replicas: 1
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - /root/nginx/conf.d:/etc/nginx/conf.d
+    networks:
+      - diagnostic-network
+
+networks:
+  diagnostic-network:
+    driver: overlay
+
+Step 4: Create Nginx Configuration
+
+Step 4.1: Create a directory for Nginx configuration
+mkdir -p ~/nginx/conf.d
+
+Step 4.2: Create a streamlit.conf file in nginx/conf.d with the following content
+upstream streamlit_app {
+    server streamlit_app:8501;
+}
+
+server {
+    listen 80;
+
+    location / {
+        proxy_pass http://streamlit_app;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # WebSocket support
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_buffering off;
+        proxy_read_timeout 86400;
+    }
+}
+
+Step 5: Configure Streamlit -- Create a config.toml file in .streamlit with the following content
+[server]
+port = 8501
+enableCORS = false
+enableXsrfProtection = false
+
+[browser]
+serverAddress = "<YOUR Doman Name or IP>"
+serverPort = 80
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
