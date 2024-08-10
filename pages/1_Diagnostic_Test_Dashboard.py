@@ -48,8 +48,8 @@ def create_filter_expander(expander_title:str, subfilter_map:dict) -> Dict:
             selected_option_map[subfilter_title] = st.multiselect(
                 subfilter_title, 
                 options_list, 
-                default=['Blood bank', ] if subfilter_title == 'Laboratory' else [],
-                # default=[]
+                # default=['Blood bank', ] if subfilter_title == 'Laboratory' else [],
+                default=[]
             )
     return selected_option_map
 
