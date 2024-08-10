@@ -20,18 +20,20 @@ with build_col:
     st.write("### Custom Test-Format Tier Table")
     display_custom_test_tier_df()
 
-    _, col_1, col_2, _ = st.columns([0.2, 0.3, 0.3, 0.2])
+    _, col_1, col_2, col_3, _ = st.columns([0.125, 0.25, 0.25, 0.25, 0.125])
     with col_1:
         delete_current_custom_test_tier_df()
     with col_2:
         save_current_coustom_test_tier_df()
+    with col_3:
+        load_lancet_test_format_tier_df()
 
     # Form to add a new condition
     add_new_condition_tier_form()
     upload_custom_tier_tier_csv()
 
 with display_col:
-    if len(st.session_state[CUSTOM_TEST_TIER_LIST_KEY]) > 1:
+    if len(st.session_state[CUSTOM_TEST_TIER_LIST_KEY]) > 0:
         if not st.session_state[SHOW_TEST_TIER_PLOT_KEY]:
             st.markdown("""<div style="height:500px;"></div>""", unsafe_allow_html=True)
             _, col, _ = st.columns([0.35, 0.3, 0.35])

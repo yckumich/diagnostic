@@ -33,11 +33,13 @@ with build_col:
     # Display the current condition data
     display_custom_condition_df()
 
-    _, col_1, col_2, _ = st.columns([0.2, 0.3, 0.3, 0.2])
+    _, col_1, col_2, col_3, _ = st.columns([0.125, 0.25, 0.25, 0.25, 0.125])
     with col_1:
         delete_current_coustom_df()
     with col_2:
         save_current_coustom_df()
+    with col_3:
+        load_lancet_condition_tier_df()
 
     # Form to add a new condition
     display_add_condition_form()
@@ -45,7 +47,7 @@ with build_col:
 
 
 with display_col:
-    if len(st.session_state["custom_condition_list"]) > 1:
+    if len(st.session_state["custom_condition_list"]) > 0:
         if not st.session_state['show_plot']:
             st.markdown("""<div style="height:500px;"></div>""", unsafe_allow_html=True)
             _, col, _ = st.columns([0.35, 0.3, 0.35])

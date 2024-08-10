@@ -7,10 +7,9 @@ import pandas as pd
 import zipfile
 import io
 
-
 def convert_query_to_df(query_stmt:str) -> pd.DataFrame:
     view_df = get_view_df()
-
+    # print('view_df.shape in convert_query_to_df: ', view_df.shape)
     if query_stmt != "":
         return view_df.query(query_stmt)
     else:
@@ -72,14 +71,17 @@ def convert_filter_to_query(filters:Dict[str,List[str]]) -> str:
     return " and ".join([f"{k} in {v}" for k,v in filters.items()])
 
 
-@st.cache_data(ttl=3600)
+# @st.cache_data(ttl=3600)
+##THIS CAUSE THE PROBLEM!!! OF NOT LETTING IT TO RUN !!
 def convert_selection_to_df(selection: Dict[str,Dict[str,List[str]]]) -> pd.DataFrame:
     """
     Convert a nested dictionary of user selections into a pandas DataFrame by applying the 
     corresponding filters and executing the query.
     """
     filters = convert_selection_to_filter(selection=selection)
+    # print("filters: ", filters)
     query_w_filter = convert_filter_to_query(filters=filters)
+    # print("query_w_filter: ", query_w_filter)
     
     return convert_query_to_df(query_w_filter)
 
@@ -139,7 +141,7 @@ def create_sorted_dataframe(data: dict[str,List]) -> pd.DataFrame:
     def sort_row(row):
         return sorted(row, key=lambda x: (x != "", str(x)), reverse=True)
     
-    labels = list(data.keys())
+    # labels = list(data.keys())
     lists = list(data.values())
     
     # Determine the maximum length of the lists
@@ -229,7 +231,7 @@ def generate_zip(dataframes:List[Any]):
         # Add each dataframe to the zip file
         for title, df in dataframes:
             if not df.empty and title in ['Test By Condition', 'Test By Laboratory Section', 'Format By Test', 'Format and Tiers']:
-                print(f'generating zip for {title}')
+                # print(f'generating zip for {title}')
                 df_bytes = df.to_csv(index=False).encode('utf-8')
                 zf.writestr(f'{title}.csv', df_bytes)
         

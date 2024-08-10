@@ -118,7 +118,7 @@ def handle_custom_test_format_csv_upload(test_tier_csv):
 
 
 def render_custom_test_format_tier_plot_section():
-    fig = create_test_tier_plot(pd.DataFrame(st.session_state[CUSTOM_TEST_TIER_LIST_KEY]))
+    fig = create_test_tier_plot(pd.DataFrame.from_dict(st.session_state[CUSTOM_TEST_TIER_LIST_KEY]))
     st.pyplot(fig)
 
     st.markdown("""<div style="height:50px;"></div>""", unsafe_allow_html=True)
@@ -167,7 +167,7 @@ def create_test_tier_plot(df):
     tests = df[TEST_FORMAT].unique()
 
     # Create a figure and axis
-    fig, ax = plt.subplots(figsize=(10, int(df[TEST_FORMAT].nunique()/3.5)))
+    fig, ax = plt.subplots(figsize=(10, max(2, int(df[TEST_FORMAT].nunique()/3.5))))
 
     # Draw the grid and rectangles
     for i, test in enumerate(tests):
@@ -214,8 +214,10 @@ def create_test_tier_plot(df):
 
     # Show the plot
     plt.gca().invert_yaxis()
-    plt.tight_layout(rect=[0, 0, 0.85, 1])
+    if len(tests) > 1:
+        plt.tight_layout(rect=[0, 0, 0.85, 1])
     return fig
+
 
 
 def add_new_test_tier():
@@ -223,13 +225,16 @@ def add_new_test_tier():
     Adds a new test tier record to the custom test tier list stored in the session state.
     The new record is added based on the current values of 'test_format' and 'custom_test_tier' in the session state.
     """
-    st.session_state.custom_test_tier_list.append(
-        {
-            TEST_FORMAT: st.session_state.test_format,
-            CUSTOM_TEST_TIER: st.session_state.custom_test_tier,
-        }
-    )
-
+    test_format_list = set(_['test_format'] for _ in st.session_state.custom_test_tier_list)
+    if st.session_state.test_format in test_format_list:
+        st.toast(f"⛔ '{st.session_state.test_format}'' already in the table...")
+    else:
+        st.session_state.custom_test_tier_list.append(
+            {
+                TEST_FORMAT: st.session_state.test_format,
+                CUSTOM_TEST_TIER: st.session_state.custom_test_tier,
+            }
+        )
 
 def test_tier_delete_callback():
     """
@@ -314,13 +319,18 @@ def save_current_coustom_test_tier_df():
         if len(st.session_state.custom_test_tier_list):
             st.session_state.custom_test_tier_df = pd.DataFrame(st.session_state.custom_test_tier_list)
 
-            msg = st.toast('Saving/Applying Custom Test Tier...')
+            msg = st.toast('Saving/Applying Custom Test-Format Tier...')
             time.sleep(0.7)
             msg.toast('Saved & Applied ✅ ')
 
         else:
             st.toast("Could Not Find Custom Test Tier Dataframe")
 
+def load_lancet_test_format_tier_df():
+    if st.button("Load Lancet Test-Format Teir Table"):
+        st.session_state[CUSTOM_TEST_TIER_LIST_KEY] = pd.read_csv('static/lancet_test_tier.csv').to_dict(orient='records')
+        st.session_state[CUSTOM_TEST_TIER_DF_KEY] = None
+        st.rerun()
 
 def add_sidebar(): 
     with st.sidebar:

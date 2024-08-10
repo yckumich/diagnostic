@@ -100,8 +100,8 @@ def generate_tests_by_tier_long():
                 'test_name_short',
                 'test_name_pretty',
                 'test_format',
-                'test_format_lancet_tier',
-                'lancet_condition_tier',
+                #'test_format_lancet_tier', #technically there is no need for this column
+                #'lancet_condition_tier', #technically there is no need for this column
                 'custom_condition_tier',
                 'custom_test_tier',]
     
@@ -111,8 +111,8 @@ def generate_tests_by_tier_long():
                 'test_name_short': 'Test Name Short',
                 'test_name_pretty': 'Test Name Pretty',
                 'test_format': 'Test Format',
-                'test_format_lancet_tier': 'Test Format Lancet Tier',
-                'lancet_condition_tier': 'Lancet Condition Tier',
+                #'test_format_lancet_tier': 'Test Format Lancet Tier',
+                #'lancet_condition_tier': 'Lancet Condition Tier',
                 'custom_condition_tier': 'Custom Condition Tier',
                 'custom_test_tier': 'Test Format Custom Tier'
                 }

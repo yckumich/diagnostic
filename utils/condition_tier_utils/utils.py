@@ -386,7 +386,14 @@ def save_current_coustom_df():
         else:
             st.toast("Could Not Find Custom Condition Level Dataframe")
   
-            
+def load_lancet_condition_tier_df():
+    if st.button("Load Lancet Condition Table"):
+        st.session_state["custom_condition_list"] = pd.read_csv('static/lancet_condition_level.csv').to_dict(orient='records')
+        st.session_state.custom_condition_df = None
+        st.rerun()
+        
+
+
 def add_sidebar():
     with st.sidebar:
         st.markdown("""

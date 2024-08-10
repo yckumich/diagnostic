@@ -42,13 +42,15 @@ agg_filter_selection = dict()
 #------------------------------HELPERS------------------------------
 def create_filter_expander(expander_title:str, subfilter_map:dict) -> Dict:
     selected_option_map = {k:[] for k in subfilter_map.keys()}
-    with st.expander(expander_title):
+    with st.expander(expander_title, expanded=True if expander_title=='Diagnostic' else False):
         
         for subfilter_title, options_list in subfilter_map.items():
             selected_option_map[subfilter_title] = st.multiselect(
                 subfilter_title, 
                 options_list, 
-                default=['Blood bank', ] if subfilter_title == 'Laboratory' else [])
+                default=['Blood bank', ] if subfilter_title == 'Laboratory' else [],
+                # default=[]
+            )
     return selected_option_map
 
 
@@ -103,6 +105,7 @@ with test_list_col:
         .sort_values(by='testname')
     )
     grid_option = build_grid_option(unique_test_df)
+    # print(selected_test_df.shape)
     grid_table = AgGrid(
         data=unique_test_df,
         gridOptions=grid_option,

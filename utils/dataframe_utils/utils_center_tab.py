@@ -3,7 +3,7 @@ import streamlit as st
 import time
 
 
-@st.cache_data(ttl=3600)
+# @st.cache_data(ttl=3600)
 def get_test_by_condition_test_by_condition(df, custom_condition_tier=False, custom_test_tier=False):
     df = df[[
             'conditionname',
@@ -25,6 +25,7 @@ def get_test_by_condition_test_by_condition(df, custom_condition_tier=False, cus
         inplace=True,
     )
     df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
+    print("test_by_condition.shape: ", df.shape)
     return df
 
 
@@ -42,8 +43,8 @@ def get_lab_specific_test_by_laboratory_section(df, custom_condition_tier=False,
         'test_name_short',
         'test_name_pretty',
         'test_format',
-        'test_format_lancet_tier',
-        'lancet_condition_tier',
+        # 'test_format_lancet_tier',
+        # 'lancet_condition_tier',
     ]
     rename_map = {
         'laboratory': 'Laboratory',
@@ -51,17 +52,17 @@ def get_lab_specific_test_by_laboratory_section(df, custom_condition_tier=False,
         'test_name_short': 'Test Name Short',
         'test_name_pretty': 'Test Name Pretty',
         'test_format': 'Test Format',
-        'test_format_lancet_tier': 'Test Format Lancet Tier',
-        'lancet_condition_tier': 'Lancet Condition Tier'
+        # 'test_format_lancet_tier': 'Test Format Lancet Tier',
+        # 'lancet_condition_tier': 'Lancet Condition Tier'
     }
 
-    if custom_test_tier:
-        columns.append('custom_test_tier')
-        rename_map['custom_test_tier'] = 'Test Format Custom Tier'
+    # if custom_test_tier:
+    #     columns.append('custom_test_tier')
+    #     rename_map['custom_test_tier'] = 'Test Format Custom Tier'
         
-    if custom_condition_tier:
-        columns.append('custom_condition_tier')
-        rename_map['custom_condition_tier'] = 'Custom Condition Tier'
+    # if custom_condition_tier:
+    #     columns.append('custom_condition_tier')
+    #     rename_map['custom_condition_tier'] = 'Custom Condition Tier'
 
     df = df[columns].copy()
 
@@ -71,19 +72,19 @@ def get_lab_specific_test_by_laboratory_section(df, custom_condition_tier=False,
     )
     df = df.drop_duplicates().dropna().sort_values(by=list(df.columns)).reset_index(drop=True)
     
-    custom_col_list = []
-    for col in ['Custom Condition Tier','Test Format Custom Tier']:
-        if col in df.columns:
-            custom_col_list.append(col)
+    # custom_col_list = []
+    # for col in ['Custom Condition Tier','Test Format Custom Tier']:
+    #     if col in df.columns:
+    #         custom_col_list.append(col)
 
-    def apply_color(_):
-        return f"background-color: lightblue;"
+    # def apply_color(_):
+    #     return f"background-color: lightblue;"
 
-    df = df.style.map(apply_color, subset=custom_col_list)
+    # df = df.style.map(apply_color, subset=custom_col_list)
 
     return df
 
-@st.cache_data(ttl=3600)
+# @st.cache_data(ttl=3600)
 def get_lab_specific_format_by_test(df, custom_condition_tier=False, custom_test_tier=False):
     df = df[[
             'test_name_pretty',
@@ -102,21 +103,21 @@ def get_lab_specific_format_by_test(df, custom_condition_tier=False, custom_test
     df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
     return df
 
-@st.cache_data(ttl=3600)
+# @st.cache_data(ttl=3600)
 def get_lab_specific_format_and_tiers(df, custom_condition_tier=False, custom_test_tier=False):
     columns = [
         'test_format',
-        'test_format_lancet_tier',
+        # 'test_format_lancet_tier',
     ]
     rename_map = {
         'test_format': 'Test Format',
-        'test_name_short': 'Test Name Short',
-        'test_format_lancet_tier': 'Test Format Lancet Tier',
+        # 'test_name_short': 'Test Name Short',
+        # 'test_format_lancet_tier': 'Test Format Lancet Tier',
     }
     
-    if custom_test_tier:
-        columns.append('custom_test_tier')
-        rename_map['custom_test_tier'] = 'Custom Test Tier'
+    # if custom_test_tier:
+    #     columns.append('custom_test_tier')
+    #     rename_map['custom_test_tier'] = 'Custom Test Tier'
 
 
     df = df[columns].copy()
@@ -128,7 +129,7 @@ def get_lab_specific_format_and_tiers(df, custom_condition_tier=False, custom_te
     return df
 
 
-@st.cache_data(ttl=3600)
+# @st.cache_data(ttl=3600)
 def get_test_by_medicine_test_by_medicine(df, custom_condition_tier=False, custom_test_tier=False):
 
     df = df[[
@@ -238,17 +239,19 @@ def generate_tab_content(tab_title,
                 use_container_width=True,
                 height=900,
             )
-            if (df_titles[i] == 'Test By Laboratory Section'):
-                if st.button("Save Table"):
-                    if not isinstance(st.session_state.cached_tbls_all_cols, pd.DataFrame):
-                        st.warning('Must upload :red-background[custom condition/test format tier] to save the table')
-                        time.sleep(1.5)
-                        st.rerun()
-                    else:
+            if df_titles[i] == 'Test By Laboratory Section':
+                if ((isinstance(st.session_state.cached_tbls_all_cols, pd.DataFrame))
+                    and 
+                    (st.session_state.cached_tbls_all_cols.shape[0]>0) 
+                    ):
+                    if st.button("Save Table"):
                         msg = st.toast("Saving current 'Test By Laboratory' table...")
                         time.sleep(0.7)
                         msg.toast('Saved ✅')
                         time.sleep(0.7)
+                else:
+                    st.warning('Must upload :red-background[custom condition/test format tier] to save the table')
+
 
         tab_dataframes.append((df_titles[i], result_df))
     return tab_dataframes
