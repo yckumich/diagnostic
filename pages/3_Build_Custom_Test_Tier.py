@@ -10,6 +10,10 @@ st.set_page_config(
 
 from utils.test_tier_utils.utils import *
 
+UM_Block_Logo = "static/Block_M-Hex.png"
+UM_Extended_Logo = "static/U-M_Logo-Horizontal-Hex.png"
+
+st.logo(UM_Extended_Logo, icon_image=UM_Block_Logo)
 
 #----------------------MAIN-----------------------
 initialize_session_state()

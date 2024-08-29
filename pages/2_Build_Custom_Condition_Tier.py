@@ -7,6 +7,11 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+UM_Block_Logo = "static/Block_M-Hex.png"
+UM_Extended_Logo = "static/U-M_Logo-Horizontal-Hex.png"
+
+st.logo(UM_Extended_Logo, icon_image=UM_Block_Logo)
+
 import pandas as pd
 from utils.condition_tier_utils.utils import *
 
@@ -27,7 +32,7 @@ GDB_CONDITION_LIST = retrieve_gbd_conditions()
 #----------------------MAIN-----------------------
 add_sidebar()
 build_col, display_col = st.columns([1,1], gap="small")
-    
+
 with build_col:
     st.write("### Custom Condition Tier Table")
     # Display the current condition data

@@ -6,6 +6,10 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+UM_Block_Logo = "static/Block_M-Hex.png"
+UM_Extended_Logo = "static/U-M_Logo-Horizontal-Hex.png"
+
+st.logo(UM_Extended_Logo, icon_image=UM_Block_Logo)
 
 from utils.tests_summary_utils.utils import *
 from style import get_style_markdown

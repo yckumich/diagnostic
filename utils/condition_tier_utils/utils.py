@@ -23,22 +23,22 @@ GDB_CONDITION_LIST = retrieve_gbd_conditions()
 def process_condition_tiers(df: pd.DataFrame) -> pd.DataFrame:
     """
     Processes the input DataFrame to ensure that each condition has the appropriate tiers (Primary, Secondary, Tertiary) based on the condition level.
-    
+
     Parameters:
     df (pd.DataFrame): DataFrame containing columns 'conditionname', 'conditionlevel', and 'custom_condition_tier'.
-    
+
     Returns:
     pd.DataFrame: A DataFrame with processed condition tiers ensuring that if a condition has a secondary or tertiary tier, 
                   it also includes the necessary primary and/or secondary tiers as per the hierarchical order.
     """
-    
+
     # Define the order for tiers and levels and other variables 
     tier_order = {"Primary": 1, "Secondary": 2, "Tertiary": 3}
     level_order = {"triage": 1, "moderate": 2, "severe": 3}
     condition_df_dict_list = list()
     final_df_dict_list = list()
     secondary_filled_tertiary = False
-    
+
     # Group by condition name and condition level to sort custom condition tier
     for condition_name, condition_df in df.groupby(by='conditionname'):
         for condition_level, condition_tier_df in condition_df.groupby('conditionlevel'):
@@ -51,9 +51,9 @@ def process_condition_tiers(df: pd.DataFrame) -> pd.DataFrame:
                         key=lambda x: tier_order[x])[0]
                 }
             )
-    
+
     processed_df = pd.DataFrame.from_dict(condition_df_dict_list)
-    
+
     # Ensure that each condition has the appropriate tiers
     for conditionname, condition_df in processed_df.groupby(by='conditionname'):
         if len(set(condition_df['custom_condition_tier'])) == 3:
@@ -76,7 +76,7 @@ def process_condition_tiers(df: pd.DataFrame) -> pd.DataFrame:
                             'custom_condition_tier':row['custom_condition_tier'],
                         }
                     )
-                    
+
             if 'Secondary' in set(condition_df['custom_condition_tier']):
                 df_w_secondary = condition_df[condition_df['custom_condition_tier'] == 'Secondary']
                 for i,row in df_w_secondary.iterrows():
@@ -86,12 +86,12 @@ def process_condition_tiers(df: pd.DataFrame) -> pd.DataFrame:
                             'conditionlevel':row['conditionlevel'],
                             'custom_condition_tier':row['custom_condition_tier'],
                         }
-                    )   
+                    )
                 highest_condition_level_in_secondary = sorted(
                     condition_df[condition_df['custom_condition_tier'] == 'Secondary']['conditionlevel'].values,
                     key=lambda x: level_order[x]
                 )[-1]
-                
+
                 if 'Tertiary' not in set(condition_df['custom_condition_tier']):
                     final_df_dict_list.append(
                         {
@@ -101,7 +101,7 @@ def process_condition_tiers(df: pd.DataFrame) -> pd.DataFrame:
                         }
                     )
                     secondary_filled_tertiary = True
-            
+
             if 'Primary' in set(condition_df['custom_condition_tier']):
                 df_w_primary = condition_df[condition_df['custom_condition_tier'] == 'Primary']
                 for i,row in df_w_primary.iterrows():
@@ -111,13 +111,13 @@ def process_condition_tiers(df: pd.DataFrame) -> pd.DataFrame:
                             'conditionlevel':row['conditionlevel'],
                             'custom_condition_tier':row['custom_condition_tier'],
                         }
-                )                
-                    
+                )
+
                 highest_condition_level_in_primary = sorted(
                     condition_df[condition_df['custom_condition_tier'] == 'Primary']['conditionlevel'].values,
                     key=lambda x: level_order[x]
                 )[-1]
-                
+
                 if 'Secondary' not in set(condition_df['custom_condition_tier']):
                     final_df_dict_list.append(
                         {
@@ -125,7 +125,7 @@ def process_condition_tiers(df: pd.DataFrame) -> pd.DataFrame:
                             'conditionlevel':highest_condition_level_in_primary,
                             'custom_condition_tier': 'Secondary',
                         }
-                    )    
+                    )
                 if ((not secondary_filled_tertiary) and 
                     ('Tertiary' not in set(condition_df['custom_condition_tier']))):
                     final_df_dict_list.append(
@@ -134,18 +134,18 @@ def process_condition_tiers(df: pd.DataFrame) -> pd.DataFrame:
                             'conditionlevel':highest_condition_level_in_primary,
                             'custom_condition_tier': 'Tertiary',
                         }
-                    )             
-    
+                    )
+
     return pd.DataFrame.from_dict(final_df_dict_list)
-        
-        
+
+
 def create_condition_plot(df):
     """
     Creates and returns a condition level plot based on the given DataFrame.
-    
+
     Parameters:
     df (DataFrame): DataFrame containing 'conditionname', 'conditionlevel', and 'custom_condition_tier' columns.
-    
+
     Returns:
     Figure: A matplotlib figure object representing the condition levels by health facility tier.
     """
@@ -173,7 +173,7 @@ def create_condition_plot(df):
         for j, tier in enumerate(tiers):
             # Get the condition levels for this cell
             cell_data = df[(df["conditionname"] == condition) & (df["custom_condition_tier"] == tier)]
-            
+
             if not cell_data.empty:
                 levels = sorted(cell_data["conditionlevel"].values, key=lambda x: level_order[x])
                 num_levels = len(levels)
@@ -244,7 +244,7 @@ def add_new_condition():
 
 
 def handle_custom_condition_file_upload(condition_level_csv):
-    
+
     try:
         uploaded_df = pd.read_csv(condition_level_csv)
         uploaded_df_cols = list(uploaded_df.columns)
@@ -385,13 +385,13 @@ def save_current_coustom_df():
 
         else:
             st.toast("Could Not Find Custom Condition Level Dataframe")
-  
+
 def load_lancet_condition_tier_df():
     if st.button("Load Lancet Condition Table"):
         st.session_state["custom_condition_list"] = pd.read_csv('static/lancet_condition_level.csv').to_dict(orient='records')
         st.session_state.custom_condition_df = None
         st.rerun()
-        
+
 
 
 def add_sidebar():
@@ -411,17 +411,17 @@ def add_sidebar():
             ### Instructions:
             1. **Add a New Condition Record:**
                - Use the form provided to select the condition name, level, and tier, then click 'Add' to append the new record to the table.
-            
+
             2. **Upload a Custom Condition Tier CSV:**
                - Use the file uploader to select and upload your CSV file. Ensure that your file contains only the required columns: :blue-background[conditionname], :blue-background[conditionlevel], and :blue-background[custom_condition_tier].
-            
+
             3. **Display and Edit Condition Table:**
                - View the current condition table displayed on the left. You can mark records for deletion directly within the table by checking the 'delete' checkbox.
-            
+
             4. **Save or Delete the Condition Table:**
                - Click 'Save Current Custom Condition Table' to save the current table for future use.
                - Click 'Delete Current Custom Condition Table' to delete the existing table and start fresh.
-            
+
             5. **Render and Manage Plot:**
                - Once you have built or uploaded your condition table, click 'Render Custom Condition Tier Plot' to visualize your data.
                - Use the buttons to redraw or delete the plot as needed.

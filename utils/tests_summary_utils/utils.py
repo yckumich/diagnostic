@@ -389,8 +389,8 @@ def dataframe_to_pdf(dataframe, pdf_file='output.pdf'):
         pagesize=letter,
         topMargin=0.35 * inch,
         bottomMargin=0.35 * inch
-    )    
-    
+    )
+
     elements = []
 
     # Define the styles

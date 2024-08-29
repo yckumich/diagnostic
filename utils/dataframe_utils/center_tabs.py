@@ -22,7 +22,7 @@ cetner_tab_dict = {
         "Tests",
     ],
 
-    "Condition By Test":[
+    "Condition Per Test":[
         "Conditions per Test",
     ],
 
