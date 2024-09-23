@@ -93,7 +93,7 @@ get_style_markdown()
 #--------------Configure the Main filter--------------
 filter_map = get_filter()
 selection = add_sidebar(filter_map=filter_map)
-print(selection)
+# print(selection)
 #--------------Configure center pane------------------
 center_tab_col, test_list_col = st.columns([0.86, 0.14], gap="medium")
 

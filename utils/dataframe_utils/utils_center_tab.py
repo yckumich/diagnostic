@@ -25,7 +25,7 @@ def get_test_by_condition_test_by_condition(df, custom_condition_tier=False, cus
         inplace=True,
     )
     df = df.drop_duplicates().sort_values(by=list(df.columns)).reset_index(drop=True)
-    print("test_by_condition.shape: ", df.shape)
+    # print("test_by_condition.shape: ", df.shape)
     return df
 
 
