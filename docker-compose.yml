@@ -9,7 +9,7 @@ services:
       replicas: 1
 
   nginx:
-    image: nginx:latest
+    image: nginx:1.27.0
     ports:
       - "80:80"
     volumes:

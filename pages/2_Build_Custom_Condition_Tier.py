@@ -14,6 +14,7 @@ st.logo(UM_Extended_Logo, icon_image=UM_Block_Logo)
 
 import pandas as pd
 from utils.condition_tier_utils.utils import *
+from utils.accessibility import *
 
 def initialize_session_state():
     if "custom_condition_list" not in st.session_state:
@@ -30,10 +31,14 @@ initialize_session_state()
 GDB_CONDITION_LIST = retrieve_gbd_conditions()
 
 #----------------------MAIN-----------------------
+hide_topmenu()
+add_skip_link_to_sidebar()
 add_sidebar()
 build_col, display_col = st.columns([1,1], gap="small")
 
 with build_col:
+    st.markdown('<div id="main-content"></div>', unsafe_allow_html=True)
+
     st.write("### Custom Condition Tier Table")
     # Display the current condition data
     display_custom_condition_df()

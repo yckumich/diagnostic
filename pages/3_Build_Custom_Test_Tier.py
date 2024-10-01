@@ -9,6 +9,7 @@ st.set_page_config(
 )
 
 from utils.test_tier_utils.utils import *
+from utils.accessibility import *
 
 UM_Block_Logo = "static/Block_M-Hex.png"
 UM_Extended_Logo = "static/U-M_Logo-Horizontal-Hex.png"
@@ -17,10 +18,13 @@ st.logo(UM_Extended_Logo, icon_image=UM_Block_Logo)
 
 #----------------------MAIN-----------------------
 initialize_session_state()
+hide_topmenu()
+add_skip_link_to_sidebar()
 add_sidebar()
 build_col, display_col = st.columns([1,1], gap="small")
     
 with build_col:
+    st.markdown('<div id="main-content"></div>', unsafe_allow_html=True)
     st.write("### Custom Test-Format Tier Table")
     display_custom_test_tier_df()
 

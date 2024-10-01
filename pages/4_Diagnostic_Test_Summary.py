@@ -13,6 +13,7 @@ st.logo(UM_Extended_Logo, icon_image=UM_Block_Logo)
 
 from utils.tests_summary_utils.utils import *
 from style import get_style_markdown
+from utils.accessibility import *
 
 def initialize_session_state():
     if "display_test_summary" not in st.session_state:
@@ -38,6 +39,8 @@ def initialize_session_state():
 
 #----------------------MAIN-----------------------
 initialize_session_state()
+hide_topmenu()
+add_skip_link_to_sidebar()
 add_sidebar()
 get_style_markdown()
 
@@ -45,6 +48,8 @@ st.write("### Test Summary")
 build_col, display_col = st.columns([1, 1], gap="medium")
 
 with build_col:
+    st.markdown('<div id="main-content"></div>', unsafe_allow_html=True)
+
     custom_cond_tier_tab, custom_test_tier_tab  = st.tabs(['Custom Condition Tier', 'Custom Test-Format Tier', ])
 
     with custom_cond_tier_tab:
@@ -62,8 +67,8 @@ with build_col:
                 inline_update_custom_condition_tier()
             with col_2:  
                 generate_and_display_test_summary(input_key='cond_tab')
-
     with custom_test_tier_tab:
+        
         if len(st.session_state.custom_test_tier_list) == 0:
             st.markdown("""<div style="height:400px;"></div>""", unsafe_allow_html=True)
             st.markdown("<h2 style='text-align: center; color: grey;'>Must create/upload test condition tier (Check instruction on the page 4)</h2>", unsafe_allow_html=True)
@@ -80,6 +85,7 @@ with build_col:
                 generate_and_display_test_summary(input_key='test_tab')
 
 with display_col:
+    st.markdown("""<div style="height:10px;"></div>""", unsafe_allow_html=True)
     long_format_tab, pdf_tab =  st.tabs(['Test Summary - Long Format','Test Summary - pdf',])
    
     if st.session_state.display_test_summary == False:
