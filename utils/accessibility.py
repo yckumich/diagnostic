@@ -87,3 +87,28 @@ def set_dataframe_buttons_visibility(show_buttons=True, show_search=True, always
     css += "</style>"
     
     st.markdown(css, unsafe_allow_html=True)
+
+
+
+def set_dataframe_header_style(background_color="#FFFFFF", font_color="#000000"):
+    """
+    Modify the header style of st.dataframe components.
+
+    Parameters:
+    - background_color (str): The background color for the header (default is white "#FFFFFF").
+    - font_color (str): The font color for the header text (default is black "#000000").
+    """
+    css = f"""
+    <style>
+    /* Apply styles to the header of st.dataframe */
+    .stDataFrame thead tr th {{
+        background-color: {background_color} !important;
+        color: {font_color} !important;
+    }}
+    /* Adjust border color if needed */
+    .stDataFrame tbody tr td, .stDataFrame thead tr th {{
+        border-color: rgba(49, 51, 63, 0.1);
+    }}
+    </style>
+    """
+    st.markdown(css, unsafe_allow_html=True)

@@ -26,6 +26,7 @@ from utils.accessibility import *
 hide_topmenu()
 add_skip_link_to_sidebar()
 set_dataframe_buttons_visibility()
+set_dataframe_header_style()
 
 # hide_topmenu()
 # add_skip_link_to_sidebar()
@@ -68,25 +69,27 @@ def add_sidebar(filter_map, tab_titles):
     with st.sidebar:
         st.markdown("""<div style="height:0px;"></div>""", unsafe_allow_html=True)
 
-        st.header('Select Table')
+        st.header("Tabs")
 
         # Add the section selection radio buttons before the Filter
         selected_tab = st.radio("Navigate to:", tab_titles, key="main_tabs")
 
-        st.header('Filter')
+        st.header('Filters')
 
         agg_filter_selection = {}
         for main_filter in filter_map:
             agg_filter_selection[main_filter] = create_filter_expander(main_filter, filter_map[main_filter])
 
-        st.divider()
+        # st.divider()
         st.header('Current Filter Selection')
 
         with st.expander("Current Filter Selection"):
             st.json(agg_filter_selection)
 
-        st.divider()
+        # st.divider()
         # Assuming `sidebar_instruction` is defined elsewhere
+        st.divider()
+
         st.markdown(sidebar_instruction)
     return agg_filter_selection, selected_tab
 
@@ -105,7 +108,7 @@ center_tab_col, test_list_col = st.columns([0.86, 0.14], gap="medium")
 with test_list_col:
     st.markdown("""<div style="height:88px;"></div>""", unsafe_allow_html=True)
     st.divider()
-    st.header("Test Names")
+    st.markdown("### Test Names")
     selected_test_df = convert_selection_to_df(selection)
     unique_test_df = (
         selected_test_df[['testname']]
@@ -144,7 +147,7 @@ with center_tab_col:
             st.warning('Custom Test-Format Tier Not Applied 🚨')
 
     st.divider()
-    st.header(f'Selected Table: {selected_tab}')
+    st.markdown(f'### Selected Tab: {selected_tab}')
     st.markdown("""<div style="height:0px;"></div>""", unsafe_allow_html=True)
 
     # If user selected specific test/tests in the left panel, refine the selected_test_df

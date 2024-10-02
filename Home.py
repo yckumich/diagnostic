@@ -209,6 +209,7 @@ st.download_button(
     label="Download the original research paper",
     data=paper_content,
     file_name="research_paper.pdf",
+    help='Download the original paper: Rational design of an essential diagnostics network to support Universal Health Coverage: a modeling analysis',
     mime="application/pdf"
 )
 
@@ -222,6 +223,7 @@ with open("supplements/The selection and use of essential in vitro diagnostics.p
 st.download_button(
     label="Download the original WHO report",
     data=report_content,
+    help='Download the report: The selection and use of essential in vitro diagnostics.',
     file_name="WHO_EDL_report.pdf",
     mime="application/pdf"
 )

@@ -27,6 +27,7 @@ def initialize_session_state():
         st.session_state['show_plot'] = False
 
 initialize_session_state()
+set_dataframe_header_style()
 
 GDB_CONDITION_LIST = retrieve_gbd_conditions()
 

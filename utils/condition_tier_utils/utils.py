@@ -3,10 +3,13 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import streamlit as st
 import time
+from utils.accessibility import *
 
 CONDITION_LEVELS = ["triage", "moderate", "severe", "not applicable"]
 CONDITION_TIERS = ["Primary", "Secondary", "Tertiary"]
 ESSENTIAL_COLS = ['conditionname', 'conditionlevel', 'custom_condition_tier']
+
+set_dataframe_header_style()
 
 
 @st.cache_data(ttl=3600)
