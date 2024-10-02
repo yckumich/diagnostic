@@ -4,5 +4,5 @@ enableCORS = false
 enableXsrfProtection = false
 
 [browser]
-serverAddress = "64.176.222.176"
+serverAddress = "208.167.230.130"
 serverPort = 80
