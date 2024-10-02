@@ -335,7 +335,7 @@ def load_lancet_test_format_tier_df():
 def add_sidebar(): 
     with st.sidebar:
         st.markdown("""
-            # Custom Test-Format Tier Page
+            ## Custom Test-Format Tier Page
 
             Welcome to the **Custom Test-Format Tier** page. This page allows you to create, manage, and visualize a custom test-format tier dataset for diagnostic purposes. You can build a test-formate table by adding individual records, uploading a CSV file, or directly editing the existing dataset. The main features and functionalities of this page are as follows:
 

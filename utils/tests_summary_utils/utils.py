@@ -17,11 +17,9 @@ name_map = {"test_format": "Test Format", "custom_test_tier": "Test Format Custo
 DATA_FRAME_HEIGHT = 800
 
 
-def display_placeholder_message(long_format_tab, pdf_tab):
+def display_placeholder_message(selected_display_option):
     message = generate_placeholder_message()
-    for tab in [long_format_tab, pdf_tab]:
-        with tab:
-            st.markdown(f"""<div style="height:400px;"></div>{message}""", unsafe_allow_html=True)
+    st.markdown(f"""<div style="height:400px;"></div>{message}""", unsafe_allow_html=True)
 
 def generate_placeholder_message():
     if (('cached_tbls_all_cols' not in st.session_state) or 
@@ -644,40 +642,86 @@ def inline_update_custom_test_tier():
             msg.toast('Refreshing page')
             st.rerun()
 
+# def add_sidebar():
+#     with st.sidebar:
+#         st.markdown("""
+#         # Diagnostic Test Summary Instructions
+
+#         Welcome to the **Diagnostic Test Summary** page. This page is designed to help you generate a comprehensive summary of diagnostic tests categorized by their respective tiers. Follow the instructions below to make the most out of this functionality.
+
+#         ## Purpose
+#         The **Diagnostic Test Summary** page allows you to:
+#         1. Generate and view a **summary of diagnostic tests** categorized into primary, secondary, and tertiary tiers.
+#         2. Manage the [**Custom Condition Tiers**](/Build_Custom_Condition_Tier) and their respective diagnostic tests.
+#         3. Manage the [**Custom Test-Format Tiers**](/Build_Custom_Test_Tier) and their respective diagnostic tests.
+
+#         ## Steps to Use This Page
+
+#         ### Step 1: Create/Upload Custom Condition Tier
+#         Before generating the test summary, ensure you have created or uploaded a Custom Condition Tier. This can be done on the **Build Custom Condition Tier** page. If you have already done this, you will see the "Custom Condition Tier" column displayed in the "Test By Laboratory" table on the Diagnostic Test Dashboard under the Lab Specific tab.
+
+#         ### Step 2: Create/Upload Custom Test-Format Tier
+#         Similarly, create or upload a Custom Test-Format Tier on the [**Build Custom Test Tier**](/_Build_Custom_Test_Tier) page. This is necessary to categorize tests into different tiers.
+
+#         ### Step 3: Manage Current Table
+#         Once the table is fetched and displayed, you have the following options:
+#         - **Fetch Current Table**: Click this button to fetch the latest table.
+#         - **Update Current Table**: Click this button to apply the updates you created in this page to the original current table in **Build Custom Condition Tier** or **Build Custom Test Tier** page .
+#         - **Generate Test Summary**: Click this button to generate the test summary based on the current tables.
+
+#         ### Step 4: View and Edit Test Summary
+#         After generating the test summary, it will be displayed in the "Test Summary" section. You can view the summary of diagnostic tests categorized into primary, secondary, and tertiary tiers.
+
+#         ## Notes
+#         - The **Generate Test Summary** button will process the Custom Condition Tiers and Custom Test-Format Tiers to generate a comprehensive summary of diagnostic tests.
+#         - Ensure that you have created or uploaded the Custom Condition Tier and Custom Test-Format Tier and check the generated Lab Specific - Test By Laboratory table before attempting to generate the test summary.
+#         - Use the "Fetch Current Table" and "Update Current Table" buttons to manage the current table effectively.
+#         """)
+
+
 def add_sidebar():
     with st.sidebar:
+        st.markdown("# Display Option")
+        build_options = ['Custom Condition Tier', 'Custom Test-Format Tier']
+        selected_build_option = st.radio("Select Custom Table Option:", build_options, key="build_option")
+
+        # st.markdown("### Display Options")
+        display_options = ['Test Summary - Long Format', 'Test Summary - pdf']
+        selected_display_option = st.radio("Select Summary Option:", display_options, key="display_option")
+        st.divider()
+        # Then include the instructions
         st.markdown("""
-        # Diagnostic Test Summary Instructions
+## Diagnostic Test Summary Instructions
 
-        Welcome to the **Diagnostic Test Summary** page. This page is designed to help you generate a comprehensive summary of diagnostic tests categorized by their respective tiers. Follow the instructions below to make the most out of this functionality.
+Welcome to the **Diagnostic Test Summary** page. This page is designed to help you generate a comprehensive summary of diagnostic tests categorized by their respective tiers. Follow the instructions below to make the most out of this functionality.
 
-        ## Purpose
-        The **Diagnostic Test Summary** page allows you to:
-        1. Generate and view a **summary of diagnostic tests** categorized into primary, secondary, and tertiary tiers.
-        2. Manage the [**Custom Condition Tiers**](/Build_Custom_Condition_Tier) and their respective diagnostic tests.
-        3. Manage the [**Custom Test-Format Tiers**](/Build_Custom_Test_Tier) and their respective diagnostic tests.
+## Purpose
+The **Diagnostic Test Summary** page allows you to:
+1. Generate and view a **summary of diagnostic tests** categorized into primary, secondary, and tertiary tiers.
+2. Manage the [**Custom Condition Tiers**](/Build_Custom_Condition_Tier) and their respective diagnostic tests.
+3. Manage the [**Custom Test-Format Tiers**](/Build_Custom_Test_Tier) and their respective diagnostic tests.
 
-        ## Steps to Use This Page
+## Steps to Use This Page
 
-        ### Step 1: Create/Upload Custom Condition Tier
-        Before generating the test summary, ensure you have created or uploaded a Custom Condition Tier. This can be done on the **Build Custom Condition Tier** page. If you have already done this, you will see the "Custom Condition Tier" column displayed in the "Test By Laboratory" table on the Diagnostic Test Dashboard under the Lab Specific tab.
+### Step 1: Create/Upload Custom Condition Tier
+Before generating the test summary, ensure you have created or uploaded a Custom Condition Tier. This can be done on the **Build Custom Condition Tier** page. If you have already done this, you will see the "Custom Condition Tier" column displayed in the "Test By Laboratory" table on the Diagnostic Test Dashboard under the Lab Specific tab.
 
-        ### Step 2: Create/Upload Custom Test-Format Tier
-        Similarly, create or upload a Custom Test-Format Tier on the [**Build Custom Test Tier**](/_Build_Custom_Test_Tier) page. This is necessary to categorize tests into different tiers.
+### Step 2: Create/Upload Custom Test-Format Tier
+Similarly, create or upload a Custom Test-Format Tier on the [**Build Custom Test Tier**](/_Build_Custom_Test_Tier) page. This is necessary to categorize tests into different tiers.
 
-        ### Step 3: Manage Current Table
-        Once the table is fetched and displayed, you have the following options:
-        - **Fetch Current Table**: Click this button to fetch the latest table.
-        - **Update Current Table**: Click this button to apply the updates you created in this page to the original current table in **Build Custom Condition Tier** or **Build Custom Test Tier** page .
-        - **Generate Test Summary**: Click this button to generate the test summary based on the current tables.
+### Step 3: Manage Current Table
+Once the table is fetched and displayed, you have the following options:
+- **Fetch Current Table**: Click this button to fetch the latest table.
+- **Update Current Table**: Click this button to apply the updates you created in this page to the original current table in **Build Custom Condition Tier** or **Build Custom Test Tier** page.
+- **Generate Test Summary**: Click this button to generate the test summary based on the current tables.
 
-        ### Step 4: View and Edit Test Summary
-        After generating the test summary, it will be displayed in the "Test Summary" section. You can view the summary of diagnostic tests categorized into primary, secondary, and tertiary tiers.
+### Step 4: View and Edit Test Summary
+After generating the test summary, it will be displayed in the "Test Summary" section. You can view the summary of diagnostic tests categorized into primary, secondary, and tertiary tiers.
 
-        ## Notes
-        - The **Generate Test Summary** button will process the Custom Condition Tiers and Custom Test-Format Tiers to generate a comprehensive summary of diagnostic tests.
-        - Ensure that you have created or uploaded the Custom Condition Tier and Custom Test-Format Tier and check the generated Lab Specific - Test By Laboratory table before attempting to generate the test summary.
-        - Use the "Fetch Current Table" and "Update Current Table" buttons to manage the current table effectively.
-        """)
+## Notes
+- The **Generate Test Summary** button will process the Custom Condition Tiers and Custom Test-Format Tiers to generate a comprehensive summary of diagnostic tests.
+- Ensure that you have created or uploaded the Custom Condition Tier and Custom Test-Format Tier and check the generated Lab Specific - Test By Laboratory table before attempting to generate the test summary.
+- Use the "Fetch Current Table" and "Update Current Table" buttons to manage the current table effectively.
+""")
 
-
+    return selected_build_option, selected_display_option

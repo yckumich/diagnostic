@@ -69,12 +69,12 @@ def add_sidebar(filter_map, tab_titles):
     with st.sidebar:
         st.markdown("""<div style="height:0px;"></div>""", unsafe_allow_html=True)
 
-        st.header("Tabs")
+        st.markdown("# Tabs")
 
         # Add the section selection radio buttons before the Filter
         selected_tab = st.radio("Navigate to:", tab_titles, key="main_tabs")
 
-        st.header('Filters')
+        st.markdown('# Filters')
 
         agg_filter_selection = {}
         for main_filter in filter_map:
@@ -147,8 +147,8 @@ with center_tab_col:
             st.warning('Custom Test-Format Tier Not Applied 🚨')
 
     st.divider()
-    st.markdown(f'### Selected Tab: {selected_tab}')
-    st.markdown("""<div style="height:0px;"></div>""", unsafe_allow_html=True)
+    st.markdown(f'### {selected_tab}')
+    # st.markdown("""<div style="height:-10px;"></div>""", unsafe_allow_html=True)
 
     # If user selected specific test/tests in the left panel, refine the selected_test_df
     if isinstance(grid_table['selected_rows'], pd.DataFrame):
