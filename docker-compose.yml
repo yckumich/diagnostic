@@ -13,7 +13,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - /root/nginx/conf.d:/etc/nginx/conf.d
+      - /home/yechank/nginx/conf.d:/etc/nginx/conf.d
     networks:
       - diagnostic-network
 
