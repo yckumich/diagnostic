@@ -142,10 +142,11 @@ def initialize_session_state():
         st.session_state.inline_custom_test_list = []
 
 #----------------------MAIN-----------------------
+selected_build_option, selected_display_option = add_sidebar()
+
 initialize_session_state()
 hide_topmenu()
 add_skip_link_to_sidebar()
-selected_build_option, selected_display_option = add_sidebar()
 get_style_markdown()
 
 build_col, display_col = st.columns([1, 1], gap="medium")

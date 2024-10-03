@@ -49,7 +49,7 @@ networks:
 Step 4: Create Nginx Configuration
 
 Step 4.1: Create a directory for Nginx configuration
-mkdir -p ~/nginx/conf.d
+mkdir -p ~/nginx/conf.d (/root/nginx/conf.d)
 
 Step 4.2: Create a streamlit.conf file in nginx/conf.d with the following content
 upstream streamlit_app {

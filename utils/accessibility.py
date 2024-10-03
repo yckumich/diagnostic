@@ -33,17 +33,15 @@ def add_skip_link_to_sidebar():
         """, unsafe_allow_html=True)
 
 def hide_topmenu():
-    # st.markdown('''
-    # <style>
-    # .stApp [data-testid="stToolbar"]{
-    #     display:none;
-    # }
-    # </style>
-    # ''', unsafe_allow_html=True)
+    st.markdown('''
+    <style>
+    .stApp [data-testid="stToolbar"]{
+        display:none;
+    }
+    </style>
+    ''', unsafe_allow_html=True)
     return
 
-
-# utils/accessibility.py
 
 
 def set_dataframe_buttons_visibility(show_buttons=True, show_search=True, always_visible=True):
