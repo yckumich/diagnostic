@@ -1,0 +1,56 @@
+conditionname,conditionlevel,custom_condition_tier
+Acute coronary syndrome,moderate,Secondary
+Acute coronary syndrome,severe,Tertiary
+Acute coronary syndrome,triage,Secondary
+Antenatal care,triage,Primary
+"Breast cancer, metastatic",moderate,Tertiary
+"Breast cancer, metastatic",severe,Tertiary
+"Breast cancer, metastatic",triage,Primary
+COPD,moderate,Secondary
+COPD,severe,Tertiary
+COPD,triage,Primary
+Chronic kidney disease,moderate,Secondary
+Chronic kidney disease,severe,Tertiary
+Chronic kidney disease,triage,Primary
+"Colorectal cancer, metastatic",moderate,Tertiary
+"Colorectal cancer, metastatic",severe,Tertiary
+"Colorectal cancer, metastatic",triage,Primary
+Dementia,moderate,Secondary
+Dementia,severe,Tertiary
+Dementia,triage,Primary
+Diabetes mellitus,moderate,Secondary
+Diabetes mellitus,severe,Tertiary
+Diabetes mellitus,triage,Primary
+Diarrhoea acute invasive bacterial ,moderate,Secondary
+Diarrhoea acute invasive bacterial ,severe,Tertiary
+Diarrhoea acute invasive bacterial ,triage,Primary
+HIV,moderate,Primary
+HIV,severe,Tertiary
+HIV,triage,Primary
+Hypertensive heart disease,moderate,Secondary
+Hypertensive heart disease,severe,Tertiary
+Hypertensive heart disease,triage,Primary
+Liver cancer,moderate,Tertiary
+Liver cancer,severe,Tertiary
+Liver cancer,triage,Primary
+"Lung cancer, non small cell",moderate,Tertiary
+"Lung cancer, non small cell",severe,Tertiary
+"Lung cancer, non small cell",triage,Primary
+Malaria,moderate,Primary
+Malaria,severe,Tertiary
+Malaria,triage,Primary
+Pneumonia community (severe),moderate,Primary
+Pneumonia community (severe),severe,Secondary
+Pneumonia community (severe),triage,Primary
+"Preeclampsia, HELLP",moderate,Secondary
+"Preeclampsia, HELLP",severe,Tertiary
+"Preeclampsia, HELLP",triage,Primary
+Stroke,moderate,Secondary
+Stroke,severe,Tertiary
+Stroke,triage,Primary
+Trauma,moderate,Secondary
+Trauma,severe,Tertiary
+Trauma,triage,Primary
+Tuberculosis,moderate,Primary
+Tuberculosis,severe,Tertiary
+Tuberculosis,triage,Primary

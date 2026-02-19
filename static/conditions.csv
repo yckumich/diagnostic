@@ -1,0 +1,393 @@
+"condition_name","condition_name_short","ghana_condition_tier","india_condition_tier","nigeria_condition_tier","kenya_condition_tier","lancet_condition_tier","lancet_gbd","condition_level","condition_name_lancet","indonesia_phc_conditions","who_amr_conditions"
+"Acid base disturbance","Acid-base","B1","S","Hospital","2",NULL,NULL,NULL,NULL,NULL,NULL
+"Acne","Acne",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Acromegaly","Acromegaly",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Actinic keratosis","Act. kerat.","D",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Acute coronary syndrome","ACS","C","T","Hospital","4",NULL,"Yes",NULL,"Ischemic heart disease","Yes",NULL
+"Acute kidney injury","AKI","B2","P","Hospital","4",NULL,NULL,NULL,NULL,"Yes",NULL
+"Acute kidney injury [triage]","AKI tri.",NULL,NULL,"Primary Health Clinic",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Acute lymphoblastic leukemia","ALL","D","T","Hospital","4",NULL,NULL,NULL,NULL,NULL,NULL
+"Acute myeloblastic leukemia","AML","D","T","Hospital","4",NULL,NULL,NULL,NULL,NULL,NULL
+"Acute promyelocytic leukemia","APL","D","T","Hospital","4",NULL,NULL,NULL,NULL,NULL,NULL
+"Adrenocortical insufficiency","Adren. insuff.","M","T","Hospital","S",NULL,NULL,NULL,NULL,NULL,NULL
+"Alcohol dependence","ETOH dependence ","B1","P","Health Centre","4",NULL,NULL,NULL,NULL,"Yes",NULL
+"Alcohol withdrawal syndrome","Alcohol withdrawal","C","T","Primary Health Clinic","4",NULL,NULL,NULL,NULL,NULL,NULL
+"Allergic reaction","allergic reaction",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Allergic rhinitis","All. rhin.","B2","P","Hospital","2",NULL,NULL,NULL,NULL,"Yes",NULL
+"Allergic rhinitis [Severe]","All. rhin. [sev]","D","T","Hospital","S",NULL,NULL,NULL,NULL,"Yes",NULL
+"Amebiasis","Ameb.","B1","P","Primary Health Clinic","2",NULL,NULL,NULL,NULL,"Yes",NULL
+"Amebiasis [triage]","ameb. tri.",NULL,NULL,"Primary Health Clinic",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Amenorrhea, secondary","Amenorrh.","D","P","Hospital","2",NULL,NULL,NULL,NULL,"Yes",NULL
+"Anemia due to CKD, cancer, chemotherapy, HIV","Anemia, sec.","D","S","Hospital","S",NULL,NULL,NULL,NULL,NULL,NULL
+"Anemia, B12 deficiency","Anemia, B12","D","P","Hospital","4",NULL,NULL,NULL,NULL,NULL,NULL
+"Anemia, folate deficiency","Anemia, folate","B1","P","Health Centre","2",NULL,NULL,NULL,NULL,"Yes",NULL
+"Anemia, folate deficiency [triage]","Anemia, folate tri.",NULL,NULL,"Health Post",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Anemia, hemolytic","hemolytic anemia","C","T","Hospital","4",NULL,NULL,NULL,NULL,NULL,NULL
+"Anemia, iron deficiency","Anemia, iron","A","P","Health Post","2",NULL,NULL,NULL,NULL,"Yes",NULL
+"Anemia, iron deficiency [Severe]","Anemia, iron [Sev]","C","T","Hospital","S",NULL,NULL,NULL,NULL,"Yes",NULL
+"Anesthesia local","Anesth., local","M","P","Hospital","2",NULL,NULL,NULL,NULL,"Yes",NULL
+"Anesthesia, opthalmic","Anesth., opth.","C","P","Hospital","4",NULL,NULL,NULL,NULL,NULL,NULL
+"Angina stable","Angina","C","P","Hospital","4",NULL,NULL,NULL,NULL,"Yes",NULL
+"Antenatal care","ANC",NULL,NULL,NULL,NULL,NULL,"Yes",NULL,"Antenatal care",NULL,NULL
+"Antiallergics and anaphylaxis","Allergy & anaphl.","A","P","Primary Health Clinic","2",NULL,NULL,NULL,NULL,"Yes",NULL
+"Antiallergics and anaphylaxis [Severe]","antiallergics and anaphylaxis [sev]","C","P","Hospital","4",NULL,NULL,NULL,NULL,"Yes",NULL
+"Anticoagulant overdose","Anticoag. od","B2","S","Hospital","4",NULL,NULL,NULL,NULL,NULL,NULL
+"Antiphospholipid syndrome","APS","D","S","Hospital","4",NULL,NULL,NULL,NULL,NULL,NULL
+"Anxiety disorders","Anxiety","D","P","Hospital","4",NULL,NULL,NULL,NULL,"Yes",NULL
+"Aortic aneurysm","Aortic aneurysm","D","T","Hospital","4",NULL,NULL,NULL,NULL,NULL,NULL
+"Apnea of prematurity","Apnea, prem.",NULL,"S","Hospital","S",NULL,NULL,NULL,NULL,NULL,NULL
+"Arrhythmia","Arrhythmia","B2","S","Hospital","4",NULL,NULL,NULL,NULL,"Yes",NULL
+"Aspergillosis, chronic pulmonary","Asperg., chron. pulm.","D","S","Hospital","4",NULL,NULL,NULL,NULL,NULL,NULL
+"Aspergillosis, invasive","Asperg., invasive","D","S","Hospital","4",NULL,NULL,NULL,NULL,NULL,NULL
+"Asthma","Asthma","B2","P","Hospital","2",NULL,NULL,NULL,NULL,"Yes",NULL
+"Asthma [Severe]","Asthma [Sev]","D","S","Hospital","4",NULL,NULL,NULL,NULL,"Yes",NULL
+"Atopic dermatitis","Atopic dermatitis ","SM","T","Hospital","S",NULL,NULL,NULL,NULL,NULL,NULL
+"Atrial fibrillation","A. fib.","D","S","Hospital","4",NULL,NULL,NULL,NULL,NULL,NULL
+"Attention deficit hyperactivity disorder","ADHD","D",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Benign prostatic hyperplasia/hypertrophy","BPH","SM",NULL,"Hospital","S",NULL,NULL,NULL,NULL,NULL,NULL
+"Benzodiazepine overdose","Benzodiaz. o.d.","D",NULL,"Hospital","4",NULL,NULL,NULL,NULL,NULL,NULL
+"Beta blocker overdose","B blocker od","B2","P",NULL,"4",NULL,NULL,NULL,NULL,"Yes",NULL
+"Bipolar disorders","Bipolar","SM","S","Hospital","4",NULL,NULL,NULL,NULL,"Yes",NULL
+"Bladder cancer","Bladder ca.","SM",NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Blastomycosis","Blasto.","D","S","Hospital","4",NULL,NULL,NULL,NULL,NULL,NULL
+"Bone and joint infection","Bone joint infect.","B2","S","Hospital","3",NULL,NULL,NULL,NULL,NULL,NULL
+"Bone marrow suppression, chemotherapy","Marrow suppr., chemo.","B2","S","Hospital","4",NULL,NULL,NULL,"Immunosuppression, chemotherapy",NULL,NULL
+"Bone marrow suppression, leukemia","Marrow suppr., leuk.","B2","S","Hospital","4",NULL,NULL,NULL,NULL,NULL,NULL
+"Bony metastases associated with solid tumors","Bony metastases ",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Breast cancer, metastatic","Br. cancer, meta.","D","T","Hospital",NULL,NULL,"Yes",NULL,"Breast cancer",NULL,NULL
+"Bronchitis","Bronchitis",NULL,NULL,"Primary Health Clinic",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Brucellosis","Brucell.","PM","P","Health Centre","2",NULL,NULL,NULL,NULL,NULL,NULL
+"Burkitt lymphoma","Burkitt",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"CKD, hyperphosphatemia","CKD, hyperphosph.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"CMV infection, congenital","CMV, congenital",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"CMV retinitis","CMV retin.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"COPD","COPD",NULL,NULL,"Hospital",NULL,NULL,"Yes",NULL,"COPD","Yes","Yes"
+"Calcium channel blocker overdose","Calc. chn. blocker od",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Candidiasis, cutaneous","Candida, cutan.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Candidiasis, oropharyngeal","Candida, oropharyn.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Candidiasis, systemic","Candida, systemic",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Candidiasis, vulvovaginal","Candida, vulvo.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Cardiomyopathy","Cardiomyopathy",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Cardiopulmonary bypass","CPB",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Cerebral edema","Cerebral edema",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Cervical cancer","Cerv. cancer",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Chikungunya","Chik.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Chlamydia trachomatis","Chlamydia",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes","Yes"
+"Cholera","Cholera",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Cholera [c]","Cholera",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Chromoblastomycosis","Chromo.",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Chronic kidney disease","CKD",NULL,NULL,"Hospital",NULL,NULL,"Yes",NULL,"Chronic kidney disease","Yes",NULL
+"Chronic lymphocytic leukemia","CLL",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Chronic myelogenous leukemia","CML",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Chronic prostatitis","Chron. prostat.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Cirrhosis","Cirrhosis",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Clostridium difficile infection","CDI",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,"Yes"
+"Coagulopathy inherited","Coag. inherited",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Coagulopathy liver","Coag. liver",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Coccidiomycosis","Cocci.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Colorectal cancer, metastatic","CRC",NULL,NULL,"Hospital",NULL,NULL,"Yes",NULL,"Colorectal cancer",NULL,NULL
+"Complicated intraabdominal infections (mild to moderate)","Compl. abd. infect. (mild to mod)",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Complicated intraabdominal infections (severe)","Compl. abd. infect. (severe)",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Condylomata acuminata","C. acuminata",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Conjunctivitis, Neisseria gonorrhoeae","Conjunct., N. gonorrh.",NULL,NULL,"Primary Health Clinic",NULL,NULL,NULL,NULL,NULL,"Yes","Yes"
+"Conjunctivitis, allergic","Conjunct., allergic",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Conjunctivitis, bacterial","Conjunct., bact.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,"Yes","Yes"
+"Conjunctivitis, fungal","Conjunct., fungal",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Constipation","Constip.",NULL,NULL,"Primary Health Clinic",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Contraception, female","Contracept., fem.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Contraception, male","Contracept., male",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Corneal abrasion","Corneal abrasion",NULL,NULL,"Primary Health Clinic",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Corneal ulcer","Corneal ulcer",NULL,NULL,"Primary Health Clinic",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Cryptococcus neoformans infection","Cryptococcus",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Cryptococcus neoformans infection, cutaneous","Cryptococcus, cutan.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Cyanotic heart disease in the newborn","Cyan. heart dis. newborn",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Cystinuria","Cystinuria",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Dandruff","Dandruff",NULL,NULL,"Primary Health Clinic",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Deep venous thrombosis","DVT",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Dehydration","Dehydr.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Dementia","Dementia",NULL,NULL,"Hospital",NULL,NULL,"Yes",NULL,"Dementia",NULL,NULL
+"Dengue fever","Dengue",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Dental caries, prevention","Caries, prev.",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,"Yes","Yes"
+"Dermatoses, steroid responsive","Dermatoses",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Diabetes mellitus","DM",NULL,NULL,"Hospital",NULL,"Secondary","Yes",NULL,"Diabetes","Yes",NULL
+"Diarrhoea acute invasive bacterial ","Diarrh. bacter.",NULL,NULL,"Health Centre",NULL,NULL,"Yes",NULL,"Diarrheal disease","Yes","Yes"
+"Diffuse large B cell lymphoma","DLBCL",NULL,NULL,"Specialized/Restricted",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Digoxin overdose","Digoxin o.d.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Diluent","Diluent",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Diptheria","Diptheria",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Disinfection","Disinfect.",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Disseminated intravascular coagulation","DIC",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Dry eyes","Dry eyes",NULL,NULL,"Primary Health Clinic",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Duodenal ulcer disease","Duodenal ulcer ",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Eczema","Eczema",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Electroconvulsive therapy","ECT",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Electrolyte replacement","Elect. replac.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Emesis, preventive","Emesis, prev.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Endocarditis","Endocarditis",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Endometriosis","Endometriosis",NULL,NULL,"Specialized/Restricted",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Eosinophilic esophagitis","Eos. esoph.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Epilepsy and seizures","Siezures",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Epistaxis","Epistaxis",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Epistaxis [triage]","epistaxis tri.",NULL,NULL,"Health Post",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Erectile dysfunction","Erectile dysf.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Ewing sarcoma","Ewing",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Exocrine pancreatic insufficiency","Pancr. insuff.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Extrapyramidal symptoms","EPS",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Febrile neutropenia high risk","Febril. neutr.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Febrile neutropenia low risk","Febril. neutr.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Fetal lung immaturity","Fetal lung immat.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Filariasis","Filariasis",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Fluid replacement","Fluid replac.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Follicular lymphoma","Follic. lymph.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Gastric ulcer","Gastric ulcer ",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Gastroesophageal reflux disease","GERD",NULL,NULL,"Health Post",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Gastrointestinal stromal tumour","GIST",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"General anesthesia","Gen. anesth.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,"General anesthesia",NULL,NULL
+"Gestational trophoblastic neoplasia","Gest. troph. neoplasia",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Giant cell tumor of bone","Giant cell tumor of bone",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Giardiasis","Giardiasis",NULL,NULL,"Primary Health Clinic",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Gingivitis","Gingivitis",NULL,NULL,"Health Post",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Glaucoma","Glaucoma",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Glucose replacement","Gluc. replac.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Gout","Gout",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"HIV","HIV",NULL,NULL,"Hospital",NULL,NULL,"Yes",NULL,"HIV","Yes",NULL
+"HIV OI prophylaxis","HIV OI prophy.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Head and neck cancer","Head-neck cancer",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Helicobacter Pylori Infection","HPylori Infection",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Hemolytic disease of the newborn","HDN",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Hemophilia","Hemoph.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Hemorrhoids","Hemorrh.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Heparin associated bleeding","Heparin bleed",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Heparin induced thrombocytopenia","HIT",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Heparin neutralization","Heparin neutraliz.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Hepatic encephalopathy","HE",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Hepatic encephalopathy ","HE ",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"HepatitisA","HAV",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"HepatitisAutoimmune","autoimmune hepatitis",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"HepatitisB","HBV",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"HepatitisB post-exposure prophylaxis","HBV post-expos. prophyl.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"HepatitisC","HCV",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"HepatitisE","HEV",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Herpes simplex keratitis","HSV kerat.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Herpes simplex virus infection","HSV kerat.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Herpes zoster opthalmicus","Zoster opthalm.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"High-grade glioma","High-grade glioma",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Histoplasmosis","Histo.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Hodgkin lymphoma","HL",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Hypercalcemia","HyperCa",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Hyperlipidemia","HLD",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Hyperprolactinemia","Hyperprolactinemia",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Hypertension essential","Htn",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Hypertensive heart disease","HHD",NULL,NULL,"Hospital",NULL,NULL,"Yes",NULL,"Hypertensive heart disease","Yes",NULL
+"Hyperthyroidism","Hyperthyr.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Hypocalcemia","Hypocalc.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Hypoglycemia, diabetes","Hypogly, DM",NULL,NULL,"Health Post",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Hypogonadism","Hypogon.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Hyponatremia","HypoNa",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Hypothyroidism","Hypothyr.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Hypotrichosis","Hypotrichosis",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Hypoxaemia","Hypox.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Immune thrombocytopenia","ITP",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Induction of labor","Labor induct.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Induction of labor [triage]","ind. of labor tri.",NULL,NULL,"Primary Health Clinic",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Inflammation, mild","Inflam., mild",NULL,NULL,"Primary Health Clinic",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Inflammatory bowel disease","IBD",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Influenza","Influ.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Insomnia","Insomnia",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Intestinal helminths","Intest. helm.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Iodine deficiency","Iod. def.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Iron toxicity","Iron tox.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Irritable bowel syndrome","IBS",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Japanese encephalitis","Jap. enceph.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Juvenile arthritis","Juv. arthr.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Kaposi sarcoma","Kaposi",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Kawasaki disease","Kawasaki",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Kidney transplant monitoring","Kidn. txplant monit.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Lassa fever","Lassa",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"LeishmaniasisCutaneous","Leish. cut.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"LeishmaniasisVisceral","Leish. visc.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Leprosy","Lepr.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Lice (pediculosis)","Lice",NULL,NULL,"Primary Health Clinic",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Lichen Sclerosis","Lichen Sclerosis ",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Liver cancer","Liver cancer",NULL,NULL,NULL,NULL,NULL,"Yes",NULL,"Liver cancer",NULL,NULL
+"Lung cancer, non small cell","NSCLC",NULL,NULL,"Hospital",NULL,NULL,"Yes",NULL,"Lung cancer",NULL,NULL
+"Macular degeneration","Mac. degn.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Malaria","Malaria",NULL,NULL,"Health Centre",NULL,NULL,"Yes",NULL,"Malaria","Yes",NULL
+"Malaria prophylaxis","Malaria prophyl.",NULL,NULL,"Health Post",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Malignancy related bone disease","Malign-related bone dis.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Malnutrition severe complicated [c]","Malnutr. sev. compl.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Malnutrition severe uncomplicated [c]","Malnutr. sev. uncompl.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Measles","Measles",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Medication termination of intrauterine pregnancy","Preg. termin.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Meningitis bacterial acute","Mening. bact.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Meningitis bacterial acute [c]","Mening. bact.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Menopause","Menopause",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Methemoglobinemia","Methem.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Migraine","Migraine",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Migraine prophylaxis","Migraine prophyl.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Miosis, induction","Miosis",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Molluscum contagiosum","Molluscum contag.",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Mucormycosis","Mucor",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Mydriasis, induction","Mydriasis",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Myocarditis","Myocarditis",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Myoclonus","Myoclonus",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Narcolepsy","Narcolepsy",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Nasopharyngeal cancer","Nasophary. cancer",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Neisseria gonorrhoeae infection","Gonorrhoeae",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Nephrolithiasis","Nepthrolith.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Nocturnal enuresis","Noct. enuresis",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Nutritional supplement, pregnancy","Nutrit. suppl. preg.",NULL,NULL,"Health Post",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Obsessive compulsive disorder","OCD",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Obstetric hemorrhage","Obstet. hemorrh.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Osteoarthritis","OA",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Osteolytic bone metastases of breast cancer and osteolytic bone lesions of multiple myeloma","Osteolytic bone lesions",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Osteopenia","Osteopenia ",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Osteoporosis","Osteopor.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Osteosarcoma","Osteosarc.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Otitis externa","Otit. extern.",NULL,NULL,"Primary Health Clinic",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Otitis media","Otit. med.",NULL,NULL,"Primary Health Clinic",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Ovarian cancer, epithelial","Ovar. epith. cancer",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Ovarian germ cell tumor","Ovar. germ tumor",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Ovulation induction","Ovul. Induct.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Paget's disease","Paget's disease",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Pain","Pain",NULL,NULL,"Health Post",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Palliative care","Palliative",NULL,NULL,"Health Post",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Pancreatitis","Pancreatitis",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Panic attacks","Panic",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Paracoccidiomycosis","Paracocc.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Parenteral nutrition","nutrition, parenteral",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Parkinsons disease","Parkinsons",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Patent ductus arteriosus","PDA",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Pediculosis capitis","Ped. cap.",NULL,NULL,"Primary Health Clinic",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Pellagra","Pellagra",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Peptic ulcer disease","PUD",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Periodontitis","Periodontitis",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,"Yes"
+"Peripheral vascular disease","PVD",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Peritoneal dialysis","Dialysis",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Pharyngitis","Pharyng.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes","Yes"
+"Pharyngitis [triage]","pharyngitis. tri.",NULL,NULL,"Primary Health Clinic",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Pityriasis versicolor","PV",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Plasma cell dyscrasias","Myeloma",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Platelet function defects, inherited","Platelet defect, inherit.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Pneumocystosis","PCP",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Pneumonia community (severe)","Pnuem. community (sev.)",NULL,NULL,"Hospital",NULL,NULL,"Yes",NULL,"Lower respiratory infections","Yes","Yes"
+"Pneumonia hospital acquired","Pnuem. hosp-acq.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Poisoning","Poisoning",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Poisoning [triage]","pois. tri.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Poisoning, Acetylsalicylic acid","Acetylsalic. pois.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Poisoning, Acetylsalicylic acid [triage]","Acetylsalic. pois. tri.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Poisoning, Alcohols","Alcohols",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Poisoning, Anticholinergics","Antichol. pois.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Poisoning, Arsenic","Arsenic",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Poisoning, Cyanide","Cyanide pois.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Poisoning, Iron","Iron pois.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Poisoning, Lead","Lead pois.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Poisoning, Mercury","Mercury pois.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Poisoning, Muscarinic","Musc. pois.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Poisoning, Opiates","Opioid pois.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Poisoning, Paracetamol","Paracet. pois.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Poisoning, Radioactivity","Radioactiv.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Polio","polio",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Polyneuropathy","Polyneuropathy",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Post partum bleeding","Post-part. Bleed",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Post traumatic stress disorder","PTSD",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Preeclampsia [triage]","preeclamp. tri.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Preeclampsia, HELLP","Preeclampsia, HELLP",NULL,NULL,"Hospital",NULL,NULL,"Yes",NULL,"Preeclampsia","Yes",NULL
+"Premenstrual syndrome/dysphoric disorder","PMS or PMDD",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Preoperative sedation","Preop sedat.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Preterm labor","Preterm labor",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Primary immune deficiency","Prim. immun. def.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Prostate cancer, metastatic","Prost. cancer",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Psoriasis","Psoriasis",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Psychotic disorders","Pychoses",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Pulmonary embolism","PE",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Pyelonephritis or prostatitis (mild to moderate)","Pyelo",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Pyelonephritis or prostatitis (mild to moderate) [triage]","pyelo. tri.",NULL,NULL,"Primary Health Clinic",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Pyelonephritis or prostatitis (severe)","Pyelo",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Rabies","Rabies",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Radiocontrast agent","Radiocontr.",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Raynaud's Phenomenon","Raynaud's ",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Respiratory distress syndrome","RDS",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Retinoblastoma","Retinoblast.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Rhabdomyosarcoma","Rhabdo.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Rhesus (D) alloimmunization in pregnancy","D alloimmuniz. preg.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Rheumatic fever","Rheum. Fever",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Rheumatoid arthritis","RA",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Rhinitis","Rhinitis",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Rosacea","Rosacea",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Scabies","Scabies",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Schistosomiasis","Schisto.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Schizophrenia","Schizophrenia",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Scrub typhus","Scrub ty.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Seborrheic dermatitis","Seb. derm.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Sepsis","Sepsis",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Sepsis [c]","Sepsis",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Shock","Shock",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Sickle cell disorders and other hemoglobinopathies","Sickle",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Sickle cell disorders and other hemoglobinopathies [triage]","SCD tri.",NULL,NULL,"Primary Health Clinic",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Sinusitis","Sinusitis",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Skin and soft tissue infections","Soft tissue infect.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Skin cancer","Skin cancer",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Skin irritation","Skin irrit.",NULL,NULL,"Health Post",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Spasticity","Spasticity",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Sporotrichosis","Sporo.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Stroke","Stroke",NULL,NULL,"Hospital",NULL,NULL,"Yes",NULL,"Cerebrovascular disease",NULL,NULL
+"Substance abuse, nicotine","Nicotine abuse",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Substance abuse, opiates","Opiate abuse",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Superficial skin infections","Skin infect.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Surgical procedures","Surg. proc.",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Syphilis","Syphilis",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Syphilis [c]","Syphilis",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Systemic lupus erythematosus","SLE",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Talaromyces marneffei infection","T marneff. infect.",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Testicular germ cell tumor","Testic. germ tumor",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Tetanus","Tetanus",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Thiamine deficiency","B1 defic.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Thrombotic thrombocytopenic purpura","TTP",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Thrombotic thrombocytopenic purpura [triage]","TTP tri.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Tinea (dermatophyte)","Tinea",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Tinea versicolor","Versicolor",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Toxoplasmosis","Toxo",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Tracheal intubation","Tracheal. intub.",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Trachoma","Trachoma",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Trauma","Trauma",NULL,NULL,"Hospital",NULL,NULL,"Yes",NULL,"Trauma",NULL,NULL
+"Trauma, corneal","Trauma, corneal",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Trichinellosis","trichinellosis",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Trichomonas vaginalis","T. vaginalis",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"TrypanosomiasisAfrican","Tryp. african",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"TrypanosomiasisAmerican","Tryp. amer.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Tuberculosis","TB",NULL,NULL,"Hospital",NULL,NULL,"Yes",NULL,"Tuberculosis","Yes",NULL
+"Tuberculosis, latent","TB, latent",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Tumor lysis syndrome","Tumor lysis",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Umbilical cord care","Umb. cord care",NULL,NULL,"Health Post",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Unconjugated hyperbilirubinemia","Neonat. jaund.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Unipolar depression","Depression",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Urinary tract infections lower","UTI",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Urinary tract infections lower [triage]","UTI tri.",NULL,NULL,"Primary Health Clinic",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Uterine bleeding","Uter. bleed.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Uterine bleeding [triage]","Uter. bleed. tri.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Vaccination","Vacc.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Venomization","Venomization",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Vitamin A deficiency","Vit. A defic.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Vitamin B2 deficiency","Vit. B2 defic.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Vitamin B6 deficiency","Vit. B6 defic.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Vitamin C deficiency","Vit. C defic.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Vitamin D deficiency","Vit. D defic.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Warfarin associated bleeding","Warfarin bleed.",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Warts","Warts",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Wellness","Wellness",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Wilms tumor","Wilms",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Wilsons disease","Wilson's",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Wound cleaning","Wound cleaning",NULL,NULL,"Health Post",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"Yellow fever","Yellow fever",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"Zollinger-Ellison syndrome","ZES",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"dehydration [triage]","dehydr. tri.",NULL,NULL,"Health Post",NULL,NULL,NULL,NULL,NULL,"Yes",NULL
+"diabetes insipidus","DI",NULL,NULL,"Specialized/Restricted",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"impacted wax","wax, impacted",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"myasthenia gravis","myasthen. gravis",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"scorpion sting","scorpion bite",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"scorpion sting [triage]","scorpion bite tri.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"subarachnoid hemorrhage","SAH",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"thyroid cancer","thyroid ca.","SM","T","Hospital","4",NULL,NULL,NULL,NULL,NULL,NULL
+"uveitis","uve.",NULL,NULL,"Health Centre",NULL,NULL,NULL,NULL,NULL,NULL,NULL
+"von Willebrand disease","vWD",NULL,NULL,"Hospital",NULL,NULL,NULL,NULL,NULL,NULL,NULL

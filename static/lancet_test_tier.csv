@@ -1,0 +1,54 @@
+test_format,custom_test_tier
+Advanced breast imaging,Tertiary
+Antimicrobial susceptibility testing,Secondary
+"Antimicrobial susceptibility testing, TB",Tertiary
+Automated biochemical microbial identification,Secondary
+Automated chemistry analyzer,Secondary
+Automated coagulation analyzer,Secondary
+Automated hematology analyzer,Secondary
+Automated immunoassay analyzer,Secondary
+"Automated immunoassay analyzer, specialized",Tertiary
+Automated nucleic acid analyzer,Tertiary
+Benchtop/handheld analyzer,Secondary
+CT scan,Tertiary
+Culture,Secondary
+ELISA,Secondary
+Echocardiogram,Tertiary
+Flow cytometry,Tertiary
+Fluorescence microscopy,Tertiary
+Fluoroscopy,Tertiary
+Glucometer,Primary
+Hematology smear microscopy,Secondary
+Hemocytometer,Secondary
+Hemoglobinometer,Primary
+High performance liquid chromatography,Tertiary
+Indirect immunofluorescence,Tertiary
+"Interventional radiology, basic",Tertiary
+"Interventional radiology, complex",Tertiary
+Latex agglutination,Secondary
+MRI,Tertiary
+Malaria smear microscopy,Primary
+Mammography,Tertiary
+Mass Spectrometry,Tertiary
+"Microscopy, with immunohistochemistry",Tertiary
+"Microscopy, with stains",Secondary
+No instrument,Primary
+Nuclear radiology,Tertiary
+Nucleic acid sequencing,Tertiary
+Osmometer,Secondary
+PET scan,Tertiary
+Particle agglutination assay,Secondary
+RDT,Primary
+Radial immunodiffusion,Tertiary
+Red blood cell agglutination,Secondary
+Semi-quantitative fluorescent spot test,Tertiary
+Slide agglutination,Secondary
+Stool microscopy,Primary
+TB Culture,Tertiary
+Tube agglutination test,Secondary
+Ultrasound,Secondary
+"Ultrasound, POC",Primary
+"Urinalysis, microscopic",Primary
+Urine Dipstick,Primary
+Widal,Secondary
+X-ray,Secondary
