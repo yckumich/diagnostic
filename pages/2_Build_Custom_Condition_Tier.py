@@ -27,7 +27,7 @@ def initialize_session_state():
 
 initialize_session_state()
 
-GDB_CONDITION_LIST = retrieve_gbd_conditions()
+ALL_CONDITIONS_LIST = retrieve_all_conditions()
 
 #----------------------MAIN-----------------------
 add_sidebar()

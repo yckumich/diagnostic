@@ -10,15 +10,15 @@ ESSENTIAL_COLS = ['conditionname', 'conditionlevel', 'custom_condition_tier']
 
 
 @st.cache_data(ttl=3600)
-def retrieve_gbd_conditions():
+def retrieve_all_conditions():
     """
-    Fetches and returns a sorted list of condition names from the 'conditions' table
-    where the 'lancet_gbd' field is 'Yes'. The data is cached for 3600 seconds.
+    Fetches and returns a sorted list of all unique condition names from the main dataset.
+    The data is cached for 3600 seconds.
     """
 
-    return sorted(pd.read_csv("static/conditions.csv").query("lancet_gbd == 'Yes'")['condition_name'].to_list(), key=str.casefold)
+    return sorted(pd.read_csv("static/tableau3_t2_tjfs_join_edl_dashadmin.csv")['conditionname'].dropna().unique().tolist(), key=str.casefold)
 
-GDB_CONDITION_LIST = retrieve_gbd_conditions()
+ALL_CONDITIONS_LIST = retrieve_all_conditions()
 
 def process_condition_tiers(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -222,7 +222,7 @@ def create_condition_plot(df):
 def display_add_condition_form():
     st.write("### Add a New Custom Condition Instance ")
     with st.form("new_condition", clear_on_submit=True):
-        st.selectbox("Condition Name", GDB_CONDITION_LIST, key="conditionname")
+        st.selectbox("Condition Name", ALL_CONDITIONS_LIST, key="conditionname")
         st.selectbox("Condition Level", CONDITION_LEVELS, key="conditionlevel")
         st.selectbox("Condition Tier", CONDITION_TIERS, key="custom_condition_tier")
         st.form_submit_button("Add", on_click=add_new_condition)

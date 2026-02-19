@@ -86,8 +86,7 @@ def convert_selection_to_df(selection: Dict[str,Dict[str,List[str]]]) -> pd.Data
     return convert_query_to_df(query_w_filter)
 
 
-@st.cache_resource(ttl=3600)
-def build_grid_option(df:pd.DataFrame, 
+def build_grid_option(df:pd.DataFrame,
                       pagination_size:int=50, 
                       selection_mode='multiple'):
     """

@@ -24,7 +24,7 @@ with build_col:
     st.write("### Custom Test-Format Tier Table")
     display_custom_test_tier_df()
 
-    _, col_1, col_2, col_3, _ = st.columns([0.125, 0.25, 0.25, 0.25, 0.125])
+    _, col_1, col_2, col_3, _ = st.columns([0.005, 0.33, 0.33, 0.33, 0.005])
     with col_1:
         delete_current_custom_test_tier_df()
     with col_2:

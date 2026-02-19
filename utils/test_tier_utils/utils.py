@@ -2,7 +2,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import streamlit as st
-from data.database import get_view_df
 import time
 
 
@@ -12,27 +11,17 @@ SHOW_TEST_TIER_PLOT_KEY = 'show_test_tier_plot'
 TEST_FORMAT = 'test_format'
 CUSTOM_TEST_TIER = 'custom_test_tier'
 
-def retrieve_gbd_test_formats():
+def retrieve_all_test_formats():
     """
-    Retrieves a sorted list of unique test formats associated with conditions marked as 'lancet_gbd' in the 'conditions' CSV file.
-
-    This function performs the following steps:
-    1. Loads the view data from the database using the `get_view_df` function.
-    2. Reads the 'conditions.csv' file to identify conditions marked as 'lancet_gbd'.
-    3. Filters the test formats in the view data that are associated with the identified conditions.
-    4. Returns a sorted list of unique test formats.
+    Retrieves a sorted list of all unique test formats from the main dataset.
 
     Returns:
-    List[str]: A sorted list of unique test formats associated with 'lancet_gbd' conditions.
+    List[str]: A sorted list of all unique test formats.
     """
 
-    view_df = get_view_df()
-    condition_names_list = sorted(pd.read_csv("static/conditions.csv").query("lancet_gbd == 'Yes'")['condition_name'].to_list(), key=str.casefold)
-    test_format_list = set(view_df[view_df['conditionname'].isin(condition_names_list)][TEST_FORMAT].dropna())
-    del view_df
-    return sorted(test_format_list, key=str.casefold)
+    return sorted(pd.read_csv("static/tableau3_t2_tjfs_join_edl_dashadmin.csv")[TEST_FORMAT].dropna().unique().tolist(), key=str.casefold)
 
-GDB_TEST_FORMAT_LIST = retrieve_gbd_test_formats()
+ALL_TEST_FORMATS_LIST = retrieve_all_test_formats()
 
 
 def initialize_session_state():
@@ -54,13 +43,13 @@ def add_new_condition_tier_form():
     This function does the following:
     1. Writes a header for the form.
     2. Creates a form in Streamlit for adding a new test format instance.
-    3. Adds a select box for choosing a test format from the global list `GDB_TEST_FORMAT_LIST`.
+    3. Adds a select box for choosing a test format from the global list `ALL_TEST_FORMATS_LIST`.
     4. Adds a select box for choosing the test format tier (Primary, Secondary, Tertiary).
     5. Adds a submit button that, when clicked, calls the `add_new_test_tier` function and clears the form upon submission.
     """
     st.write("### Add a New Diagnostic Format Instance")
     with st.form("new_test_tier", clear_on_submit=True):
-        st.selectbox("Diagnostic Format", GDB_TEST_FORMAT_LIST, key=TEST_FORMAT)
+        st.selectbox("Diagnostic Format", ALL_TEST_FORMATS_LIST, key=TEST_FORMAT)
         st.selectbox("Diagnostic-Format Tier", ["Primary", "Secondary", "Tertiary"], key=CUSTOM_TEST_TIER)
         st.form_submit_button("Add", on_click=add_new_test_tier)
 

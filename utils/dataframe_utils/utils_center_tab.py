@@ -346,27 +346,5 @@ def generate_tab_content(tab_title,
                 use_container_width=True,
                 height=900,
             )
-            # --- special case: Test-By-Laboratory table ---------------
-            if df_titles[i] == "Diagnostic By Domain":
-                tiers_ok = bool(st.session_state.custom_condition_list) and bool(
-                    st.session_state.custom_test_tier_list
-                )
-                snapshot_ok = (
-                    isinstance(st.session_state.get("cached_tbls_all_cols"), pd.DataFrame)
-                    and st.session_state.cached_tbls_all_cols.shape[0] > 0
-                )
-                btn_disabled = not (tiers_ok and snapshot_ok)
-                btn_key = f"save_table_{tab_title.replace(' ', '_')}"
-
-                if st.button("Save Filter State", key=btn_key, disabled=btn_disabled):
-                    msg = st.toast("Saving current filter state…")
-                    time.sleep(0.7)
-                    msg.toast("Saved ✅")
-
-                if btn_disabled:
-                    st.warning(
-                        "Upload *both* custom tier tables first, then regenerate this tab."
-                    )
-
         tab_dataframes.append((df_titles[i], result_df))
     return tab_dataframes

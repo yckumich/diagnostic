@@ -64,7 +64,7 @@ def remove_stars(s: str) -> str:
 # utils/tests_summary_utils/utils.py
 def generate_and_display_test_summary(input_key: str):
 
-    label = "Generate Diagnostic Summary"          
+    label = "Generate Diagnostic Summary"
     btn_key = f"gen_summary_btn_{input_key}" 
 
     if st.button(label, key=btn_key):        
