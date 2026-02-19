@@ -42,7 +42,6 @@ CLAUDE.md
 # Env/config
 .env
 .streamlit/secrets.toml
-.streamlit/config.toml
 
 # SQLite or app-created DBs (if any)
 *.sqlite3
