@@ -100,7 +100,7 @@ def build_grid_option(df:pd.DataFrame,
         paginationAutoPageSize=False,
     )
     gd.configure_default_column(
-        editable=True, 
+        editable=False,
         groupable=True
     )
     gd.configure_selection(

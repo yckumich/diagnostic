@@ -139,7 +139,7 @@ get_style_markdown()
 filter_map = get_filter()
 selection = add_sidebar(filter_map=filter_map)
 #--------------Configure center pane------------------
-center_tab_col, test_list_col = st.columns([0.86, 0.14], gap="medium")
+center_tab_col, test_list_col = st.columns([0.8, 0.2], gap="medium")
 
 #--------------Configure Test List--------------------
 with test_list_col:
