@@ -30,17 +30,13 @@ def display_placeholder_message(long_format_tab, pdf_tab):
 
 
 def generate_placeholder_message():
-    if ("cached_tbls_all_cols" not in st.session_state or
-        not isinstance(st.session_state.cached_tbls_all_cols, pd.DataFrame)):
-        return ("<h2 style='text-align:center;color:grey'>Click "
-                "**Save Table** in *Diagnostic Dashboard → Diagnostic Details → Bottom of Diagnostic By Domain*</h2>")
     if not st.session_state.custom_condition_list and not st.session_state.custom_test_tier_list:
         return "<h2 style='text-align:center;color:grey'>Upload both tier tables first</h2>"
     if not st.session_state.custom_condition_list:
-        return "<h2 style='text-align:center;color:grey'>Upload the condition-tier table</h2>"
+        return "<h2 style='text-align:center;color:grey'>Upload the condition-tier table on Page 2 first</h2>"
     if not st.session_state.custom_test_tier_list:
-        return "<h2 style='text-align:center;color:grey'>Upload the test-format-tier table</h2>"
-    return "<h2 style='text-align:center;color:grey'>Press **Generate Diagnostic Placement Summary** at the bottom of the left table to continue</h2>"
+        return "<h2 style='text-align:center;color:grey'>Upload the test-format-tier table on Page 3 first</h2>"
+    return "<h2 style='text-align:center;color:grey'>Press <b>Generate Diagnostic Summary</b> on the left to continue</h2>"
 
 
 # Function to generate PDF
@@ -75,22 +71,23 @@ def generate_and_display_test_summary(input_key: str):
             st.toast("Need both diagnostic format and condition tier tables", icon="⚠️")
             st.rerun()
 
-        st.session_state.test_summary_df = generate_tests_summary(tests_long)
+        result = generate_tests_summary(tests_long)
+        if result.empty:
+            _reset_test_summary()
+            st.toast("No matching tests found — check that your condition and test-format tier selections overlap with the data.", icon="⚠️")
+            st.rerun()
+
+        st.session_state.test_summary_df = result
         st.session_state.display_test_summary = True
         st.rerun()
 
 
 def generate_tests_by_tier_long():
-    if (('cached_tbls_all_cols' not in st.session_state) or 
-        (not isinstance(st.session_state.cached_tbls_all_cols, pd.DataFrame))):
-        return None
-    
     if not st.session_state.custom_condition_list or not st.session_state.custom_test_tier_list:
-        return None     
-    
-    cached_clstbls_df_all_cols = st.session_state.cached_tbls_all_cols.drop(
-        columns=['custom_condition_tier','custom_test_tier']
-    )
+        return None
+
+    from data.database import get_view_df
+    cached_clstbls_df_all_cols = get_view_df()
     
     custom_condition_df = pd.DataFrame.from_dict(st.session_state.custom_condition_list)
     custom_test_df = pd.DataFrame.from_dict(st.session_state.custom_test_tier_list)
@@ -338,6 +335,9 @@ def generate_tests_summary(tests_by_tier_long: pd.DataFrame):
             temp_lab = ", ".join(temp_lab)
             tests_out_seperated.append({"service": temp_lab,"test_format":temp_test_format, "test_name":test, "tier": temp_tier})
     
+    if not tests_out_seperated:
+        return pd.DataFrame(columns=['service', 'tier', 'test_format', 'test_name'])
+
     tests_out_seperated_df = pd.DataFrame.from_dict(tests_out_seperated)[['service','tier','test_format','test_name']].sort_values(by=['service','tier','test_format','test_name'], ascending=True).reset_index(drop=True)
 
     return tests_out_seperated_df

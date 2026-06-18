@@ -9,14 +9,32 @@ CONDITION_TIERS = ["Primary", "Secondary", "Tertiary"]
 ESSENTIAL_COLS = ['conditionname', 'conditionlevel', 'custom_condition_tier']
 
 
-@st.cache_data(ttl=3600)
-def retrieve_all_conditions():
+@st.cache_resource
+def retrieve_condition_levels_map() -> dict:
     """
-    Fetches and returns a sorted list of all unique condition names from the main dataset.
-    The data is cached for 3600 seconds.
+    Builds a mapping of condition name → sorted list of non-'tmp' conditionlevel values.
+    Built once at app startup from the master CSV and shared across all sessions.
+    Only cleared on app restart (i.e., when the underlying CSV changes via a new deployment).
     """
+    df = pd.read_csv("static/tableau3_t2_tjfs_join_edl_dashadmin.csv")
+    result = {}
+    for condition, group in df.groupby('conditionname'):
+        levels = sorted(
+            [l for l in group['conditionlevel'].dropna().unique() if l != 'tmp']
+        )
+        result[condition] = levels
+    return result
 
-    return sorted(pd.read_csv("static/tableau3_t2_tjfs_join_edl_dashadmin.csv")['conditionname'].dropna().unique().tolist(), key=str.casefold)
+
+def retrieve_all_conditions() -> list:
+    """
+    Returns a sorted list of condition names that have at least one non-'tmp' conditionlevel.
+    Conditions where every row is 'tmp' are excluded — they can never be matched during
+    summary generation and would silently produce empty results.
+    """
+    levels_map = retrieve_condition_levels_map()
+    return sorted([c for c, levels in levels_map.items() if levels], key=str.casefold)
+
 
 ALL_CONDITIONS_LIST = retrieve_all_conditions()
 
@@ -221,26 +239,35 @@ def create_condition_plot(df):
 
 def display_add_condition_form():
     st.write("### Add a New Custom Condition Instance ")
-    with st.form("new_condition", clear_on_submit=True):
-        st.selectbox("Condition Name", ALL_CONDITIONS_LIST, key="conditionname")
-        st.selectbox("Condition Level", CONDITION_LEVELS, key="conditionlevel")
-        st.selectbox("Condition Tier", CONDITION_TIERS, key="custom_condition_tier")
-        st.form_submit_button("Add", on_click=add_new_condition)
 
+    # A counter-based key forces all three widgets to reset to defaults
+    # after each successful add, replicating st.form's clear_on_submit behavior.
+    if "add_condition_form_counter" not in st.session_state:
+        st.session_state.add_condition_form_counter = 0
+    counter = st.session_state.add_condition_form_counter
 
-def add_new_condition():
-    """
-    Adds a new condition to the custom condition list stored in the session state.
-    The new condition is added based on the current values of 'conditionname',
-    'conditionlevel', and 'custom_condition_tier' in the session state.
-    """
-    st.session_state.custom_condition_list.append(
-        {
-            "conditionname": st.session_state.conditionname,
-            "conditionlevel": st.session_state.conditionlevel,
-            "custom_condition_tier": st.session_state.custom_condition_tier,
-        }
-    )
+    with st.container(border=True):
+        selected_condition = st.selectbox(
+            "Condition Name", ALL_CONDITIONS_LIST,
+            key=f"conditionname_select_{counter}"
+        )
+        available_levels = retrieve_condition_levels_map().get(selected_condition, [])
+        selected_level = st.selectbox(
+            "Condition Level", available_levels,
+            key=f"conditionlevel_{counter}"
+        )
+        selected_tier = st.selectbox(
+            "Condition Tier", CONDITION_TIERS,
+            key=f"custom_condition_tier_{counter}"
+        )
+        if st.button("Add", key=f"add_condition_btn_{counter}"):
+            st.session_state.custom_condition_list.append({
+                "conditionname": selected_condition,
+                "conditionlevel": selected_level,
+                "custom_condition_tier": selected_tier,
+            })
+            st.session_state.add_condition_form_counter += 1
+            st.rerun()
 
 
 def handle_custom_condition_file_upload(condition_level_csv):
