@@ -424,35 +424,13 @@ def load_lancet_condition_tier_df():
 def add_sidebar():
     with st.sidebar:
         st.markdown("""
-            ## Custom Condition-Tier Page
+**Custom Condition Tier Page**  
+Welcome to the **Custom Condition Tier** page. You will need to define this table in order to use the Diagnostic Placement Tool that details which tier (e.g., primary, secondary, tertiary) each diagnostic should be placed. This page allows you to create, manage, and visualize a custom Condition Tier table, defining the lowest tier in the health system that a given condition is expected to be treated. You can build a Custom Condition Tier table by adding individual records, uploading a CSV file, directly editing the existing table, or loading the table created for the Lancet study (see Home). Importantly, only a subset of conditions have the internal associations encoded in this database to support the Diagnostic Placement Tool. If you would like additional conditions encoded for the Diagnostic Placement Tool, please contact us. Follow the steps below to use this page effectively:
 
-            Welcome to the **Custom Condition-Tier** page. You will need to define this table in order to use the Diagnostic Summary tool that details which tier each diagnostic should be placed. This page allows you to create, manage, and visualize a custom Condition-Tier table, defining the lowest tier in the health system that a given condition can be treated. You can build a Condition Table by adding individual records, uploading a CSV file, or directly editing the existing dataset. Follow the steps below to use this page effectively:
-
-            ### Key Features:
-            - **Add New Condition Records:** Manually add new condition records by specifying the condition name, condition level (triage, moderate, severe), and condition tier (Primary, Secondary, Tertiary).
-            - **Upload Custom Condition Tier CSV:** Upload a pre-developed dataset in CSV format. The CSV file must contain the columns :blue-background[conditionname], :blue-background[conditionlevel], and :blue-background[custom_condition_tier].
-            - **Display and Edit Condition Table:** View the current condition table and mark records for deletion directly within the table.
-            - **Apply and Delete Condition Table:** Apply the current custom condition table or delete the entire table if needed.
-            - **Render Custom Condition Tier Plot:** Visualize the distribution of condition levels across different health facility tiers. You can redraw or delete the plot as needed.
-
-            ### Instructions:
-            1. **Add a New Condition Record:**
-               - Use the form provided to select the condition name, level, and tier, then click 'Add' to append the new record to the table.
-
-            2. **Upload a Custom Condition Tier CSV:**
-               - Use the file uploader to select and upload your CSV file. Ensure that your file contains only the required columns: :blue-background[conditionname], :blue-background[conditionlevel], and :blue-background[custom_condition_tier].
-
-            3. **Display and Edit Condition Table:**
-               - View the current condition table displayed on the left. You can mark records for deletion directly within the table by checking the 'delete' checkbox.
-
-            4. **Save or Delete the Condition Table:**
-               - Click 'Apply Current Custom Condition Table' to apply the current table to be used as a filter in the dashboard.
-               - Click 'Delete Current Custom Condition Table' to delete the existing table and start fresh.
-
-            5. **Render and Manage Plot:**
-               - Once you have built or uploaded your condition table, click 'Render Custom Condition Tier Plot' to visualize your data.
-               - Use the buttons to redraw or delete the plot as needed.
-               - You can also download the current table by clicking the 'Download Table' button.
-
-            This page enables efficient customization and visualization of condition tiers, supporting better diagnostic planning and resource allocation.
+**Instructions:**
+- **Add new custom condition records:** Manually add new condition records by specifying the condition name, condition level (triage, moderate, severe), and condition tier (Primary, Secondary, Tertiary).
+- **Upload a Custom Condition Tier CSV:** Upload a pre-developed dataset in CSV format. The CSV file must contain the columns conditionname, conditionlevel, and custom_condition_tier.
+- **Within the table:** Records can be deleted by clicking in the delete column. Condition levels and tiers can be changed by clicking on cells and selecting different options.
+- **Delete, apply, and load Lancet table:** Use buttons below the table to delete the entire table, apply the current custom condition table to effect changes in the dashboard and be used with the Diagnostic Placement Tool, or to load the Lancet study table.
+- **Render and download the Custom Condition Tier table:** Visualize the distribution of condition levels across different health facility tiers. You can redraw or delete the graphic, or download the underlying table as needed. Use screen capture to copy the graphic.
         """)

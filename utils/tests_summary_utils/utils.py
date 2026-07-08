@@ -751,35 +751,28 @@ def inline_update_custom_test_tier():
 def add_sidebar():
     with st.sidebar:
         st.markdown("""
-        # Diagnostic Placement Summary Instructions
+**Diagnostic Placement Tool Instructions**  
+Welcome to the **Diagnostic Placement Tool**. This tool is designed to help you generate a comprehensive summary of diagnostic placement recommendations by health system tier. Follow the instructions below to make the most out of this tool.
 
-        Welcome to the **Diagnostic Placment Summary** page. This page is designed to help you generate a comprehensive summary of diagnostics categorized by their respective tiers. Follow the instructions below to make the most out of this functionality.
+**Purpose**
+The **Diagnostic Placement Tool** allows you to:
+1. **Generate and view a summary of diagnostic placement recommendations** categorized into primary, secondary, and tertiary tiers.
+2. **Edit the Custom Condition Tier and Custom Diagnostic-Format Tier tables and see the impact on placement recommendations.**
 
-        ## Purpose
-        The **Diagnostic Placement Summary** page allows you to:
-        1. **Generate and view a summary of diagnostics** categorized into primary, secondary, and tertiary tiers.
-        2. **Manage the Custom Condition-Tiers and their respective diagnostics**.
-        3. **Manage the Custom Diagnostic Format-Tiers and their respective diagnostics**.
+**Steps to Use This Page**
+- **Step 1: Create/Upload Custom Condition Tier table**
+Before generating the Diagnostic Placement Summary, ensure you have created or uploaded a Custom Condition-Tier as well as applied the table. This can be done on the Build Custom Condition Tier page.
+- **Step 2: Create/Upload Custom Diagnostic-Format Tier table**
+Similarly, create or upload a Custom Diagnostic-Format Tier table on the Build Custom Diagnostic-Format Tier page and apply the table.
+- **Step 3: View Diagnostic Placement Summaries and Manage Current Tables**
+Once the tables are displayed (see tabs above the left panel table), you have the following options:
+    - **Generate Diagnostic Summary:** Click this button to generate the placement summary based on the current tables.
+    - **Edit the Custom Condition and Diagnostic-Format Tier tables:** individual cells can be changed from this page and it will update the tables on the Custom Condition and Diagnostic-Format Tier pages. Then new Diagnostic Summaries can be generated to see the impact of changes.
 
-        ## Steps to Use This Page
-
-        ### Step 1: Create/Upload Custom Condition Tier
-        Before generating the Diagnostic Placement Summary, ensure you have created or uploaded a Custom Condition-Tier. This can be done on the **Build Custom Condition Tier** page. If you have already done this, you will see the "Custom Condition Tier" column displayed in the "Diagnostic By Domain" table on the Diagnostic Dashboard under the Diagnostic Details tab.
-
-        ### Step 2: Create/Upload Custom Diagnostic Format-Tier
-        Similarly, create or upload a Custom Diagnostic Format-Tier table on the **Build Custom Diagnostic Format-Tier** page. This is necessary to categorize diagnostics into different tiers.
-
-        ### Step 3: Manage Current Table
-        Once the table is fetched and displayed, you have the following options:
-        - **Fetch Current Table**: Click this button to fetch the latest table.
-        - **Update Current Table**: Click this button to apply the updates you created in this page to the original current table in **Build Custom Condition-Tier** or **Build Custom Diagnostic Format-Tier** page .
-        - **Generate Diagnostic Placement Summary**: Click this button to generate the placement summary based on the current tables.
-
-        ### Step 4: View and Edit Diagnostic Placement Summary
-        After generating the diagnostic summary, it will be displayed in the "Diagnostic Placement Summary" section. You can view the summary of diagnostics categorized into primary, secondary, and tertiary tiers.
-
-        ## Notes
-        - The **Generate Diagnostic Placement Summary** button will process the Custom Condition Tiers and Custom Diagnostic Format-Tiers to generate a comprehensive summary of diagnostic placements.
-        - Ensure that you have created or uploaded the Custom Condition Tier and Custom Diagnostic Format-Tier and check the generated Diagnostic Details - Diagnostic By Domain table before attempting to generate the diagnostic placement summary.
-        - Use the "Fetch Current Table" and "Update Current Table" buttons to manage the current table effectively.
+**Notes**
+- The **Generate Diagnostic Summary** button will process the Custom Condition Tier and Custom Diagnostic-Format Tier tables to generate a comprehensive summary of diagnostic placement recommendations.
+- Ensure that you have created or uploaded the Custom Condition Tier and Custom Diagnostic-Format Tier tables as well as applied those tables from the respective pages.
+- While filtering based on the Custom Condition Tier and Custom Diagnostic-Format Tier tables will affect the Diagnostic Test Dashboard, additional filters applied with the Diagnostic Test Dashboard will not affect the Custom Condition and Diagnostic-Format Tier tables or the Diagnostic Placement Tool.
+- After generating the Diagnostic Summary with this tool, you can go back to the Diagnostic Test Dashboard to view and download all of the associations as provided in the various tables. Be sure to clear any additional filters that may be applied within the Diagnostic Test Dashboard, unless they are desired. Those filters only affect display within the dashboard.
+- Importantly, only a subset of conditions have the internal associations encoded in this database to support the Diagnostic Placement Tool. If you would like additional conditions encoded for the Diagnostic Placement Tool, please contact us.
         """)

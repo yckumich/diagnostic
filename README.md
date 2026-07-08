@@ -15,7 +15,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 # Run the app
-streamlit run Home.py
+streamlit run 🏠_Home.py
 ```
 
 The app runs at `http://localhost:8501` by default.
@@ -28,7 +28,7 @@ The app runs at `http://localhost:8501` by default.
 
 | Page | Purpose |
 |---|---|
-| `Home.py` | Landing page, initializes session state |
+| `🏠_Home.py` | Landing page, initializes session state |
 | `pages/1_Diagnostic_Test_Dashboard.py` | Main explorer with sidebar filters and tabbed views |
 | `pages/2_Build_Custom_Condition_Tier.py` | Build or upload a custom condition-level filter |
 | `pages/3_Build_Custom_Test_Tier.py` | Build or upload a custom test-format filter |
@@ -149,7 +149,7 @@ WORKDIR /app/diagnostic
 RUN pip install -r requirements.txt
 
 EXPOSE 8501
-CMD ["streamlit", "run", "Home.py"]
+CMD ["streamlit", "run", "🏠_Home.py"]
 ```
 
 ---

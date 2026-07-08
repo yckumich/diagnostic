@@ -3,7 +3,7 @@ import streamlit as st
 ## PAGE CONFIG
 st.set_page_config(
     page_title="EDL Dashboard",
-    page_icon="📋",
+    page_icon="🗂️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -12,7 +12,6 @@ st.logo(image="static/CGHE_formal_horizontal.png",
         icon_image="static/CGHE_formal_horizontal.png",
         size="large")
 
-import time
 import pandas as pd
 from typing import Dict, List
 from st_aggrid import AgGrid, GridUpdateMode, AgGridTheme
@@ -108,19 +107,7 @@ def add_sidebar(filter_map):
         for main_filter in filter_map:
             agg_filter_selection[main_filter] = create_filter_expander(main_filter, filter_map[main_filter])
 
-        tiers_ok = bool(st.session_state.get('custom_condition_list')) and bool(
-            st.session_state.get('custom_test_tier_list')
-        )
-        save_btn_disabled = not tiers_ok
-
-        save_col, clear_col = st.columns(2)
-        with save_col:
-            if st.button("Save Filter", disabled=save_btn_disabled, key="save_filter_state"):
-                msg = st.toast("Saving current filter state…")
-                time.sleep(0.7)
-                msg.toast("Saved ✅")
-        with clear_col:
-            st.button("Clear Filter", on_click=clear_all_filters, args=(filter_map,))
+        st.button("Clear Filter", on_click=clear_all_filters, args=(filter_map,))
 
         st.divider()
         st.header('Current Filter Selection')
@@ -139,7 +126,7 @@ get_style_markdown()
 filter_map = get_filter()
 selection = add_sidebar(filter_map=filter_map)
 #--------------Configure center pane------------------
-center_tab_col, test_list_col = st.columns([0.8, 0.2], gap="medium")
+center_tab_col, test_list_col = st.columns([0.78, 0.22], gap="medium")
 
 #--------------Configure Test List--------------------
 with test_list_col:
@@ -147,19 +134,24 @@ with test_list_col:
     st.divider()
     # st.header("Test Name")
     st.markdown(
-        "<h2 style='font-size:2rem;'>Test Name</h2>",
+        "<h2 style='font-size:2rem;'>Diagnostic Name</h2>",
         unsafe_allow_html=True
     )
 
     selected_test_df = convert_selection_to_df(selection)
     unique_test_df = (
-        selected_test_df[['testname']]
+        selected_test_df[['testname', 'test_name_pretty']]
         .drop_duplicates(subset=['testname'])
         .reset_index(drop=True)
-        .sort_values(by='testname')
+        .sort_values(by='test_name_pretty')
     )
-    grid_option = build_grid_option(unique_test_df)
-    # print(selected_test_df.shape)
+    gd = GridOptionsBuilder.from_dataframe(unique_test_df)
+    gd.configure_pagination(enabled=False, paginationPageSize=50, paginationAutoPageSize=False)
+    gd.configure_default_column(editable=False, groupable=True)
+    gd.configure_selection(selection_mode='multiple', use_checkbox=False)
+    gd.configure_column('testname', hide=True)
+    gd.configure_column('test_name_pretty', header_name='Diagnostic Name')
+    grid_option = gd.build()
     grid_table = AgGrid(
         data=unique_test_df,
         gridOptions=grid_option,
@@ -184,9 +176,9 @@ with center_tab_col:
 
     with test_badge:
         if st.session_state.custom_test_tier_list:
-            st.success("Custom Test-Format Tier Applied ✅")
+            st.success("Custom Diagnostic-Format Tier Applied ✅")
         else:
-            st.warning("Custom Test-Format Tier Not Applied 🚨")
+            st.warning("Custom Diagnostic-Format Tier Not Applied 🚨")
 
     st.divider()
     st.header('Tabs')

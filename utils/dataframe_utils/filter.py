@@ -31,6 +31,5 @@ high_level_filter_map = {
         "Test Format Lancet Tier" :'test_format_lancet_tier', 
         "Test Name" :'testname',
         "Test Format Lancet Include" :'test_format_lancet_include',
-        "Lancet Indication Exclude" :'lancet_indication_exclude',
     }
 }

@@ -246,45 +246,35 @@ def collect_and_generate_zip(collected_dataframes):
     return zip_buffer
 
 
-sidebar_instruction = """## Diagnostic Test Dashboard
+sidebar_instruction = """
+**Diagnostic Test Dashboard**  
+Welcome to the Diagnostic Test Dashboard. This page allows you to filter, explore, and display diagnostics and their associations based on various conditions, medicines, and other attributes. Follow the steps below to make the most of this page:
 
-Welcome to the Diagnostic Test Dashboard. This page allows you to filter, explore, and display diagnostic tests based on various conditions, medicines, and other attributes. Follow the steps below to make the most of this page:
-
-### How to Use This Page:
-
-1. **Filter Section:**
-   - **Diagnostic:** Use this filter to select specific diagnostics of interest.
-   - **Medicine:** Filter tests based on associated medicines.
-   - **Condition:** Select conditions to narrow down the list of diagnostic tests.
-   - **WHO EDL/EML:** Choose options related to the WHO Essential Diagnostics List or Essential Medicines List.
-   
-   Select your desired filters from each dropdown to refine the diagnostic tests displayed on the page.
-
+**How to Use This Page:**
+1. **Filters:** Select your desired filters from each dropdown to refine the diagnostics displayed on the dashboard.
+    - **Diagnostic:** Filter by diagnostic features.
+    - **Medicine:** Filter by associated medicines.
+    - **Condition:** Filter by associated conditions.
+    - **WHO EDL/EML:** Filter by features of the WHO Essential Diagnostics List or Essential Medicines List.
+    - **Lancet:** Filter by features from the Lancet study (see Home).
 2. **Current Filter Selection:**
-   - This section displays the current filters you have selected. Expand it to review and ensure your selections are correct.
-
-3. **Test Names Column:**
-   - On the right side, you'll see a list of test names that match your selected filters. Click on any test name to further refine your dashb.
-
-4. **Tabs Section:**
-   - The main area of the page is divided into multiple tabs:
-     - **Test By Condition:** Displays tests categorized by condition.
-     - **Lab Specific:** Shows lab-specific test details.
-     - **Test By Medicine:** Lists tests associated with medicines.
-     - **Test By Med And Cond:** Combines tests by both medicine and condition.
-     - **Test:** A detailed view of the selected tests.
-     - **Condition By Test:** Conditions associated with each test.
-     - **Medicine Indications:** Indicates medicines related to the tests.
-     - **Tests And Cond:** A comprehensive view of tests and conditions.
-     - **Test Indication:** Provides test indications.
-
-   Each tab provides a different perspective and detailed information about the diagnostic tests based on your filter selections.
-
-5. **Condition and Test Tier Status:**
-   - Indicators at the top showing whether Custom Condition Tier and Custom Test Tier are applied. This helps you know if additional custom filters are in effect.
-
+    - This section displays the current filters you have selected. Expand it to review if you want to ensure your selections are correct.
+3. **Diagnostic Name Panel:**
+    - On the far right panel of the dashboard, you'll see a list of diagnostic names that match your selected filters (and any additional filters created and applied in the Build Custom Condition and Diagnostic Tier pages). Click on any diagnostic name to further refine your dashboard.
+4. **Tabs Panel:**
+    - The main panel of the page is divided into multiple tabs:
+        - **Diagnostic Details:** Displays diagnostics by domain (e.g., laboratory) and diagnostic formats.
+        - **Diagnostic By Condition:** Displays diagnostics associated with different conditions (e.g., diseases).
+        - **Diagnostic By Medicine:** Displays diagnostics associated with different medicines (either due to medicines associated with conditions for which the diagnostic is indicated, or due medicine-related diagnostic indications (e.g. for toxicity effects).
+        - **Diagnostic By Med And Cond:** Displays diagnostics with associated medicines and conditions (use this to view diagnostic indications at the most granular level).
+        - **Medicine Indications:** Displays the medicines indicated for different conditions.
+5. **Condition and Diagnostic-Format Tier Status:**
+    - Indicators at the top show whether Custom Condition Tier and Custom Diagnostic-Format Tier filters are applied. This helps to know if additional custom filters are in effect.
 6. **Interacting with the Dashboard:**
-   - Use the sidebar filters to adjust the data dynamically.
-   - Click on specific tests in the Test Names column to drill down further.
-   - Switch between tabs to get different views and detailed insights into the diagnostic tests.
+    - This dashboard is useful for viewing and downloading detailed associations
+    - Use the left sidebar filters to adjust the data dynamically.
+    - Click on specific diagnostics in the Diagnostic Name column to filter further. Use shift-select and control-select for multiple selections. Control-select on a selected diagnostic will deselect it.
+    - Switch between tabs to get different views and detailed insights into the diagnostics.
+    - Each table in the dashboard can be downloaded as CSV files by hovering over the headers.
+    - While the Custom Condition Tier and Custom Diagnostic-Form Tier filters will change the content of these dashboard tables, filtering within this dashboard (left or right panels) will not effect the Diagnostic Placement Tool.
 """
