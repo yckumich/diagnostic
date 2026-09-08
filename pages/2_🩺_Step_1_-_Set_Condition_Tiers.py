@@ -2,7 +2,7 @@ import streamlit as st
 
 #----------------------INIT-----------------------
 st.set_page_config(
-    page_title="Custom Condition Tier",
+    page_title="Set Condition Tiers",
     page_icon="🩺",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -14,6 +14,7 @@ st.logo(image="static/CGHE_formal_horizontal.png",
 
 import pandas as pd
 from utils.condition_tier_utils.utils import *
+from style import get_sidebar_style
 
 def initialize_session_state():
     if "custom_condition_list" not in st.session_state:
@@ -31,10 +32,11 @@ ALL_CONDITIONS_LIST = retrieve_all_conditions()
 
 #----------------------MAIN-----------------------
 add_sidebar()
+get_sidebar_style()
 build_col, display_col = st.columns([1,1], gap="small")
 
 with build_col:
-    st.write("### Custom Condition Tier Table")
+    st.write("### Condition Tiers Table")
     # Display the current condition data
     display_custom_condition_df()
 
@@ -57,7 +59,7 @@ with display_col:
             st.markdown("""<div style="height:500px;"></div>""", unsafe_allow_html=True)
             _, col, _ = st.columns([0.35, 0.3, 0.35])
             with col:
-                if st.button('Render Custom Condition Tier Plot'):
+                if st.button('Render Condition Tiers Plot'):
                     st.session_state['show_plot'] = True
                     st.rerun()
         else:

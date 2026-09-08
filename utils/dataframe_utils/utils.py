@@ -247,8 +247,8 @@ def collect_and_generate_zip(collected_dataframes):
 
 
 sidebar_instruction = """
-**Diagnostic Test Dashboard**  
-Welcome to the Diagnostic Test Dashboard. This page allows you to filter, explore, and display diagnostics and their associations based on various conditions, medicines, and other attributes. Follow the steps below to make the most of this page:
+**Essential Diagnostics Explorer**  
+Welcome to the Essential Diagnostics Explorer. This page allows you to filter and explore diagnostics and their associations based on various conditions, medicines, and other attributes. It includes diagnostics from the WHO Essential Diagnostics List as well as other diagnostics used to support WHO Essential Medicines. Follow the steps below to make the most of this page:
 
 **How to Use This Page:**
 1. **Filters:** Select your desired filters from each dropdown to refine the diagnostics displayed on the dashboard.
@@ -260,21 +260,21 @@ Welcome to the Diagnostic Test Dashboard. This page allows you to filter, explor
 2. **Current Filter Selection:**
     - This section displays the current filters you have selected. Expand it to review if you want to ensure your selections are correct.
 3. **Diagnostic Name Panel:**
-    - On the far right panel of the dashboard, you'll see a list of diagnostic names that match your selected filters (and any additional filters created and applied in the Build Custom Condition and Diagnostic Tier pages). Click on any diagnostic name to further refine your dashboard.
+    - On the far right panel of the dashboard, you'll see a list of diagnostic names that match your selected filters (and any additional filters created and applied in the Set Condition Tiers and Set Diagnostic-Format Tiers pages). Click on any diagnostic name to further refine your dashboard.
 4. **Tabs Panel:**
     - The main panel of the page is divided into multiple tabs:
-        - **Diagnostic Details:** Displays diagnostics by domain (e.g., laboratory) and diagnostic formats.
+        - **Diagnostic Details:** Displays diagnostics by domain (e.g., laboratory section) and diagnostic formats.
         - **Diagnostic By Condition:** Displays diagnostics associated with different conditions (e.g., diseases).
-        - **Diagnostic By Medicine:** Displays diagnostics associated with different medicines (either due to medicines associated with conditions for which the diagnostic is indicated, or due medicine-related diagnostic indications (e.g. for toxicity effects).
+        - **Diagnostic By Medicine:** Displays diagnostics associated with different medicines (either due to medicines associated with conditions for which the diagnostic is indicated, or due to medicine-related diagnostic indications, e.g. for toxicity effects).
         - **Diagnostic By Med And Cond:** Displays diagnostics with associated medicines and conditions (use this to view diagnostic indications at the most granular level).
         - **Medicine Indications:** Displays the medicines indicated for different conditions.
 5. **Condition and Diagnostic-Format Tier Status:**
-    - Indicators at the top show whether Custom Condition Tier and Custom Diagnostic-Format Tier filters are applied. This helps to know if additional custom filters are in effect.
-6. **Interacting with the Dashboard:**
-    - This dashboard is useful for viewing and downloading detailed associations
+    - Indicators at the top show whether custom Condition Tiers and Diagnostic-Format Tiers filters are applied. This helps to know if additional custom filters are in effect.
+6. **Interacting with the Essential Diagnostics Explorer:**
+    - The Essential Diagnostics Explorer is useful for viewing and downloading detailed associations.
     - Use the left sidebar filters to adjust the data dynamically.
     - Click on specific diagnostics in the Diagnostic Name column to filter further. Use shift-select and control-select for multiple selections. Control-select on a selected diagnostic will deselect it.
     - Switch between tabs to get different views and detailed insights into the diagnostics.
     - Each table in the dashboard can be downloaded as CSV files by hovering over the headers.
-    - While the Custom Condition Tier and Custom Diagnostic-Form Tier filters will change the content of these dashboard tables, filtering within this dashboard (left or right panels) will not effect the Diagnostic Placement Tool.
+    - While the Condition Tiers and Diagnostic-Format Tiers filters will change the content of these Essential Diagnostics Explorer tables, filtering within the Explorer (left or right panels) will not affect the Diagnostic Network Planner results.
 """

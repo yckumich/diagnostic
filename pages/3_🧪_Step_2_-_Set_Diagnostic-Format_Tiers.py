@@ -3,13 +3,14 @@ import streamlit as st
 
 #----------------------INIT-----------------------
 st.set_page_config(
-    page_title="Custom Test Format Tier",
+    page_title="Set Diagnostic-Format Tiers",
     layout="wide",
     page_icon="🧪",
     initial_sidebar_state="expanded"
 )
 
 from utils.test_tier_utils.utils import *
+from style import get_sidebar_style
 
 st.logo(image="static/CGHE_formal_horizontal.png",
         icon_image="static/CGHE_formal_horizontal.png",
@@ -18,10 +19,11 @@ st.logo(image="static/CGHE_formal_horizontal.png",
 #----------------------MAIN-----------------------
 initialize_session_state()
 add_sidebar()
+get_sidebar_style()
 build_col, display_col = st.columns([1,1], gap="small")
     
 with build_col:
-    st.write("### Custom Diagnostic-Format Tier Table")
+    st.write("### Diagnostic-Format Tiers Table")
     display_custom_test_tier_df()
 
     _, col_1, col_2, col_3, _ = st.columns([0.005, 0.33, 0.33, 0.33, 0.005])
@@ -42,7 +44,7 @@ with display_col:
             st.markdown("""<div style="height:500px;"></div>""", unsafe_allow_html=True)
             _, col, _ = st.columns([0.35, 0.3, 0.35])
             with col:
-                if st.button('Render Custom Test-Format Tier Plot'):
+                if st.button('Render Diagnostic-Format Tiers Plot'):
                     st.session_state[SHOW_TEST_TIER_PLOT_KEY] = True
                     st.rerun()
         else:

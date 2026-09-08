@@ -502,7 +502,7 @@ def display_pdf_summary():
     _, col, _ = st.columns([0.3, 0.4, 0.3], gap='small')
     with col:
         st.download_button(
-            "Download Test Summary",
+            "Download Diagnostic Summary",
             convert_df(st.session_state.test_summary_df),
             "test_summary.csv",
             "text/csv",
@@ -635,7 +635,7 @@ def inline_display_custom_condition_df():
         'conditionlevel': st.column_config.SelectboxColumn(
             help='Condition Level', options=['triage','moderate','severe'], required=True),
         'custom_condition_tier': st.column_config.SelectboxColumn(
-            help='Custom Condition Tier', options=['Primary','Secondary','Tertiary'], required=True)
+            help='Condition Tier', options=['Primary','Secondary','Tertiary'], required=True)
     }
     custom_condition_df["delete"] = False
     custom_condition_df = custom_condition_df[["delete"] + custom_condition_df.columns[:-1].tolist()]
@@ -652,19 +652,19 @@ def inline_display_custom_condition_df():
 
 
 def inline_fetch_custom_condition_tier():
-    if st.button("Fetch Condition Tier Table"):
+    if st.button("Fetch Condition Tiers Table"):
         # st.session_state.inline_custom_condition_list = st.session_state.custom_condition_list.copy()
-        msg = st.toast('Fetching Custom Condition Tier Table...')
+        msg = st.toast('Fetching Condition Tiers Table...')
         time.sleep(0.7)
         msg.toast('Fetched ✅ ')
         st.rerun()
 
 
 def inline_update_custom_condition_tier():
-    if st.button("Update Condition Tier Table"):
+    if st.button("Update Condition Tiers Table"):
         if len(st.session_state.inline_custom_condition_list) > 0:
             st.session_state.custom_condition_list = st.session_state.inline_custom_condition_list
-            msg = st.toast('Updating Custom Condition Tier Table...')
+            msg = st.toast('Updating Condition Tiers Table...')
             time.sleep(0.7)
             msg.toast('Updated ✅ ')
             st.rerun()
@@ -727,23 +727,23 @@ def inline_display_custom_test_tier_df():
     )
 
 def inline_fetch_custom_test_tier():
-    if st.button("Fetch Diagnostic Format-Tier Table"):
+    if st.button("Fetch Diagnostic-Format Tiers Table"):
         st.session_state.inline_custom_test_list = st.session_state.custom_test_tier_list.copy()
-        msg = st.toast('Fetching Custom Diagnostic Format-Tier Table...')
+        msg = st.toast('Fetching Diagnostic-Format Tiers Table...')
         time.sleep(0.7)
         msg.toast('Fetched ✅ ')
         st.rerun()
 
 def inline_update_custom_test_tier():
-    if st.button("Update Diagnostic Format-Tier Table"):
+    if st.button("Update Diagnostic-Format Tiers Table"):
         if len(st.session_state.inline_custom_test_list) > 0:
             st.session_state.custom_test_tier_list = st.session_state.inline_custom_test_list
-            msg = st.toast('Updating Custom Diagnostic Format-Tier Table...')
+            msg = st.toast('Updating Diagnostic-Format Tiers Table...')
             time.sleep(0.7)
             msg.toast('Updated ✅ ')
             st.rerun()
         else:
-            msg = st.toast('You have not made any changes to the custom Diagnostic Format-Tier table...')
+            msg = st.toast('You have not made any changes to the Diagnostic-Format Tiers table...')
             time.sleep(0.7)
             msg.toast('Refreshing page')
             st.rerun()
@@ -751,28 +751,29 @@ def inline_update_custom_test_tier():
 def add_sidebar():
     with st.sidebar:
         st.markdown("""
-**Diagnostic Placement Tool Instructions**  
-Welcome to the **Diagnostic Placement Tool**. This tool is designed to help you generate a comprehensive summary of diagnostic placement recommendations by health system tier. Follow the instructions below to make the most out of this tool.
+**Diagnostic Network Planner Results Instructions**  
+Welcome to the page for visualizing results of the Diagnostic Network Planner. This page is designed to help you generate a comprehensive summary of diagnostic placement recommendations by health system tier. Follow the instructions below to make the most out of this tool.
 
 **Purpose**
-The **Diagnostic Placement Tool** allows you to:
+
+The **Diagnostic Network Planner** allows you to:
 1. **Generate and view a summary of diagnostic placement recommendations** categorized into primary, secondary, and tertiary tiers.
-2. **Edit the Custom Condition Tier and Custom Diagnostic-Format Tier tables and see the impact on placement recommendations.**
+2. **Edit the Condition Tiers and Diagnostic-Format Tiers tables and see the impact on placement recommendations.**
 
 **Steps to Use This Page**
-- **Step 1: Create/Upload Custom Condition Tier table**
-Before generating the Diagnostic Placement Summary, ensure you have created or uploaded a Custom Condition-Tier as well as applied the table. This can be done on the Build Custom Condition Tier page.
-- **Step 2: Create/Upload Custom Diagnostic-Format Tier table**
-Similarly, create or upload a Custom Diagnostic-Format Tier table on the Build Custom Diagnostic-Format Tier page and apply the table.
-- **Step 3: View Diagnostic Placement Summaries and Manage Current Tables**
+- **Step 1: Create/Upload a Condition Tiers table**  
+Before generating the Diagnostic Summary, ensure you have set and applied a Condition-Tiers table. This can be done on the Set Condition Tiers page.
+- **Step 2: Create/Upload a Diagnostic-Format Tiers table**  
+Similarly, ensure you have set and applied a Diagnostic-Format Tiers table on the Set Diagnostic-Format Tiers page.
+- **Step 3: View Diagnostic Network Planner Summaries and Manage Current Tables**  
 Once the tables are displayed (see tabs above the left panel table), you have the following options:
     - **Generate Diagnostic Summary:** Click this button to generate the placement summary based on the current tables.
-    - **Edit the Custom Condition and Diagnostic-Format Tier tables:** individual cells can be changed from this page and it will update the tables on the Custom Condition and Diagnostic-Format Tier pages. Then new Diagnostic Summaries can be generated to see the impact of changes.
+    - **Edit the Condition Tiers and Diagnostic-Format Tiers tables:** individual cells can be changed from this page and it will update the tables on the Set Condition Tiers and Set Diagnostic-Format Tiers pages. Then new Diagnostic Summaries can be generated to see the impact of changes.
 
 **Notes**
-- The **Generate Diagnostic Summary** button will process the Custom Condition Tier and Custom Diagnostic-Format Tier tables to generate a comprehensive summary of diagnostic placement recommendations.
-- Ensure that you have created or uploaded the Custom Condition Tier and Custom Diagnostic-Format Tier tables as well as applied those tables from the respective pages.
-- While filtering based on the Custom Condition Tier and Custom Diagnostic-Format Tier tables will affect the Diagnostic Test Dashboard, additional filters applied with the Diagnostic Test Dashboard will not affect the Custom Condition and Diagnostic-Format Tier tables or the Diagnostic Placement Tool.
-- After generating the Diagnostic Summary with this tool, you can go back to the Diagnostic Test Dashboard to view and download all of the associations as provided in the various tables. Be sure to clear any additional filters that may be applied within the Diagnostic Test Dashboard, unless they are desired. Those filters only affect display within the dashboard.
-- Importantly, only a subset of conditions have the internal associations encoded in this database to support the Diagnostic Placement Tool. If you would like additional conditions encoded for the Diagnostic Placement Tool, please contact us.
+- The **Generate Diagnostic Summary** button will process the Condition Tiers and Diagnostic-Format Tiers tables to generate a comprehensive summary of diagnostic placement recommendations.
+- Ensure that you have created or uploaded the Condition Tiers and Diagnostic-Format Tiers tables as well as applied those tables from the respective pages.
+- While filtering based on the Condition Tiers and Diagnostic-Format Tiers tables will affect the Essential Diagnostics Explorer, additional filters applied with the Essential Diagnostics Explorer will not affect the Condition and Diagnostic-Format Tiers tables or the Diagnostic Network Planner results.
+- After generating the Diagnostic Summary with this tool, you can go back to the Essential Diagnostics Explorer to view and download all of the associations as provided in the various tables. Be sure to clear any additional filters that may be applied within the Essential Diagnostics Explorer, unless they are desired. Those filters only affect display within the Explorer.
+- Importantly, only a subset of conditions have the internal associations encoded in this database to support the Diagnostic Network Planner. If you would like additional conditions encoded for the Diagnostic Network Planner, please contact us (see About).
         """)

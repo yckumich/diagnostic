@@ -1,7 +1,9 @@
 import streamlit as st
 
+from style import get_sidebar_style
+
 st.set_page_config(
-    page_title="Essential Diagnostics Management",
+    page_title="Essential Diagnostics for Universal Health Coverage",
     page_icon="🏠",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -10,6 +12,8 @@ st.set_page_config(
 st.logo(image="static/CGHE_formal_horizontal.png",
         icon_image="static/CGHE_formal_horizontal.png",
         size="large")
+
+get_sidebar_style()
         
 
 ##INITIALIZE SESSION STATE
@@ -38,71 +42,64 @@ st.markdown("""<div style="height:20px;"></div>""", unsafe_allow_html=True)
 
 st.markdown(
     """
-    The **Essential Diagnostics project** aims to support Universal Health Coverage (UHC) 
-    by developing a rational and effective network of diagnostic services. This initiative is rooted
-    in the principles outlined in a comprehensive study focused on optimizing the availability
-    and utilization of essential diagnostic tests. The core objectives of the project include 
-    enhancing diagnostic capabilities across various levels of healthcare facilities, ensuring 
-    equitable access to critical diagnostic tests, and promoting the efficient use of resources 
-    to improve patient outcomes.
+    Access to appropriate diagnostic services is essential for effective treatment and universal
+    health coverage. This website provides decision-support tools to help policymakers, health
+    system planners, researchers, and other stakeholders identify essential diagnostics and design
+    integrated, tiered diagnostic networks.
 
-    #### Key Highlights:
-    - **Rational Design:** The project emphasizes a systematic approach to designing diagnostic networks that align with the healthcare needs of different populations.
-    It involves identifying essential diagnostic tests that are critical for the effective management of common health conditions.
+    **There are two tools built into this decision support:**
+    - **Essential Diagnostics Explorer:** Explore which diagnostics are needed for particular diseases and medicines, and which diseases and medicines are supported by particular diagnostics
+    - **Diagnostic Network Planner:** Where diagnostics should be placed within a tiered health system
 
-    - **Health Facility Tiers:** The network design considers the capabilities and resources of different tiers of health facilities, from primary to tertiary care.
-    The goal is to ensure that each level of care has access to appropriate diagnostic tools, facilitating timely and accurate diagnoses.
+    #### Essential Diagnostics Explorer: Explore diseases, medicines, and diagnostics
+    Use the relational database to explore connections among:
+    - Diseases and clinical conditions
+    - Essential medicines
+    - In vitro diagnostics & radiological examinations
 
-    - **Condition Levels and Diagnostic Needs:** The project categorizes health conditions based on their severity and diagnostic requirements.
-    This categorization helps in prioritizing the allocation of diagnostic resources and tailoring the network to address the most pressing health challenges.
+    Comprehensive filters allow you to focus on selected diseases, medicines, or diagnostics. Use the results to:
+    - Identify diagnostics needed to manage specific diseases
+    - Determine which diagnostics support the safe and effective use of essential medicines
+    - Explore the clinical applications of selected diagnostics
+    - Inform essential diagnostics lists, policies, and planning
 
-    - **Data-Driven Approach:** Leveraging data from various sources, the project aims to create a dynamic and adaptable diagnostic network.
-    Continuous monitoring and evaluation are integral to the project, ensuring that the network remains responsive to changing healthcare needs and emerging health threats.
+    #### Diagnostic Network Planner: Design a tiered diagnostic network
+    Use the Lancet Commission on Diagnostics model to explore where diagnostic services could be
+    placed across different tiers of a country or health system. The tool currently supports 20 high
+    burden diseases. The model includes diseases projected to cause a substantial burden in low- and
+    middle-income countries in 2030 and 2040.
 
-    - **Universal Health Coverage:** The ultimate aim of the project is to support UHC by making essential diagnostics accessible and affordable for all.
-    By improving diagnostic services, the project contributes to better health outcomes and reduces the burden of disease on communities.
+    The tool allows you to:
+    - Assign diseases and levels of disease severity to different tiers of care
+    - Specify which diagnostic formats could potentially be supported at each tier in a system
+    - Adapt the model to the organization and capabilities of a particular health system
+    - Support the development of national essential diagnostics lists and diagnostic-network strategies
 """
 )
 
+st.page_link("pages/5_📖_Background.py",
+             label="Learn more about the project in Background",
+             icon="📖")
 
 
-# st.markdown("""<div style="height:50px;"></div>""", unsafe_allow_html=True)
 
+# Display the WHO video. st.video takes no width, so the surrounding columns are
+# what centre it and set its size. Streamlit also hands the YouTube embed a 4:3
+# box, which letterboxes a 16:9 video, so the ratio is forced here.
+VIDEO_URL = "https://youtu.be/OgLqIgqLkqg?si=1cKn3HypBFMRPcR9"
 
 st.markdown(
     """
-    #### Resources:
-"""
+    <style>
+    [data-testid="stVideo"] {
+        aspect-ratio: 16 / 9;
+        height: auto !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
 )
 
-# Read the paper content
-with open("supplements/original_research.pdf", "rb") as file:
-    paper_content = file.read()
-
-    # Provide a download button for the paper
-    st.download_button(
-        label="Download the original research paper",
-        data=paper_content,
-        file_name="research_paper.pdf",
-        mime="application/pdf"
-    )
-
-# st.image("static/Paper_screenshot.png", caption="BMC Webpage of the Research Paper", width=600)
-
-# # Read the WHO report content
-with open("supplements/WHO_report.pdf", "rb") as file:
-    report_content = file.read()
-
-    st.download_button(
-        label="Download the original WHO report",
-        data=report_content,
-        file_name="WHO_EDL_report.pdf",
-        mime="application/pdf"
-    )
-
-# st.image("static/WHO_Report_screenshot.png", caption="WHO Report of Essential Diagnostic List", width=600)
-
-
-# Display the WHO video
-VIDEO_URL = "https://youtu.be/OgLqIgqLkqg?si=1cKn3HypBFMRPcR9"
-st.video(VIDEO_URL)
+_, video_col, _ = st.columns([0.2, 0.6, 0.2])
+with video_col:
+    st.video(VIDEO_URL)

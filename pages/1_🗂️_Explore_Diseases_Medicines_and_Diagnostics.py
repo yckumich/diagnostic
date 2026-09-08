@@ -2,7 +2,7 @@ import streamlit as st
 
 ## PAGE CONFIG
 st.set_page_config(
-    page_title="EDL Dashboard",
+    page_title="Essential Diagnostics Explorer",
     page_icon="🗂️",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -18,7 +18,7 @@ from st_aggrid import AgGrid, GridUpdateMode, AgGridTheme
 from utils.dataframe_utils.center_tabs import centner_tab_dict
 from utils.dataframe_utils.utils_center_tab import *
 from utils.dataframe_utils.utils import *
-from style import get_style_markdown
+from style import get_style_markdown, get_sidebar_style
 
 #------------------------------INIT------------------------------
 
@@ -121,6 +121,7 @@ def add_sidebar(filter_map):
 
 #------------------------------MAIN------------------------------
 get_style_markdown()
+get_sidebar_style()
 
 #--------------Configure the Main filter--------------
 filter_map = get_filter()
@@ -170,15 +171,15 @@ with center_tab_col:
 
     with cond_badge:
         if st.session_state.custom_condition_list:
-            st.success("Custom Condition Tier Applied ✅")
+            st.success("Condition Tiers Applied ✅")
         else:
-            st.warning("Custom Condition Tier Not Applied 🚨")
+            st.warning("Condition Tiers Not Applied 🚨")
 
     with test_badge:
         if st.session_state.custom_test_tier_list:
-            st.success("Custom Diagnostic-Format Tier Applied ✅")
+            st.success("Diagnostic-Format Tiers Applied ✅")
         else:
-            st.warning("Custom Diagnostic-Format Tier Not Applied 🚨")
+            st.warning("Diagnostic-Format Tiers Not Applied 🚨")
 
     st.divider()
     st.header('Tabs')

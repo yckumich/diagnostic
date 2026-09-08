@@ -1,7 +1,7 @@
 #----------------------INIT-----------------------
 import streamlit as st
 st.set_page_config(
-    page_title="Diagnostic Placement Tool",
+    page_title="Diagnostic Network Planner Results",
     page_icon="📍",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -11,7 +11,7 @@ st.logo(image="static/CGHE_formal_horizontal.png",
         size="large")
 
 import streamlit as st
-from style import get_style_markdown
+from style import get_style_markdown, get_sidebar_style
 from utils.tests_summary_utils import utils as U
 
 st.session_state.setdefault("display_test_summary", False)
@@ -28,17 +28,18 @@ if (not st.session_state.custom_condition_list or
 # initialize_session_state()
 U.add_sidebar()
 get_style_markdown()
+get_sidebar_style()
 
-st.write("### Diagnostic Placement Tool")
+st.write("### Diagnostic Network Planner Results")
 left, right = st.columns([1, 1], gap="medium")
 
 with left:
-    cond_tab, test_tab = st.tabs(["Custom Condition Tier", "Custom Test-Format Tier"])
+    cond_tab, test_tab = st.tabs(["Condition Tiers", "Diagnostic-Format Tiers"])
 
     # ---- Condition Tier Tab ----
     with cond_tab:
         if not st.session_state.custom_condition_list:
-            st.info("Create or upload a **Custom Condition Tier**.")
+            st.info("Create or upload a **Condition Tiers** table.")
         else:
             U.condition_editor()  # live editor
             st.divider()
@@ -47,7 +48,7 @@ with left:
     # ---- Test-Format Tier Tab ----
     with test_tab:
         if not st.session_state.custom_test_tier_list:
-            st.info("Create or upload a **Custom Test-Format Tier**.")
+            st.info("Create or upload a **Diagnostic-Format Tiers** table.")
         else:
             U.test_tier_editor()
             st.divider()
@@ -55,7 +56,7 @@ with left:
 
 with right:
     long_tab, pdf_tab = st.tabs(
-        ["Test Summary - Long Format", "Test Summary - PDF"]
+        ["Diagnostic Summary - Long Format", "Diagnostic Summary - PDF"]
     )
 
     if not st.session_state.display_test_summary:

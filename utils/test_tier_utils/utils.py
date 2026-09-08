@@ -71,7 +71,7 @@ def upload_custom_tier_tier_csv():
     3. If a file is uploaded and the 'Upload' button is clicked, it calls the function
        `handle_custom_test_format_csv_upload` to process the uploaded file.
     """
-    st.write("### Upload a Custom Diagnostic Format-Tier CSV")
+    st.write("### Upload a Custom Diagnostic-Format Tiers CSV")
     test_tier_csv = st.file_uploader("upload a CSV file", type={"csv", "txt"})
     if (test_tier_csv is not None) and (st.button("Upload")):
         handle_custom_test_format_csv_upload(test_tier_csv)
@@ -283,14 +283,14 @@ def delete_current_custom_test_tier_df():
     Resets the 'custom_test_tier_list', 'show_test_tier_plot', and 'custom_test_tier_df' session states.
     """
 
-    if st.button("Delete Diagnostic-Format Tier Table"):
+    if st.button("Delete Diagnostic-Format Tiers Table"):
         st.session_state["custom_test_tier_list"] = []
         st.session_state['show_test_tier_plot'] = False
         st.session_state.custom_test_tier_df = None
         st.session_state.temp_custom_lab_specific_test_by_laboratory_section_df  = None
         st.session_state.custom_lab_specific_test_by_laboratory_section_df  = None
 
-        msg = st.toast('Deleting Custom Diagnostic Tier...')
+        msg = st.toast('Deleting Diagnostic-Format Tiers Table...')
         time.sleep(0.7)
         msg.toast('Deleted 🗑️')
         time.sleep(0.7)
@@ -304,19 +304,19 @@ def save_current_coustom_test_tier_df():
     If the list is empty, it shows a warning toast message.
     """
 
-    if st.button("Apply Diagnostic Format-Tier Table"):
+    if st.button("Apply Diagnostic-Format Tiers Table"):
         if len(st.session_state.custom_test_tier_list):
             st.session_state.custom_test_tier_df = pd.DataFrame(st.session_state.custom_test_tier_list)
 
-            msg = st.toast('Applying Custom Diagnostic Format-Tier...')
+            msg = st.toast('Applying Diagnostic-Format Tiers Table...')
             time.sleep(0.7)
             msg.toast('Applied ✅ ')
 
         else:
-            st.toast("Could Not Find Custom Diagnostic Tier Dataframe")
+            st.toast("Could Not Find Diagnostic-Format Tiers Table")
 
 def load_lancet_test_format_tier_df():
-    if st.button("Load Lancet Diagnostic Format-Tier Table"):
+    if st.button("Load Lancet Diagnostic-Format Tiers Table"):
         st.session_state[CUSTOM_TEST_TIER_LIST_KEY] = pd.read_csv('static/lancet_test_tier.csv').to_dict(orient='records')
         st.session_state[CUSTOM_TEST_TIER_DF_KEY] = None
         st.rerun()
@@ -324,13 +324,13 @@ def load_lancet_test_format_tier_df():
 def add_sidebar(): 
     with st.sidebar:
         st.markdown("""
-**Custom Diagnostic-Format Tier Page**  
-Welcome to the **Custom Diagnostic-Format Tier** page. You will need to define this table in order to use the Diagnostic Placement Tool that details which tier each diagnostic should be placed. This page allows you to create, manage, and visualize a custom Diagnostic-Format Tier table that identifies the lowest tier in the health system that a given Diagnostic Format could potentially be placed (if indicated) considering infrastructural limitations. You can build a Custom Diagnostic-Format Tier table by adding individual records, uploading a CSV file, directly editing the existing table, or loading the table created for the Lancet study (see Home). The main features and functionalities of this page are as follows:
+**Set Diagnostic-Format Tiers Page**  
+Welcome to the **Set Diagnostic-Format Tiers** page. You will need to define this table in order to use the Diagnostic Network Planner that details which tier each diagnostic should be placed. This page allows you to create, manage, and visualize a custom Diagnostic-Format Tiers table that identifies the lowest tier in the health system that a given Diagnostic Format could potentially be placed (if indicated) considering infrastructural limitations. You can build a custom Diagnostic-Format Tiers table by adding individual records, uploading a CSV file, directly editing the existing table, or loading and applying the table created for the Lancet study (see Home). The main features and functionalities of this page are as follows:
 
 **Instructions:**
 - **Add new diagnostic format records:** Manually add new Diagnostic Format records by specifying the Diagnostic Format and Diagnostic Tier (Primary, Secondary, Tertiary).
-- **Upload Custom Diagnostic-Format Tier CSV:** Upload a pre-developed dataset in CSV format. The uploaded file must contain columns 'test_format' and 'custom_test_tier'.
+- **Upload a Custom Diagnostic-Format Tiers CSV:** Upload a pre-developed dataset in CSV format. The uploaded file must contain columns 'test_format' and 'custom_test_tier'.
 - **Within the table:** Records can be deleted by clicking in the delete column. Diagnostic-Format Tiers can be changed by clicking on cells and selecting different options.
-- **Delete, apply, and load Lancet table:** Use buttons below the table to delete the entire table, apply the current custom Diagnostic-Format Tier table to effect changes in the dashboard and be used with the Diagnostic Placement tool, or to load the Lancet study table (see Home).
-- **Render and download the Custom Diagnostic-Format Tier table:** Visualize the distribution of diagnostic format possibilities across different health facility tiers. You can redraw or delete the graphic, or download the underlying table as needed. Use screen capture to copy the graphic.
+- **Delete, apply, and load Lancet table:** Use buttons below the table to delete the entire table, apply the current custom Diagnostic-Format Tiers table to effect changes in the dashboard and be used with the Diagnostic Network Planner, or to load the Lancet study table (see Home and Background).
+- **Render and download the custom Diagnostic-Format Tiers table:** Visualize the distribution of diagnostic format possibilities across different health facility tiers. You can redraw or delete the graphic, or download the underlying table as needed. Use screen capture to copy the graphic.
         """)

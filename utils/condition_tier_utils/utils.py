@@ -290,7 +290,7 @@ def handle_custom_condition_file_upload(condition_level_csv):
 
 
 def upload_custom_condition_csv():
-    st.write("### Upload a Custom Condition Tier CSV")
+    st.write("### Upload a Custom Condition Tiers CSV")
     condition_level_csv = st.file_uploader("upload a CSV file", type={"csv", "txt"})
     if (condition_level_csv is not None) and (st.button("Upload")):
         handle_custom_condition_file_upload(condition_level_csv)
@@ -356,7 +356,7 @@ def display_custom_condition_df():
             required=True,
         ),
         'custom_condition_tier': st.column_config.SelectboxColumn(
-            help='Custom Condition Tier',
+            help='Condition Tier',
             options=['Primary','Secondary','Tertiary'],
             required=True,
         )
@@ -384,12 +384,12 @@ def delete_current_coustom_df():
     Resets the 'custom_condition_list', 'show_plot', and 'custom_condition_df' session states.
     """
 
-    if st.button("Delete Custom Condition Table"):
+    if st.button("Delete Condition Tiers Table"):
         st.session_state["custom_condition_list"] = []
         st.session_state['show_plot'] = False
         st.session_state.custom_condition_df = None
 
-        msg = st.toast('Deleting Custom Condition Level...')
+        msg = st.toast('Deleting Condition Tiers Table...')
         time.sleep(0.7)
         msg.toast('Deleted 🗑️')
         time.sleep(0.7)
@@ -403,18 +403,18 @@ def save_current_coustom_df():
     If the list is empty, it shows a warning toast message.
     """
 
-    if st.button("Apply Custom Condition Table"):
+    if st.button("Apply Condition Tiers Table"):
         if len(st.session_state.custom_condition_list):
             st.session_state.custom_condition_df = pd.DataFrame(st.session_state["custom_condition_list"])
-            msg = st.toast('Applying Custom Condition Level...')
+            msg = st.toast('Applying Condition Tiers Table...')
             time.sleep(0.7)
             msg.toast('Applied ✅ ')
 
         else:
-            st.toast("Could Not Find Custom Condition Level Dataframe")
+            st.toast("Could Not Find Condition Tiers Table")
 
 def load_lancet_condition_tier_df():
-    if st.button("Load Lancet Condition Table"):
+    if st.button("Load Lancet Condition Tiers Table"):
         st.session_state["custom_condition_list"] = pd.read_csv('static/lancet_condition_level.csv').to_dict(orient='records')
         st.session_state.custom_condition_df = None
         st.rerun()
@@ -424,13 +424,13 @@ def load_lancet_condition_tier_df():
 def add_sidebar():
     with st.sidebar:
         st.markdown("""
-**Custom Condition Tier Page**  
-Welcome to the **Custom Condition Tier** page. You will need to define this table in order to use the Diagnostic Placement Tool that details which tier (e.g., primary, secondary, tertiary) each diagnostic should be placed. This page allows you to create, manage, and visualize a custom Condition Tier table, defining the lowest tier in the health system that a given condition is expected to be treated. You can build a Custom Condition Tier table by adding individual records, uploading a CSV file, directly editing the existing table, or loading the table created for the Lancet study (see Home). Importantly, only a subset of conditions have the internal associations encoded in this database to support the Diagnostic Placement Tool. If you would like additional conditions encoded for the Diagnostic Placement Tool, please contact us. Follow the steps below to use this page effectively:
+**Set Condition Tiers Page**  
+Welcome to the **Set Condition Tiers** page. You will need to define this table in order to use the Diagnostic Network Planner that details which tier (e.g., primary, secondary, tertiary) each diagnostic should be placed. This page allows you to create, manage, and visualize a custom Condition Tiers table, defining the lowest tier in the health system that a given condition is expected to be treated. You can build a Condition Tiers table by adding individual records, uploading a CSV file, directly editing the existing table, or loading the table created for the Lancet study (see Home). Importantly, only a subset of conditions have the internal associations encoded in this database to support the Diagnostic Network Planner. If you would like additional conditions encoded for the Diagnostic Network Planner, please contact us. Follow the steps below to use this page effectively:
 
 **Instructions:**
 - **Add new custom condition records:** Manually add new condition records by specifying the condition name, condition level (triage, moderate, severe), and condition tier (Primary, Secondary, Tertiary).
-- **Upload a Custom Condition Tier CSV:** Upload a pre-developed dataset in CSV format. The CSV file must contain the columns conditionname, conditionlevel, and custom_condition_tier.
+- **Upload a Custom Condition Tiers CSV:** Upload a pre-developed dataset in CSV format. The CSV file must contain the columns conditionname, conditionlevel, and custom_condition_tier.
 - **Within the table:** Records can be deleted by clicking in the delete column. Condition levels and tiers can be changed by clicking on cells and selecting different options.
-- **Delete, apply, and load Lancet table:** Use buttons below the table to delete the entire table, apply the current custom condition table to effect changes in the dashboard and be used with the Diagnostic Placement Tool, or to load the Lancet study table.
-- **Render and download the Custom Condition Tier table:** Visualize the distribution of condition levels across different health facility tiers. You can redraw or delete the graphic, or download the underlying table as needed. Use screen capture to copy the graphic.
+- **Delete, apply, and load Lancet table:** Use buttons below the table to delete the entire table, apply the current custom condition table to effect changes in the dashboard and be used with the Diagnostic Network Planner, or to load and apply the Lancet study table.
+- **Render and download the Condition Tiers table:** Visualize the distribution of condition levels across different health facility tiers. You can redraw or delete the graphic, or download the underlying table as needed. Use screen capture to copy the graphic.
         """)
