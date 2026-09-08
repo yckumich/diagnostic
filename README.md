@@ -1,6 +1,11 @@
-# Diagnostic Test Dashboard
+# Essential Diagnostics for Universal Health Coverage
 
-A multi-page Streamlit app for exploring and analyzing an Essential Diagnostics List (EDL) for Universal Health Coverage research. All data is loaded from a single CSV file — no backend database.
+A multi-page Streamlit app for exploring an Essential Diagnostics List (EDL) for Universal Health Coverage research. All data is loaded from a single CSV file — no backend database.
+
+The site provides two decision-support tools:
+
+- **Essential Diagnostics Explorer** — explore the relational database linking diseases, medicines, in vitro diagnostics, and radiological examinations.
+- **Diagnostic Network Planner** — a three-step workflow for deciding which tier of a health system each diagnostic should be placed at.
 
 ---
 
@@ -18,7 +23,16 @@ pip install -r requirements.txt
 streamlit run 🏠_Home.py
 ```
 
-The app runs at `http://localhost:8501` by default.
+The app runs at `http://localhost:8501`.
+
+> **Heads-up:** `.streamlit/config.toml` sets `[browser] serverAddress` to the production
+> host, so `streamlit run` prints — and opens — the *deployed* URL, not your local one.
+> The local server is still on port 8501; just browse to `http://localhost:8501`, or
+> override it:
+>
+> ```bash
+> streamlit run 🏠_Home.py --browser.serverAddress=localhost --browser.serverPort=8501
+> ```
 
 ---
 
@@ -26,13 +40,19 @@ The app runs at `http://localhost:8501` by default.
 
 ### Pages
 
-| Page | Purpose |
-|---|---|
-| `🏠_Home.py` | Landing page, initializes session state |
-| `pages/1_Diagnostic_Test_Dashboard.py` | Main explorer with sidebar filters and tabbed views |
-| `pages/2_Build_Custom_Condition_Tier.py` | Build or upload a custom condition-level filter |
-| `pages/3_Build_Custom_Test_Tier.py` | Build or upload a custom test-format filter |
-| `pages/4_Diagnostic_Test_Summary.py` | Generate and export a diagnostic placement summary |
+| File | Sidebar label | Purpose |
+|---|---|---|
+| `🏠_Home.py` | Home | Landing page; initializes session state |
+| `pages/1_🗂️_Explore_Diseases_Medicines_and_Diagnostics.py` | Explore Diseases Medicines and Diagnostics | **Essential Diagnostics Explorer** — sidebar filters, tabbed views, diagnostic-name selector |
+| `pages/2_🩺_Step_1_-_Set_Condition_Tiers.py` | Step 1 - Set Condition Tiers | Build or upload the Condition Tiers table |
+| `pages/3_🧪_Step_2_-_Set_Diagnostic-Format_Tiers.py` | Step 2 - Set Diagnostic-Format Tiers | Build or upload the Diagnostic-Format Tiers table |
+| `pages/4_📍_Step_3_-_Diagnostic_Network_Planner_Results.py` | Step 3 - Diagnostic Network Planner Results | Generate and export the placement summary (PDF) |
+| `pages/5_📖_Background.py` | Background | Project background, evidence base, publications |
+| `pages/6_ℹ️_About.py` | About | Funders, acknowledgements, disclaimer, contact |
+
+Streamlit derives both the sidebar label **and the public URL** from the filename, so renaming a page changes its URL.
+
+The sidebar groups these pages under three headings — "Essential Diagnostics Explorer", "Diagnostic Network Planner" and "Project Information". Streamlit's file-based navigation has no hook for section headings, so they are injected as CSS from `style.py`.
 
 ### Key Files
 
@@ -45,14 +65,20 @@ static/
 .streamlit/
   config.toml                               ← Streamlit server + browser config
 
+style.py                                    ← shared CSS, incl. the sidebar section headings
+
 utils/
   dataframe_utils/filter.py                 ← sidebar filter label → column mapping
-  dataframe_utils/utils.py                  ← filter/query/grid helpers
+  dataframe_utils/utils.py                  ← filter/query/grid helpers + Explorer instructions
   dataframe_utils/utils_center_tab.py       ← per-tab DataFrame functions
-  condition_tier_utils/utils.py             ← page 2 logic
-  test_tier_utils/utils.py                  ← page 3 logic
-  tests_summary_utils/utils.py              ← page 4 logic + PDF export
+  condition_tier_utils/utils.py             ← Step 1 logic + sidebar instructions
+  test_tier_utils/utils.py                  ← Step 2 logic + sidebar instructions
+  tests_summary_utils/utils.py              ← Step 3 logic, PDF export + sidebar instructions
 ```
+
+The instruction text shown in each tool page's sidebar is **hardcoded in Python** — in the
+`add_sidebar()` functions under `utils/`, and in `sidebar_instruction` in
+`dataframe_utils/utils.py`. There is no markdown file to edit.
 
 ---
 
@@ -231,3 +257,4 @@ sudo docker image prune -f
 - Always bump the image tag on every build (`0.0.1 → 0.0.2 → 0.0.3`). It makes rollbacks easy — just update the tag in `docker-compose.yml` and redeploy with an older image.
 - The nginx config at `~/nginx/conf.d/streamlit.conf` rarely needs to change. It is mounted as a volume into the nginx container, so edits take effect after `docker compose restart nginx`.
 - `.streamlit/config.toml` is baked into the Docker image at build time (via `git clone`). If you update the server address or port, commit the change and rebuild the image.
+- Four tracked files use **CRLF** line endings while the rest of the repo uses LF: `README.md`, `utils/condition_tier_utils/utils.py`, `utils/test_tier_utils/utils.py` and `utils/tests_summary_utils/utils.py`. Editing them with a script in Python's text mode silently converts every line, turning a small change into a whole-file diff. Open them in binary mode, and sanity-check `git diff --stat` before trusting a diff.
