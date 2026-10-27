@@ -80,6 +80,35 @@ The instruction text shown in each tool page's sidebar is **hardcoded in Python*
 `add_sidebar()` functions under `utils/`, and in `sidebar_instruction` in
 `dataframe_utils/utils.py`. There is no markdown file to edit.
 
+### Updating the Data
+
+To load a new export of the master dataset:
+
+1. Replace `static/tableau3_t2_tjfs_join_edl_dashadmin.csv` with the new file, keeping the
+   filename. Copy it as-is; don't re-save it through pandas or Excel.
+2. Regenerate `static/lancet_test_tier.csv`. The **Load Lancet Diagnostic-Format Tiers Table**
+   button in Step 2 loads this file, and Step 3 silently drops any test whose format is missing
+   from it. It is derived from the master's `test_format_lancet_tier` column:
+
+   ```python
+   import pandas as pd
+   m = pd.read_csv("static/tableau3_t2_tjfs_join_edl_dashadmin.csv", low_memory=False)
+   tiers = m.groupby("test_format")["test_format_lancet_tier"].unique()
+   assert all(len(t) == 1 for t in tiers)  # each format must have exactly one tier
+   out = tiers.str[0].rename("custom_test_tier").reset_index()
+   with open("static/lancet_test_tier.csv", "w", newline="") as f:
+       f.write(out.to_csv(index=False, lineterminator="\r\n").removesuffix("\r\n"))
+   ```
+
+3. Check that every `conditionname` / `conditionlevel` pair in `static/lancet_condition_level.csv`
+   still exists in the master.
+4. Restart the app. The condition list behind Step 1 is cached until a restart.
+
+**Condition levels:** the CSVs store `triage` / `moderate` / `severe`, but the app shows the
+published model's terms, **Triage / Uncomplicated / Complicated**. `relabel_condition_levels()` in
+`data/database.py` translates them as data is read, including user uploads. Keep the raw terms in
+the CSVs.
+
 ---
 
 ## Production Deployment
