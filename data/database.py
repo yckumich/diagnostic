@@ -11,8 +11,19 @@ warnings.filterwarnings("ignore")
 #       view_df = pd.read_csv(loc).drop(columns=drop_cols, errors='ignore')
 #       view_df = view_df.fillna(np.nan).replace([np.nan], [None])
 
+# The database stores condition levels as triage/moderate/severe; the published model
+# calls them Triage/Uncomplicated/Complicated. Relabel wherever levels enter the app
+# (master CSV, Lancet table, uploads) so every page and export shows the published terms.
+CONDITION_LEVEL_LABELS = {"triage": "Triage", "moderate": "Uncomplicated", "severe": "Complicated"}
+CONDITION_LEVELS = list(CONDITION_LEVEL_LABELS.values())
+
+def relabel_condition_levels(df: pd.DataFrame) -> pd.DataFrame:
+      df["conditionlevel"] = df["conditionlevel"].replace(CONDITION_LEVEL_LABELS)
+      return df
+
 def get_view_df():
       view_df = pd.read_csv("static/tableau3_t2_tjfs_join_edl_dashadmin.csv").fillna(np.nan).replace([np.nan], [None])
+      view_df = relabel_condition_levels(view_df)
 
       if (('custom_condition_df' in st.session_state) and 
             (isinstance(st.session_state['custom_condition_df'], pd.DataFrame)) and

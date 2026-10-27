@@ -5,7 +5,6 @@ import streamlit as st
 st.set_page_config(
     page_title="Set Diagnostic-Format Tiers",
     layout="wide",
-    page_icon="🧪",
     initial_sidebar_state="expanded"
 )
 
@@ -24,6 +23,7 @@ build_col, display_col = st.columns([1,1], gap="small")
     
 with build_col:
     st.write("### Diagnostic-Format Tiers Table")
+    st.write("Define the lowest tier in the health system for which the given diagnostic format could potentially be placed (if indicated) considering the infrastructural limitations of the health system.")
     display_custom_test_tier_df()
 
     _, col_1, col_2, col_3, _ = st.columns([0.005, 0.33, 0.33, 0.33, 0.005])

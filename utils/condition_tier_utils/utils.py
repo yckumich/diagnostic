@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import streamlit as st
 import time
+from data.database import CONDITION_LEVELS, relabel_condition_levels
 
-CONDITION_LEVELS = ["triage", "moderate", "severe", "not applicable"]
 CONDITION_TIERS = ["Primary", "Secondary", "Tertiary"]
 ESSENTIAL_COLS = ['conditionname', 'conditionlevel', 'custom_condition_tier']
 
@@ -16,11 +16,12 @@ def retrieve_condition_levels_map() -> dict:
     Built once at app startup from the master CSV and shared across all sessions.
     Only cleared on app restart (i.e., when the underlying CSV changes via a new deployment).
     """
-    df = pd.read_csv("static/tableau3_t2_tjfs_join_edl_dashadmin.csv")
+    df = relabel_condition_levels(pd.read_csv("static/tableau3_t2_tjfs_join_edl_dashadmin.csv"))
     result = {}
     for condition, group in df.groupby('conditionname'):
         levels = sorted(
-            [l for l in group['conditionlevel'].dropna().unique() if l != 'tmp']
+            [l for l in group['conditionlevel'].dropna().unique() if l != 'tmp'],
+            key=CONDITION_LEVELS.index
         )
         result[condition] = levels
     return result
@@ -52,7 +53,7 @@ def process_condition_tiers(df: pd.DataFrame) -> pd.DataFrame:
 
     # Define the order for tiers and levels and other variables 
     tier_order = {"Primary": 1, "Secondary": 2, "Tertiary": 3}
-    level_order = {"triage": 1, "moderate": 2, "severe": 3}
+    level_order = {"Triage": 1, "Uncomplicated": 2, "Complicated": 3}
     condition_df_dict_list = list()
     final_df_dict_list = list()
     secondary_filled_tertiary = False
@@ -170,9 +171,9 @@ def create_condition_plot(df):
 
     # Define the color mapping
     color_map = {
-        "triage": "lightyellow",
-        "moderate": "orange",
-        "severe": "brown",
+        "Triage": "#CFC096",
+        "Uncomplicated": "#D86018",
+        "Complicated": "#9A3324",
         "not applicable": "white"
     }
 
@@ -181,7 +182,7 @@ def create_condition_plot(df):
     conditions = sorted(df["conditionname"].unique(), key=str.casefold)
 
     # Create a mapping for condition levels to ensure specific order
-    level_order = {"triage": 1, "moderate": 2, "severe": 3}
+    level_order = {"Triage": 1, "Uncomplicated": 2, "Complicated": 3}
 
     # Create a figure and axis
     fig, ax = plt.subplots(figsize=(10, 8))
@@ -224,9 +225,9 @@ def create_condition_plot(df):
     ax.set_ylabel("Condition Name")
 
     legend_elements = [
-        patches.Patch(facecolor='lightyellow', edgecolor='black', label='Triage'),
-        patches.Patch(facecolor='orange', edgecolor='black', label='Moderate'),
-        patches.Patch(facecolor='brown', edgecolor='black', label='Severe'),
+        patches.Patch(facecolor='#CFC096', edgecolor='black', label='Triage'),
+        patches.Patch(facecolor='#D86018', edgecolor='black', label='Uncomplicated'),
+        patches.Patch(facecolor='#9A3324', edgecolor='black', label='Complicated'),
         patches.Patch(facecolor='white', edgecolor='black', label='Not applicable')
     ]
     ax.legend(handles=legend_elements, title="Condition Level", loc='center left', bbox_to_anchor=(1, 0.5))
@@ -281,7 +282,7 @@ def handle_custom_condition_file_upload(condition_level_csv):
                 icon="⚠️"
             )
         else:
-            st.session_state["custom_condition_list"] = uploaded_df.to_dict(orient='records')
+            st.session_state["custom_condition_list"] = relabel_condition_levels(uploaded_df).to_dict(orient='records')
             st.session_state['show_plot'] = False
             st.rerun()
 
@@ -352,7 +353,7 @@ def display_custom_condition_df():
         ),
         'conditionlevel': st.column_config.SelectboxColumn(
             help='Condition Level',
-            options=['triage','moderate','severe'],
+            options=CONDITION_LEVELS,
             required=True,
         ),
         'custom_condition_tier': st.column_config.SelectboxColumn(
@@ -384,7 +385,7 @@ def delete_current_coustom_df():
     Resets the 'custom_condition_list', 'show_plot', and 'custom_condition_df' session states.
     """
 
-    if st.button("Delete Condition Tiers Table"):
+    if st.button("Delete Condition Tiers Table", use_container_width=True):
         st.session_state["custom_condition_list"] = []
         st.session_state['show_plot'] = False
         st.session_state.custom_condition_df = None
@@ -403,7 +404,7 @@ def save_current_coustom_df():
     If the list is empty, it shows a warning toast message.
     """
 
-    if st.button("Apply Condition Tiers Table"):
+    if st.button("Apply Condition Tiers Table", use_container_width=True):
         if len(st.session_state.custom_condition_list):
             st.session_state.custom_condition_df = pd.DataFrame(st.session_state["custom_condition_list"])
             msg = st.toast('Applying Condition Tiers Table...')
@@ -414,8 +415,8 @@ def save_current_coustom_df():
             st.toast("Could Not Find Condition Tiers Table")
 
 def load_lancet_condition_tier_df():
-    if st.button("Load Lancet Condition Tiers Table"):
-        st.session_state["custom_condition_list"] = pd.read_csv('static/lancet_condition_level.csv').to_dict(orient='records')
+    if st.button("Load Lancet Condition Tiers Table", use_container_width=True):
+        st.session_state["custom_condition_list"] = relabel_condition_levels(pd.read_csv('static/lancet_condition_level.csv')).to_dict(orient='records')
         st.session_state.custom_condition_df = None
         st.rerun()
 
@@ -423,12 +424,13 @@ def load_lancet_condition_tier_df():
 
 def add_sidebar():
     with st.sidebar:
+        st.info("See instructions below.")
         st.markdown("""
 **Set Condition Tiers Page**  
-Welcome to the **Set Condition Tiers** page. You will need to define this table in order to use the Diagnostic Network Planner that details which tier (e.g., primary, secondary, tertiary) each diagnostic should be placed. This page allows you to create, manage, and visualize a custom Condition Tiers table, defining the lowest tier in the health system that a given condition is expected to be treated. You can build a Condition Tiers table by adding individual records, uploading a CSV file, directly editing the existing table, or loading the table created for the Lancet study (see Home). Importantly, only a subset of conditions have the internal associations encoded in this database to support the Diagnostic Network Planner. If you would like additional conditions encoded for the Diagnostic Network Planner, please contact us. Follow the steps below to use this page effectively:
+Welcome to the **Set Condition Tiers** page. You will need to define this table in order to use the Diagnostic Network Planner that details which tier (e.g., primary, secondary, tertiary) each diagnostic should be placed. This page allows you to create, manage, and visualize a custom Condition Tiers table, defining the lowest tier in the health system that a given condition is expected to be treated. You can build a Condition Tiers table by adding individual records, uploading a CSV file, directly editing the existing table, or loading the table created for the Lancet study (see Background). Importantly, only a subset of conditions have the internal associations encoded in this database to support the Diagnostic Network Planner. If you would like additional conditions encoded for the Diagnostic Network Planner, please contact us. Follow the steps below to use this page effectively:
 
 **Instructions:**
-- **Add new custom condition records:** Manually add new condition records by specifying the condition name, condition level (triage, moderate, severe), and condition tier (Primary, Secondary, Tertiary).
+- **Add new custom condition records:** Manually add new condition records by specifying the condition name, condition level (Triage, Uncomplicated, Complicated), and condition tier (Primary, Secondary, Tertiary).
 - **Upload a Custom Condition Tiers CSV:** Upload a pre-developed dataset in CSV format. The CSV file must contain the columns conditionname, conditionlevel, and custom_condition_tier.
 - **Within the table:** Records can be deleted by clicking in the delete column. Condition levels and tiers can be changed by clicking on cells and selecting different options.
 - **Delete, apply, and load Lancet table:** Use buttons below the table to delete the entire table, apply the current custom condition table to effect changes in the dashboard and be used with the Diagnostic Network Planner, or to load and apply the Lancet study table.

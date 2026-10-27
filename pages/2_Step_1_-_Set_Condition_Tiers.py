@@ -3,7 +3,6 @@ import streamlit as st
 #----------------------INIT-----------------------
 st.set_page_config(
     page_title="Set Condition Tiers",
-    page_icon="🩺",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -37,10 +36,11 @@ build_col, display_col = st.columns([1,1], gap="small")
 
 with build_col:
     st.write("### Condition Tiers Table")
+    st.write("Define the lowest tier in the health system for which a given disease at a given severity can be treated.")
     # Display the current condition data
     display_custom_condition_df()
 
-    _, col_1, col_2, col_3, _ = st.columns([0.125, 0.25, 0.25, 0.25, 0.125])
+    _, col_1, col_2, col_3, _ = st.columns([0.005, 0.33, 0.33, 0.33, 0.005])
     with col_1:
         delete_current_coustom_df()
     with col_2:

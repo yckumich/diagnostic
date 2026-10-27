@@ -11,6 +11,7 @@ from reportlab.lib.units import inch
 import time
 from io import BytesIO
 import base64
+from data.database import CONDITION_LEVELS
 warnings.filterwarnings("ignore")
 
 name_map = {"test_format": "Diagnostic Format", "custom_test_tier": "Diagnostic Format Custom Tier"}
@@ -547,7 +548,7 @@ def condition_editor():
     cfg = {
         "conditionname": st.column_config.Column(disabled=True, help="Condition Name"),
         "conditionlevel": st.column_config.SelectboxColumn(
-            options=["triage", "moderate", "severe"], required=True
+            options=CONDITION_LEVELS, required=True
         ),
         "custom_condition_tier": st.column_config.SelectboxColumn(
             options=["Primary", "Secondary", "Tertiary"], required=True
@@ -633,7 +634,7 @@ def inline_display_custom_condition_df():
     column_config = {
         'conditionname': st.column_config.Column(disabled=True, help='Condition Name'),
         'conditionlevel': st.column_config.SelectboxColumn(
-            help='Condition Level', options=['triage','moderate','severe'], required=True),
+            help='Condition Level', options=CONDITION_LEVELS, required=True),
         'custom_condition_tier': st.column_config.SelectboxColumn(
             help='Condition Tier', options=['Primary','Secondary','Tertiary'], required=True)
     }
@@ -750,6 +751,7 @@ def inline_update_custom_test_tier():
 
 def add_sidebar():
     with st.sidebar:
+        st.info("See instructions below.")
         st.markdown("""
 **Diagnostic Network Planner Results Instructions**  
 Welcome to the page for visualizing results of the Diagnostic Network Planner. This page is designed to help you generate a comprehensive summary of diagnostic placement recommendations by health system tier. Follow the instructions below to make the most out of this tool.

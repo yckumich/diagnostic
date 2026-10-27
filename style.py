@@ -20,9 +20,17 @@ def get_style_markdown():
         .stDataFrame {
             margin: 0;
         }
+        /* U-M Tappan Red for the selected tab's text and underline */
+        .stTabs button[data-baseweb="tab"][aria-selected="true"] p {
+            color: #9A3324;
+        }
+        .stTabs [data-baseweb="tab-highlight"] {
+            background-color: #9A3324;
+        }
+        /* U-M Rackham Green on hover */
         [data-testid="stExpander"] details:hover summary {
-            background-color: rgba(119, 244, 121, 0.1);
-            color: darkgreen;
+            background-color: rgba(117, 152, 141, 0.1);
+            color: #75988d;
         }
         </style>
         """,
@@ -66,7 +74,7 @@ def get_sidebar_style():
             align-items: center;
         }
 
-        [data-testid="stSidebarNavItems"] > li:has(a[href*="/Explore_Diseases_Medicines_and_Diagnostics"])::before,
+        [data-testid="stSidebarNavItems"] > li:has(a[href*="/Explore_Diseases"])::before,
         [data-testid="stSidebarNavItems"] > li:has(a[href*="/Step_1_-_Set_Condition_Tiers"])::before,
         [data-testid="stSidebarNavItems"] > li:has(a[href*="/Background"])::before,
         [data-testid="stSidebarNavItems"]:not(:has(a[href*="/Background"])) > li:has(a[href*="/About"])::before {
@@ -81,7 +89,7 @@ def get_sidebar_style():
             color: inherit;
             opacity: 0.65;
         }
-        [data-testid="stSidebarNavItems"] > li:has(a[href*="/Explore_Diseases_Medicines_and_Diagnostics"])::before {
+        [data-testid="stSidebarNavItems"] > li:has(a[href*="/Explore_Diseases"])::before {
             content: "Essential Diagnostics Explorer";
         }
         [data-testid="stSidebarNavItems"] > li:has(a[href*="/Step_1_-_Set_Condition_Tiers"])::before {

@@ -141,7 +141,7 @@ def create_test_tier_plot(df):
     """
 
     # Define the color for applicable tiers
-    applicable_color = "skyblue"
+    applicable_color = "#2F65A7"
     not_applicable_color = "white"
 
     # Define the tiers and their ordinal relationship
@@ -323,14 +323,15 @@ def load_lancet_test_format_tier_df():
 
 def add_sidebar(): 
     with st.sidebar:
+        st.info("See instructions below.")
         st.markdown("""
 **Set Diagnostic-Format Tiers Page**  
-Welcome to the **Set Diagnostic-Format Tiers** page. You will need to define this table in order to use the Diagnostic Network Planner that details which tier each diagnostic should be placed. This page allows you to create, manage, and visualize a custom Diagnostic-Format Tiers table that identifies the lowest tier in the health system that a given Diagnostic Format could potentially be placed (if indicated) considering infrastructural limitations. You can build a custom Diagnostic-Format Tiers table by adding individual records, uploading a CSV file, directly editing the existing table, or loading and applying the table created for the Lancet study (see Home). The main features and functionalities of this page are as follows:
+Welcome to the **Set Diagnostic-Format Tiers** page. You will need to define this table in order to use the Diagnostic Network Planner that details which tier each diagnostic should be placed. This page allows you to create, manage, and visualize a custom Diagnostic-Format Tiers table that identifies the lowest tier in the health system that a given Diagnostic Format could potentially be placed (if indicated) considering infrastructural limitations. You can build a custom Diagnostic-Format Tiers table by adding individual records, uploading a CSV file, directly editing the existing table, or loading and applying the table created for the Lancet study (see Background). The main features and functionalities of this page are as follows:
 
 **Instructions:**
 - **Add new diagnostic format records:** Manually add new Diagnostic Format records by specifying the Diagnostic Format and Diagnostic Tier (Primary, Secondary, Tertiary).
 - **Upload a Custom Diagnostic-Format Tiers CSV:** Upload a pre-developed dataset in CSV format. The uploaded file must contain columns 'test_format' and 'custom_test_tier'.
 - **Within the table:** Records can be deleted by clicking in the delete column. Diagnostic-Format Tiers can be changed by clicking on cells and selecting different options.
-- **Delete, apply, and load Lancet table:** Use buttons below the table to delete the entire table, apply the current custom Diagnostic-Format Tiers table to effect changes in the dashboard and be used with the Diagnostic Network Planner, or to load the Lancet study table (see Home and Background).
+- **Delete, apply, and load Lancet table:** Use buttons below the table to delete the entire table, apply the current custom Diagnostic-Format Tiers table to effect changes in the dashboard and be used with the Diagnostic Network Planner, or to load the Lancet study table (see Background).
 - **Render and download the custom Diagnostic-Format Tiers table:** Visualize the distribution of diagnostic format possibilities across different health facility tiers. You can redraw or delete the graphic, or download the underlying table as needed. Use screen capture to copy the graphic.
         """)

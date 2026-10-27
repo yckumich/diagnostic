@@ -2,8 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-----------------------Preferred work style---------------------------------
-## 1. Think Before Coding
+## Preferred work style
+### 1. Think Before Coding
 **Don't assume. Don't hide confusion. Surface tradeoffs.**
 
 Before implementing:
@@ -12,7 +12,7 @@ Before implementing:
 - If a simpler approach exists, say so. Push back when warranted.
 - If something is unclear, stop. Name what's confusing. Ask.
 
-## 2. Simplicity First
+### 2. Simplicity First
 **Minimum code that solves the problem. Nothing speculative.**
 
 - No features beyond what was asked.
@@ -23,7 +23,7 @@ Before implementing:
 
 Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
 
-## 3. Surgical Changes
+### 3. Surgical Changes
 **Touch only what you must. Clean up only your own mess.**
 
 When editing existing code:
@@ -37,7 +37,6 @@ When your changes create orphans:
 - Don't remove pre-existing dead code unless asked.
 
 The test: Every changed line should trace directly to the user's request.
--------------------------------------------------------
 
 ## Running the App
 
@@ -69,6 +68,12 @@ The site presents two tools: the **Essential Diagnostics Explorer** (page 1) and
 - `custom_test_tier_df` (keyed on `test_format`)
 
 When these session state values are `None` or empty, `get_view_df()` returns the full dataset unfiltered.
+
+**Condition levels are relabeled on read.** The CSVs store `triage` / `moderate` / `severe`; the published
+model calls them **Triage / Uncomplicated / Complicated**. `relabel_condition_levels()` translates them
+wherever levels enter the app (master CSV, `lancet_condition_level.csv`, user uploads), so session state,
+editors, plots and downloads all use the published terms. Don't edit the CSVs to match, and compare
+against `CONDITION_LEVELS`, not the raw strings.
 
 ### Filter Pipeline (Page 1)
 
@@ -102,10 +107,10 @@ Both `custom_*_list` and `custom_*_df` must be set together; clearing the list m
 | File | Purpose |
 |---|---|
 | `🏠_Home.py` | Landing page; initializes all session state keys |
-| `pages/1_🗂️_Explore_Diseases_Medicines_and_Diagnostics.py` | Essential Diagnostics Explorer: sidebar filters + tabbed DataFrames + AgGrid test-name selector |
-| `pages/2_🩺_Step_1_-_Set_Condition_Tiers.py` | Build/upload the Condition Tiers table |
-| `pages/3_🧪_Step_2_-_Set_Diagnostic-Format_Tiers.py` | Build/upload the Diagnostic-Format Tiers table |
-| `pages/4_📍_Step_3_-_Diagnostic_Network_Planner_Results.py` | Generate and export the placement summary (PDF via reportlab) |
+| `pages/1_🗂️_Explore_Diseases,_Medicines,_and_Diagnostics.py` | Essential Diagnostics Explorer: sidebar filters + tabbed DataFrames + AgGrid test-name selector |
+| `pages/2_Step_1_-_Set_Condition_Tiers.py` | Build/upload the Condition Tiers table |
+| `pages/3_Step_2_-_Set_Diagnostic-Format_Tiers.py` | Build/upload the Diagnostic-Format Tiers table |
+| `pages/4_Step_3_-_Diagnostic_Network_Planner_Results.py` | Generate and export the placement summary (PDF via reportlab) |
 | `pages/5_📖_Background.py` | Project background, evidence base, linked publications |
 | `pages/6_ℹ️_About.py` | Funders, acknowledgements, disclaimer, contact |
 

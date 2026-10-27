@@ -2,33 +2,48 @@ test_format,custom_test_tier
 Advanced breast imaging,Tertiary
 Antimicrobial susceptibility testing,Secondary
 "Antimicrobial susceptibility testing, TB",Tertiary
+Atomic absorption spectroscopy,Tertiary
 Automated biochemical microbial identification,Secondary
 Automated chemistry analyzer,Secondary
 Automated coagulation analyzer,Secondary
+"Automated coagulation analyzer, specialized",Tertiary
 Automated hematology analyzer,Secondary
 Automated immunoassay analyzer,Secondary
-"Automated immunoassay analyzer, specialized",Tertiary
 Automated nucleic acid analyzer,Tertiary
 Benchtop/handheld analyzer,Secondary
 CT scan,Tertiary
+Colorimetric,Primary
+Cooximetry,Secondary
 Culture,Secondary
 ELISA,Secondary
+ELISPOT assay,Secondary
 Echocardiogram,Tertiary
+Electrophoresis,Tertiary
+Endoscopy and urease,Tertiary
 Flow cytometry,Tertiary
 Fluorescence microscopy,Tertiary
+Fluorescence spectroscopy,Tertiary
 Fluoroscopy,Tertiary
+Gas chromatography,Tertiary
 Glucometer,Primary
+Gravitometric,Secondary
 Hematology smear microscopy,Secondary
 Hemocytometer,Secondary
+Hemoglobin solubility,Secondary
 Hemoglobinometer,Primary
 High performance liquid chromatography,Tertiary
+Immunodiffusion,Secondary
+Immunoturbidimetry,Tertiary
 Indirect immunofluorescence,Tertiary
+Inductively coupled plasma mass spectrometry,Tertiary
 "Interventional radiology, basic",Tertiary
 "Interventional radiology, complex",Tertiary
-Latex agglutination,Secondary
+Intradermal,Primary
+Karyotyping,Tertiary
 MRI,Tertiary
 Malaria smear microscopy,Primary
 Mammography,Tertiary
+Manual microbial identification,Secondary
 Mass Spectrometry,Tertiary
 "Microscopy, with immunohistochemistry",Tertiary
 "Microscopy, with stains",Secondary
@@ -40,9 +55,11 @@ PET scan,Tertiary
 Particle agglutination assay,Secondary
 RDT,Primary
 Radial immunodiffusion,Tertiary
+Radiometric assay,Tertiary
 Red blood cell agglutination,Secondary
 Semi-quantitative fluorescent spot test,Tertiary
-Slide agglutination,Secondary
+Sodium metabisulfite slide test,Secondary
+Spectrophotometry,Tertiary
 Stool microscopy,Primary
 TB Culture,Tertiary
 Tube agglutination test,Secondary

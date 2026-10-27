@@ -156,7 +156,7 @@ RESOURCES = [
      "",
      "View WHO resources",
      "https://www.who.int/publications/i/item/9789240081093"),
-    ("WHO electronic Essential Diagnostics List",
+    ("WHO electronic Essential Diagnostics List (5th edition)",
      "",
      "Access the WHO eEDL",
      "https://edl.who-healthtechnologies.org/"),

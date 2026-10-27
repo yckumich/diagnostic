@@ -43,10 +43,10 @@ The app runs at `http://localhost:8501`.
 | File | Sidebar label | Purpose |
 |---|---|---|
 | `🏠_Home.py` | Home | Landing page; initializes session state |
-| `pages/1_🗂️_Explore_Diseases_Medicines_and_Diagnostics.py` | Explore Diseases Medicines and Diagnostics | **Essential Diagnostics Explorer** — sidebar filters, tabbed views, diagnostic-name selector |
-| `pages/2_🩺_Step_1_-_Set_Condition_Tiers.py` | Step 1 - Set Condition Tiers | Build or upload the Condition Tiers table |
-| `pages/3_🧪_Step_2_-_Set_Diagnostic-Format_Tiers.py` | Step 2 - Set Diagnostic-Format Tiers | Build or upload the Diagnostic-Format Tiers table |
-| `pages/4_📍_Step_3_-_Diagnostic_Network_Planner_Results.py` | Step 3 - Diagnostic Network Planner Results | Generate and export the placement summary (PDF) |
+| `pages/1_🗂️_Explore_Diseases,_Medicines,_and_Diagnostics.py` | Explore Diseases, Medicines, and Diagnostics | **Essential Diagnostics Explorer** — sidebar filters, tabbed views, diagnostic-name selector |
+| `pages/2_Step_1_-_Set_Condition_Tiers.py` | Step 1 - Set Condition Tiers | Build or upload the Condition Tiers table |
+| `pages/3_Step_2_-_Set_Diagnostic-Format_Tiers.py` | Step 2 - Set Diagnostic-Format Tiers | Build or upload the Diagnostic-Format Tiers table |
+| `pages/4_Step_3_-_Diagnostic_Network_Planner_Results.py` | Step 3 - Diagnostic Network Planner Results | Generate and export the placement summary (PDF) |
 | `pages/5_📖_Background.py` | Background | Project background, evidence base, publications |
 | `pages/6_ℹ️_About.py` | About | Funders, acknowledgements, disclaimer, contact |
 

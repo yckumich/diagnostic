@@ -256,7 +256,7 @@ Welcome to the Essential Diagnostics Explorer. This page allows you to filter an
     - **Medicine:** Filter by associated medicines.
     - **Condition:** Filter by associated conditions.
     - **WHO EDL/EML:** Filter by features of the WHO Essential Diagnostics List or Essential Medicines List.
-    - **Lancet:** Filter by features from the Lancet study (see Home).
+    - **Lancet:** Filter by features from the Lancet study (see Background).
 2. **Current Filter Selection:**
     - This section displays the current filters you have selected. Expand it to review if you want to ensure your selections are correct.
 3. **Diagnostic Name Panel:**
@@ -269,7 +269,7 @@ Welcome to the Essential Diagnostics Explorer. This page allows you to filter an
         - **Diagnostic By Med And Cond:** Displays diagnostics with associated medicines and conditions (use this to view diagnostic indications at the most granular level).
         - **Medicine Indications:** Displays the medicines indicated for different conditions.
 5. **Condition and Diagnostic-Format Tier Status:**
-    - Indicators at the top show whether custom Condition Tiers and Diagnostic-Format Tiers filters are applied. This helps to know if additional custom filters are in effect.
+    - Indicators at the top show whether custom Condition Tiers and Diagnostic-Format Tiers filters from the Diagnostic Network Planner are applied. This helps to know if additional custom filters are in effect.
 6. **Interacting with the Essential Diagnostics Explorer:**
     - The Essential Diagnostics Explorer is useful for viewing and downloading detailed associations.
     - Use the left sidebar filters to adjust the data dynamically.

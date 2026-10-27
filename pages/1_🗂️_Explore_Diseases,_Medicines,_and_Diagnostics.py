@@ -91,6 +91,17 @@ def create_detail_expander(detail_title:str, details:List):
             st.markdown(markdown_string)
 
 
+def tier_badge(table_name:str, applied:bool):
+    # Lightened U-M Rackham Green when applied, lightened Angell Hall Ash when not
+    color = "#C1D1CC" if applied else "#DCDDDB"
+    status = "applied" if applied else "not applied"
+    st.markdown(
+        f"<div style='background-color:{color};color:#1b1b1b;padding:1rem;border-radius:0.5rem;'>"
+        f"Network Planner {table_name} {status}</div>",
+        unsafe_allow_html=True
+    )
+
+
 def clear_all_filters(filter_map):
     for subfilter_map in filter_map.values():
         for subfilter_title in subfilter_map:
@@ -101,6 +112,8 @@ def clear_all_filters(filter_map):
 def add_sidebar(filter_map):
     with st.sidebar:
         st.markdown("""<div style="height:0px;"></div>""", unsafe_allow_html=True)
+
+        st.info("See instructions at the bottom of the side bar.")
 
         st.header('Filter')
 
@@ -158,7 +171,14 @@ with test_list_col:
         gridOptions=grid_option,
         update_mode=GridUpdateMode.SELECTION_CHANGED,
         height=1000,
-        theme=AgGridTheme.MATERIAL
+        theme=AgGridTheme.MATERIAL,
+        # U-M Rackham Green for hovered and selected rows
+        custom_css={
+            ".ag-root-wrapper": {
+                "--ag-row-hover-color": "rgba(117, 152, 141, 0.15)",
+                "--ag-selected-row-background-color": "rgba(117, 152, 141, 0.35)",
+            }
+        }
     )
 
 #--------------Configure Center Tab--------------------
@@ -170,16 +190,10 @@ with center_tab_col:
     cond_badge, test_badge = st.columns(2)
 
     with cond_badge:
-        if st.session_state.custom_condition_list:
-            st.success("Condition Tiers Applied ✅")
-        else:
-            st.warning("Condition Tiers Not Applied 🚨")
+        tier_badge("Condition Tiers", bool(st.session_state.custom_condition_list))
 
     with test_badge:
-        if st.session_state.custom_test_tier_list:
-            st.success("Diagnostic-Format Tiers Applied ✅")
-        else:
-            st.warning("Diagnostic-Format Tiers Not Applied 🚨")
+        tier_badge("Diagnostic-Format Tiers", bool(st.session_state.custom_test_tier_list))
 
     st.divider()
     st.header('Tabs')
